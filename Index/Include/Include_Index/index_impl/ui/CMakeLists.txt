@@ -1,3 +1,5 @@
+add_subdirectory(ImUI)
+
 target_sources(Index PRIVATE
         include.cc
         ui.cc

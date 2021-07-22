@@ -1,17 +1,25 @@
 #pragma once
 
+#include <imgui.h>
+
 #include "../core/include.cc"
 #include "../std/include.cc"
+
+namespace Index::UI
+{
+    inline ImColor ToImColor(Color color) { return ImColor(color.R, color.G, color.B, color.A); }
+    inline ImVec2 ToImVec2(Vec2F vector) { return ImVec2(vector.X, vector.Y); }
+    inline ImVec4 ToImVec4(Vec4F vector) { return ImVec4(vector.X, vector.Y, vector.Z, vector.W); }
+}
 
 namespace Index::UI
 {
     class RenderContext
     {
     public:
-        // TODO: Finish this
-        // ImDrawList& Render;
-        // ImDrawList& ForegroundRender;
-        // ImDrawList& BackgroundRender;
+        ImDrawList& Render;
+        ImDrawList& ForegroundRender;
+        ImDrawList& BackgroundRender;
     };
 
     struct LayoutInfo
@@ -49,22 +57,40 @@ namespace Index::UI
     {
         Func<UIElement*()> Build = nullptr;
         Builder() = default;
-        Builder(Func<UIElement*()> e) {
+        explicit Builder(Func<UIElement*()> e) {
             Build = std::move(e);
         }
-        template<class T = UIElement> static IPtr<T> New() {
-            if constexpr (std::is_same<T, Builder>::value) return INew<Builder>();
-            else return std::static_pointer_cast<T>(INew<Builder>());
-        }
-        template<class T = UIElement> static IPtr<T> New(Func<UIElement*()> e) {
-            if constexpr (std::is_same<T, Builder>::value) return INew<Builder>(e);
-            else return std::static_pointer_cast<T>(INew<Builder>(e));
+        template<class T = UIElement, class... Args> static IPtr<T> New(Args&&... args) {
+            if constexpr (std::is_same<T, Builder>::value) return INew<Builder>(std::forward<Args>(args)...);
+            else return std::static_pointer_cast<T>(INew<Builder>(std::forward<Args>(args)...));
         }
         LayoutInfo Render(RenderContext& e, RenderInfo i) override {
             if (Build) {
                 UIElement* element = Build();
                 if (element) {
                     return element->Render(e, i);
+                }
+            }
+            return LayoutInfo {
+                .Size = i.Size
+            };
+        }
+    };
+
+    struct Stack : public UIElement
+    {
+        List<IPtr<UIElement>> Content;
+        explicit Stack(List<IPtr<UIElement>> e) {
+            Content = std::move(e);
+        }
+        template<class T = UIElement> static IPtr<T> New(List<IPtr<UIElement>> e) {
+            if constexpr (std::is_same<T, Stack>::value) return INew<Stack>(e);
+            else return std::static_pointer_cast<T>(INew<Stack>(e));
+        }
+        LayoutInfo Render(RenderContext& e, RenderInfo i) override {
+            for(auto& ui : Content) {
+                if (!ui.IsNull) {
+                    ui->Render(e, i);
                 }
             }
             return LayoutInfo {

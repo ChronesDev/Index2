@@ -5,7 +5,7 @@
 		<Option title="Index"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="msvc8"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
@@ -24,7 +24,8 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/../Include_Index"/>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/."/>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
@@ -48,7 +49,8 @@
 				<Option type="1"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
-					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/../Include_Index"/>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/."/>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
@@ -92,6 +94,7 @@
 				<Option type="2"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
@@ -115,6 +118,7 @@
 				<Option type="2"/>
 				<Option compiler="msvc8"/>
 				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
 					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
 					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
@@ -129,6 +133,54 @@
 					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 &quot;$file&quot;"/>
 					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
 					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ImGui">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Lib/ImGui/ImGui.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Lib/ImGui"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 ImGui"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ImGui/fast">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Lib/ImGui/ImGui.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Lib/ImGui"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 ImGui/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Lib\ImGui\Makefile VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
@@ -183,6 +235,12 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/vector/vector.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ImUI/ImUI.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ImUI/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc">
 			<Option target="Index"/>
 		</Unit>
@@ -209,6 +267,45 @@
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_ui_macros_end">
 			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/backends/imgui_impl_dx9.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/backends/imgui_impl_dx9.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imconfig.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui_demo.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui_draw.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui_internal.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui_tables.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imgui_widgets.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imstb_rectpack.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imstb_textedit.h">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imstb_truetype.h">
+			<Option target="ImGui"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/main.cc">
 			<Option target="Index"/>
@@ -239,6 +336,9 @@
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\ui\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ImUI/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Lib\"/>

@@ -14,18 +14,14 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
-    var b = build({
-        return nullptr;
-    });
+    var v = Builder::New([]() -> UIElement* {
+        ui_static_ret(Stack::New({
+            build({
+                ui_static_ret(Stack::New({
 
-    var b2 = Builder::New([]() -> UIElement* {
-        static var r = build({
-            static var r = build({
-                return nullptr;
-            });
-            return r.Ptr;
-        });
-        return r.Ptr;
+                }))
+            })
+        }))
     });
 
     List<int> i2 = { 10, 11, 10, 12, 13, 14, 15 };

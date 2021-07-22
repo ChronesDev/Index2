@@ -8,5 +8,7 @@ add_library(IndexInclude STATIC
 
 add_subdirectory(index_impl)
 
+target_link_libraries(IndexInclude PUBLIC ImGui)
+
 target_link_libraries(Index PUBLIC IndexInclude)
-target_include_directories(Index PUBLIC ../Include_Index)
+target_include_directories(Index PUBLIC ./)

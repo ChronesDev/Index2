@@ -20,7 +20,7 @@ namespace Index::UI::ImUI
         Color Fill = Colors::Transparent;
         List<IPtr<UIElement>> Content;
         Rectangle() = default;
-        Rectangle(RectangleArgs e) {
+        explicit Rectangle(RectangleArgs e) {
             Size = e.Size;
             Margin = e.Margin;
             Padding = e.Padding;
@@ -36,7 +36,52 @@ namespace Index::UI::ImUI
             else return std::static_pointer_cast<T>(INew<Rectangle>(e));
         }
         LayoutInfo Render(RenderContext& e, RenderInfo i) override {
-            e.Render.AddRect(ToImVec2(i.Start), ToImVec2(i.End), ToImColor(Fill));
+            e.Render.AddRectFilled(ToImVec2(i.Start), ToImVec2(i.End), ToImColor(Fill));
+            for (auto& c : Content) {
+                if (c) c->Render(e, i.ContentArea(Padding));
+            }
+            return LayoutInfo {
+                .Size = Size
+            };
+        }
+    };
+}
+
+namespace Index::UI::ImUI
+{
+    struct OutlineRectangle : public UIElement
+    {
+        struct OutlineRectangleRectangleArgs
+        {
+            Size Size;
+            Vec4F Margin;
+            Vec4F Padding;
+            Color Fill = Colors::Transparent;
+            List<IPtr<UIElement>> Content;
+        };
+        Size Size;
+        Vec4F Margin;
+        Vec4F Padding;
+        Color Fill = Colors::Transparent;
+        List<IPtr<UIElement>> Content;
+        OutlineRectangle() = default;
+        explicit OutlineRectangle(OutlineRectangleRectangleArgs e) {
+            Size = e.Size;
+            Margin = e.Margin;
+            Padding = e.Padding;
+            Fill = e.Fill;
+            Content = std::move(Content);
+        }
+        template<class T = UIElement> static IPtr<T> New() {
+            if constexpr (std::is_same<T, OutlineRectangle>::value) return INew<OutlineRectangle>();
+            else return std::static_pointer_cast<T>(INew<OutlineRectangle>());
+        }
+        template<class T = UIElement> static IPtr<T> New(OutlineRectangleRectangleArgs e) {
+            if constexpr (std::is_same<T, OutlineRectangle>::value) return INew<OutlineRectangle>(e);
+            else return std::static_pointer_cast<T>(INew<OutlineRectangle>(e));
+        }
+        LayoutInfo Render(RenderContext& e, RenderInfo i) override {
+            e.Render.AddRectFilled(ToImVec2(i.Start), ToImVec2(i.End), ToImColor(Fill));
             for (auto& c : Content) {
                 if (c) c->Render(e, i.ContentArea(Padding));
             }
@@ -65,7 +110,7 @@ namespace Index::UI::ImUI
         Color Fill = Colors::Transparent;
         List<IPtr<UIElement>> Content;
         ClipRect() = default;
-        ClipRect(ClipRectArgs e) {
+        explicit ClipRect(ClipRectArgs e) {
             Size = e.Size;
             Margin = e.Margin;
             Padding = e.Padding;
@@ -81,10 +126,11 @@ namespace Index::UI::ImUI
             else return std::static_pointer_cast<T>(INew<ClipRect>(e));
         }
         LayoutInfo Render(RenderContext& e, RenderInfo i) override {
-            e.Render.AddRect(ToImVec2(i.Start), ToImVec2(i.End), ToImColor(Fill));
+            e.Render.PushClipRect(ToImVec2(i.Start), ToImVec2(i.End), ToImColor(Fill));
             for (auto& c : Content) {
                 if (c) c->Render(e, i.ContentArea(Padding));
             }
+            e.Render.PopClipRect();
             return LayoutInfo {
                 .Size = Size
             };

@@ -19,6 +19,7 @@ namespace Index
         Vec4F AsVec() const { return Vec4F { R * 255.0f, G * 255.0f, B * 255.0f, A * 255.0f }; };
         Vec4F AsRawVec() const { return Vec4F { R, G, B, A }; }
         static Color RGB(Vec3F rgb) { return Color(rgb.X, rgb.Y, rgb.Z); }
+        static Color RGB(Vec3I rgb) { return Color(rgb.X, rgb.Y, rgb.Z); }
         static Color RGB(int r, int g, int b) { return Color(r, g, b); }
         static Color RGB(unsigned int rgb) {
             return Color(

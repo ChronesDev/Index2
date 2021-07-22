@@ -38,7 +38,7 @@ namespace Index::UI
         __declspec(property(get = GetEnd)) Vec2F End;
         RenderInfo ContentArea(Vec4F padding) {
             return RenderInfo{
-                .Area = Rect {
+                .Area = Rect{
                     Area.X + std::min(padding.X, Size.X / 2),
                     Area.Y + std::min(padding.Y, Size.Y / 2),
                     Area.Width - std::min(padding.Z, Size.X / 2),
@@ -89,7 +89,7 @@ namespace Index::UI
         }
         LayoutInfo Render(RenderContext& e, RenderInfo i) override {
             for(auto& ui : Content) {
-                if (!ui.IsNull) {
+                if (ui != nullptr) {
                     ui->Render(e, i);
                 }
             }

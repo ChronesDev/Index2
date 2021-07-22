@@ -2,41 +2,42 @@
 #include <chrono>
 #include <index>
 
+#include "src/Window.h"
+
 #include <index_ui_macros>
-
-global int i;
-
-class A { };
-class B : open A { };
 
 int main()
 {
-    using namespace Index;
-    using namespace Index::UI;
+    OnRender = []() {
 
-    var v = Builder::New([]() -> UIElement* {
-        ui_static_ret(Stack::New({
-            build({
-                ui_static_ret(Stack::New({
+        using namespace Index;
+        using namespace Index::UI;
+        using namespace Index::UI::ImUI;
 
-                }))
+        var size = WindowSize;
+        var e = RenderContext {
+            .Render = *(ImGui::GetForegroundDrawList()),
+            .ForegroundRender = *(ImGui::GetForegroundDrawList()),
+            .BackgroundRender = *(ImGui::GetBackgroundDrawList())
+        };
+        var i = RenderInfo {
+            .Area = Rect {
+                0, 0, size.X, size.Y
+            }
+        };
+
+        var render = Stack::New({
+            Rectangle::New({
+                .Fill = Colors::Lime
             })
-        }))
-    });
+        });
 
-    List<int> i2 = { 10, 11, 10, 12, 13, 14, 15 };
-    i2.Remove(10);
-    i2.Reserve(1000);
+        render->Render(e, i);
 
-    string s;
+    };
 
-    std::cout << i2.Capacity << std::endl;
+    Entry();
 
-    for (var v : i2) {
-        std::cout << v << " ";
-    }
-
-    var i = INew<int>(100);
     return 0;
 }
 

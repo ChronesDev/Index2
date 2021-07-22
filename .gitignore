@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# VS
+.vs/
+
 # CLion
 .idea/
 

@@ -5,7 +5,7 @@
 		<Option title="Index"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="msvc8"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\fix\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
@@ -208,6 +208,12 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/windows_fix.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
@@ -274,6 +280,12 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/backends/imgui_impl_dx9.h">
 			<Option target="ImGui"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/backends/imgui_impl_win32.cpp">
+			<Option target="ImGui"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/backends/imgui_impl_win32.h">
+			<Option target="ImGui"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/Impl/imconfig.h">
 			<Option target="ImGui"/>
 		</Unit>
@@ -310,6 +322,9 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/main.cc">
 			<Option target="Index"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/src/Window.h">
+			<Option target="Index"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
@@ -327,6 +342,9 @@
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\core\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\fix\"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\macros\"/>

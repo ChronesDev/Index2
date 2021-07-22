@@ -3,6 +3,6 @@ project(Index)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Index main.cc)
+add_executable(Index main.cc src/Window.h)
 
 add_subdirectory(Index)

@@ -32,8 +32,11 @@ namespace Index
             return this->c_str();
         }
     public:
+        static const String Empty;
+    public:
         __declspec(property(get = capacity)) size_t Capacity;
         __declspec(property(get = c_str)) const char* CStr;
+        __declspec(property(get = empty)) bool IsEmpty;
         __declspec(property(get = size)) size_t Length;
         __declspec(property(get = front, put = SetFirst)) char& First;
         __declspec(property(get = back, put = SetLast)) char& Last;

@@ -35,3 +35,6 @@ namespace Index
         ALIAS_RECLASS_FUNCTION(T&, Emplace, emplace)
     };
 }
+
+#undef ALIAS_RECLASS_CONSTRUCTOR
+#undef ALIAS_RECLASS_FUNCTION

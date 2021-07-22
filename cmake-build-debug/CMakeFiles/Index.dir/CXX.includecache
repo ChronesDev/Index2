@@ -67,6 +67,8 @@ memory/memory.cc
 ../Index/Include/Include_Index/index_impl/std/memory/memory.cc
 nullable/nullable.cc
 ../Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
+string/string.cc
+../Index/Include/Include_Index/index_impl/std/string/string.cc
 vector/vector.cc
 ../Index/Include/Include_Index/index_impl/std/vector/vector.cc
 
@@ -76,6 +78,10 @@ memory
 
 ../Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
 optional
+-
+
+../Index/Include/Include_Index/index_impl/std/string/string.cc
+string
 -
 
 ../Index/Include/Include_Index/index_impl/ui/include.cc

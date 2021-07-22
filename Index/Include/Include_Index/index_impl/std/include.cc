@@ -1,4 +1,5 @@
 #include "func/func.cc"
 #include "memory/memory.cc"
 #include "nullable/nullable.cc"
+#include "string/string.cc"
 #include "vector/vector.cc"

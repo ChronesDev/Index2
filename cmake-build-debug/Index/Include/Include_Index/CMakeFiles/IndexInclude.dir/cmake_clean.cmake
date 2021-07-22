@@ -11,6 +11,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/IndexInclude.dir/index_impl/std/include.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/memory/memory.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/nullable/nullable.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/std/string/string.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/vector/vector.cc.obj"
   "IndexInclude.lib"
   "IndexInclude.pdb"

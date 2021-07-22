@@ -6,6 +6,48 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/color/color.cc
+../vector/vector.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/colors/colors.cc
+../color/color.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/color/color.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/include.cc
+types.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/types.cc
+color/color.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/color/color.cc
+colors/colors.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/colors/colors.cc
+rect/rect.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/rect/rect.cc
+size/size.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/size/size.cc
+vector/vector.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/rect/rect.cc
+../size/size.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/size/size.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/size/size.cc
+../vector/vector.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/types.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include.cc
+core/include.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/include.cc
+std/include.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/include.cc
+ui/include.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc
+
 C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/func/func.cc
 functional
 -
@@ -17,6 +59,8 @@ memory/memory.cc
 C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/memory/memory.cc
 nullable/nullable.cc
 C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
+string/string.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc
 vector/vector.cc
 C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/vector/vector.cc
 
@@ -28,7 +72,21 @@ C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std
 optional
 -
 
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc
+string
+-
+
 C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/vector/vector.cc
 vector
 -
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc
+ui.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc
+../core/include.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/include.cc
+../std/include.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/include.cc
 

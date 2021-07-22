@@ -16,6 +16,7 @@ CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: .
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\string\string.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\include.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\ui.cc
 
@@ -36,6 +37,7 @@ CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Ind
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\string\string.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\ui.cc
 
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index
@@ -53,6 +55,7 @@ CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\string\string.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\include.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc

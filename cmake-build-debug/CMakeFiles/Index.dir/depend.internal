@@ -17,6 +17,7 @@ CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/include.cc.obj
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/include.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/memory/memory.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
+ C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc
 CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.cc.obj
@@ -37,6 +38,7 @@ CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/ui.cc.obj
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/include.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/memory/memory.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
+ C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc
  C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc
 CMakeFiles/Index.dir/main.cc.obj
  ../Index/Include/Include_Index/index
@@ -54,6 +56,7 @@ CMakeFiles/Index.dir/main.cc.obj
  ../Index/Include/Include_Index/index_impl/std/include.cc
  ../Index/Include/Include_Index/index_impl/std/memory/memory.cc
  ../Index/Include/Include_Index/index_impl/std/nullable/nullable.cc
+ ../Index/Include/Include_Index/index_impl/std/string/string.cc
  ../Index/Include/Include_Index/index_impl/ui/include.cc
  ../Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.cc
  ../Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.cc

@@ -538,6 +538,39 @@ index_impl\std\nullable\nullable.cc.s:
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 .PHONY : index_impl\std\nullable\nullable.cc.s
 
+index_impl\std\string\string.obj: index_impl\std\string\string.cc.obj
+
+.PHONY : index_impl\std\string\string.obj
+
+# target to build an object file
+index_impl\std\string\string.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\string\string.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\string\string.cc.obj
+
+index_impl\std\string\string.i: index_impl\std\string\string.cc.i
+
+.PHONY : index_impl\std\string\string.i
+
+# target to preprocess a source file
+index_impl\std\string\string.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\string\string.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\string\string.cc.i
+
+index_impl\std\string\string.s: index_impl\std\string\string.cc.s
+
+.PHONY : index_impl\std\string\string.s
+
+# target to generate assembly for a file
+index_impl\std\string\string.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\string\string.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\string\string.cc.s
+
 index_impl\std\vector\vector.obj: index_impl\std\vector\vector.cc.obj
 
 .PHONY : index_impl\std\vector\vector.obj
@@ -616,6 +649,9 @@ help:
 	@echo ... index_impl/std/nullable/nullable.obj
 	@echo ... index_impl/std/nullable/nullable.i
 	@echo ... index_impl/std/nullable/nullable.s
+	@echo ... index_impl/std/string/string.obj
+	@echo ... index_impl/std/string/string.i
+	@echo ... index_impl/std/string/string.s
 	@echo ... index_impl/std/vector/vector.obj
 	@echo ... index_impl/std/vector/vector.i
 	@echo ... index_impl/std/vector/vector.s

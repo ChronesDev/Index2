@@ -32,8 +32,6 @@ namespace Index
             return this->c_str();
         }
     public:
-        static const String Empty;
-    public:
         __declspec(property(get = capacity)) size_t Capacity;
         __declspec(property(get = c_str)) const char* CStr;
         __declspec(property(get = empty)) bool IsEmpty;
@@ -60,6 +58,8 @@ namespace Index
         ALIAS_RECLASS_FUNCTION(bool, StarsWith, starts_with)
         ALIAS_RECLASS_FUNCTION(bool, EndsWith, ends_with)
     };
+
+    typedef Index::String string;
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

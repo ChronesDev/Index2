@@ -32,7 +32,7 @@ int main()
     i2.Remove(10);
     i2.Reserve(1000);
 
-    String s;
+    string s;
 
     std::cout << i2.Capacity << std::endl;
 

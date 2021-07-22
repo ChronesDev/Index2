@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/core/macros.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/core/types.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/include.cc
+core/macros.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/core/macros.cc
+core/types.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/core/types.cc
+std/func/func.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/std/func/func.cc
+std/memory/memory.cc
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/std/memory/memory.cc
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/std/func/func.cc
+functional
+-
+
+C:/Users/lukax/source/ide/clion/Index/Index/Include/Index/index_impl/std/memory/memory.cc
+memory
+-
+

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Index"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Index">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/../Include_Index"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 Index"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Index/fast">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/../Include_Index"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 Index/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="IndexInclude">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Include/Include_Index/IndexInclude.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Include/Include_Index"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 IndexInclude"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="IndexInclude/fast">
+				<Option output="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Include/Include_Index/IndexInclude.lib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/Index/Include/Include_Index"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 IndexInclude/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/types.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros_end.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/func/func.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/memory/memory.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_macros">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_macros_end">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_ui">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_ui_macros">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_ui_macros_end">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/main.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\core\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\macros\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\std\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\ui\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Lib\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/ImGui/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Lib\ImGui\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

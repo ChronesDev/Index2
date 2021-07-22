@@ -1,0 +1,4 @@
+"C:\Program Files\JetBrains\CLion 2021.1.1\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" C:\Users\lukax\source\ide\clion\Index
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/lukax/source/ide/clion/Index/cmake-build-debug

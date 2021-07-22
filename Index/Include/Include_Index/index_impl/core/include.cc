@@ -1,1 +1,6 @@
 #include "types.cc"
+#include "color/color.cc"
+#include "colors/colors.cc"
+#include "rect/rect.cc"
+#include "size/size.cc"
+#include "vector/vector.cc"

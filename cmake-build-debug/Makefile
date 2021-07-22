@@ -220,6 +220,87 @@ Index\Include\Include_Index\index_impl\ui\include.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.s
 .PHONY : Index\Include\Include_Index\index_impl\ui\include.cc.s
 
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.obj: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.obj
+
+# target to build an object file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj
+
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.i: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.i
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.i
+
+# target to preprocess a source file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.i
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.i
+
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.s: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.s
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.s
+
+# target to generate assembly for a file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.s
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.s
+
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.obj: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.obj
+
+# target to build an object file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj
+
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.i: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.i
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.i
+
+# target to preprocess a source file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.i
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.i
+
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.s: Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.s
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.s
+
+# target to generate assembly for a file
+Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.s
+.PHONY : Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.s
+
+Index\Include\Include_Index\index_impl\ui\ui.obj: Index\Include\Include_Index\index_impl\ui\ui.cc.obj
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.obj
+
+# target to build an object file
+Index\Include\Include_Index\index_impl\ui\ui.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.cc.obj
+
+Index\Include\Include_Index\index_impl\ui\ui.i: Index\Include\Include_Index\index_impl\ui\ui.cc.i
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.i
+
+# target to preprocess a source file
+Index\Include\Include_Index\index_impl\ui\ui.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.i
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.cc.i
+
+Index\Include\Include_Index\index_impl\ui\ui.s: Index\Include\Include_Index\index_impl\ui\ui.cc.s
+
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.s
+
+# target to generate assembly for a file
+Index\Include\Include_Index\index_impl\ui\ui.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Index.dir\build.make /nologo -$(MAKEFLAGS) CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.s
+.PHONY : Index\Include\Include_Index\index_impl\ui\ui.cc.s
+
 main.obj: main.cc.obj
 
 .PHONY : main.obj
@@ -266,6 +347,15 @@ help:
 	@echo ... Index/Include/Include_Index/index_impl/ui/include.obj
 	@echo ... Index/Include/Include_Index/index_impl/ui/include.i
 	@echo ... Index/Include/Include_Index/index_impl/ui/include.s
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.obj
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.i
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.s
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.obj
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.i
+	@echo ... Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.s
+	@echo ... Index/Include/Include_Index/index_impl/ui/ui.obj
+	@echo ... Index/Include/Include_Index/index_impl/ui/ui.i
+	@echo ... Index/Include/Include_Index/index_impl/ui/ui.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

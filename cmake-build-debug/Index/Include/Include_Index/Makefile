@@ -142,6 +142,72 @@ IndexInclude\fast:
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 .PHONY : IndexInclude\fast
 
+index_impl\core\color\color.obj: index_impl\core\color\color.cc.obj
+
+.PHONY : index_impl\core\color\color.obj
+
+# target to build an object file
+index_impl\core\color\color.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\color\color.cc.obj
+
+index_impl\core\color\color.i: index_impl\core\color\color.cc.i
+
+.PHONY : index_impl\core\color\color.i
+
+# target to preprocess a source file
+index_impl\core\color\color.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\color\color.cc.i
+
+index_impl\core\color\color.s: index_impl\core\color\color.cc.s
+
+.PHONY : index_impl\core\color\color.s
+
+# target to generate assembly for a file
+index_impl\core\color\color.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\color\color.cc.s
+
+index_impl\core\colors\colors.obj: index_impl\core\colors\colors.cc.obj
+
+.PHONY : index_impl\core\colors\colors.obj
+
+# target to build an object file
+index_impl\core\colors\colors.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\colors\colors.cc.obj
+
+index_impl\core\colors\colors.i: index_impl\core\colors\colors.cc.i
+
+.PHONY : index_impl\core\colors\colors.i
+
+# target to preprocess a source file
+index_impl\core\colors\colors.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\colors\colors.cc.i
+
+index_impl\core\colors\colors.s: index_impl\core\colors\colors.cc.s
+
+.PHONY : index_impl\core\colors\colors.s
+
+# target to generate assembly for a file
+index_impl\core\colors\colors.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\colors\colors.cc.s
+
 index_impl\core\include.obj: index_impl\core\include.cc.obj
 
 .PHONY : index_impl\core\include.obj
@@ -175,6 +241,72 @@ index_impl\core\include.cc.s:
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 .PHONY : index_impl\core\include.cc.s
 
+index_impl\core\rect\rect.obj: index_impl\core\rect\rect.cc.obj
+
+.PHONY : index_impl\core\rect\rect.obj
+
+# target to build an object file
+index_impl\core\rect\rect.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\rect\rect.cc.obj
+
+index_impl\core\rect\rect.i: index_impl\core\rect\rect.cc.i
+
+.PHONY : index_impl\core\rect\rect.i
+
+# target to preprocess a source file
+index_impl\core\rect\rect.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\rect\rect.cc.i
+
+index_impl\core\rect\rect.s: index_impl\core\rect\rect.cc.s
+
+.PHONY : index_impl\core\rect\rect.s
+
+# target to generate assembly for a file
+index_impl\core\rect\rect.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\rect\rect.cc.s
+
+index_impl\core\size\size.obj: index_impl\core\size\size.cc.obj
+
+.PHONY : index_impl\core\size\size.obj
+
+# target to build an object file
+index_impl\core\size\size.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\size\size.cc.obj
+
+index_impl\core\size\size.i: index_impl\core\size\size.cc.i
+
+.PHONY : index_impl\core\size\size.i
+
+# target to preprocess a source file
+index_impl\core\size\size.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\size\size.cc.i
+
+index_impl\core\size\size.s: index_impl\core\size\size.cc.s
+
+.PHONY : index_impl\core\size\size.s
+
+# target to generate assembly for a file
+index_impl\core\size\size.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\size\size.cc.s
+
 index_impl\core\types.obj: index_impl\core\types.cc.obj
 
 .PHONY : index_impl\core\types.obj
@@ -207,6 +339,39 @@ index_impl\core\types.cc.s:
 	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\types.cc.s
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 .PHONY : index_impl\core\types.cc.s
+
+index_impl\core\vector\vector.obj: index_impl\core\vector\vector.cc.obj
+
+.PHONY : index_impl\core\vector\vector.obj
+
+# target to build an object file
+index_impl\core\vector\vector.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\vector\vector.cc.obj
+
+index_impl\core\vector\vector.i: index_impl\core\vector\vector.cc.i
+
+.PHONY : index_impl\core\vector\vector.i
+
+# target to preprocess a source file
+index_impl\core\vector\vector.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\vector\vector.cc.i
+
+index_impl\core\vector\vector.s: index_impl\core\vector\vector.cc.s
+
+.PHONY : index_impl\core\vector\vector.s
+
+# target to generate assembly for a file
+index_impl\core\vector\vector.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\core\vector\vector.cc.s
 
 index_impl\include.obj: index_impl\include.cc.obj
 
@@ -340,6 +505,72 @@ index_impl\std\memory\memory.cc.s:
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 .PHONY : index_impl\std\memory\memory.cc.s
 
+index_impl\std\nullable\nullable.obj: index_impl\std\nullable\nullable.cc.obj
+
+.PHONY : index_impl\std\nullable\nullable.obj
+
+# target to build an object file
+index_impl\std\nullable\nullable.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\nullable\nullable.cc.obj
+
+index_impl\std\nullable\nullable.i: index_impl\std\nullable\nullable.cc.i
+
+.PHONY : index_impl\std\nullable\nullable.i
+
+# target to preprocess a source file
+index_impl\std\nullable\nullable.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\nullable\nullable.cc.i
+
+index_impl\std\nullable\nullable.s: index_impl\std\nullable\nullable.cc.s
+
+.PHONY : index_impl\std\nullable\nullable.s
+
+# target to generate assembly for a file
+index_impl\std\nullable\nullable.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\nullable\nullable.cc.s
+
+index_impl\std\vector\vector.obj: index_impl\std\vector\vector.cc.obj
+
+.PHONY : index_impl\std\vector\vector.obj
+
+# target to build an object file
+index_impl\std\vector\vector.cc.obj:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\vector\vector.cc.obj
+
+index_impl\std\vector\vector.i: index_impl\std\vector\vector.cc.i
+
+.PHONY : index_impl\std\vector\vector.i
+
+# target to preprocess a source file
+index_impl\std\vector\vector.cc.i:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.i
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\vector\vector.cc.i
+
+index_impl\std\vector\vector.s: index_impl\std\vector\vector.cc.s
+
+.PHONY : index_impl\std\vector\vector.s
+
+# target to generate assembly for a file
+index_impl\std\vector\vector.cc.s:
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+	$(MAKE) $(MAKESILENT) -f Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make /nologo -$(MAKEFLAGS) Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.s
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+.PHONY : index_impl\std\vector\vector.cc.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -349,12 +580,27 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... IndexInclude
+	@echo ... index_impl/core/color/color.obj
+	@echo ... index_impl/core/color/color.i
+	@echo ... index_impl/core/color/color.s
+	@echo ... index_impl/core/colors/colors.obj
+	@echo ... index_impl/core/colors/colors.i
+	@echo ... index_impl/core/colors/colors.s
 	@echo ... index_impl/core/include.obj
 	@echo ... index_impl/core/include.i
 	@echo ... index_impl/core/include.s
+	@echo ... index_impl/core/rect/rect.obj
+	@echo ... index_impl/core/rect/rect.i
+	@echo ... index_impl/core/rect/rect.s
+	@echo ... index_impl/core/size/size.obj
+	@echo ... index_impl/core/size/size.i
+	@echo ... index_impl/core/size/size.s
 	@echo ... index_impl/core/types.obj
 	@echo ... index_impl/core/types.i
 	@echo ... index_impl/core/types.s
+	@echo ... index_impl/core/vector/vector.obj
+	@echo ... index_impl/core/vector/vector.i
+	@echo ... index_impl/core/vector/vector.s
 	@echo ... index_impl/include.obj
 	@echo ... index_impl/include.i
 	@echo ... index_impl/include.s
@@ -367,6 +613,12 @@ help:
 	@echo ... index_impl/std/memory/memory.obj
 	@echo ... index_impl/std/memory/memory.i
 	@echo ... index_impl/std/memory/memory.s
+	@echo ... index_impl/std/nullable/nullable.obj
+	@echo ... index_impl/std/nullable/nullable.i
+	@echo ... index_impl/std/nullable/nullable.s
+	@echo ... index_impl/std/vector/vector.obj
+	@echo ... index_impl/std/vector/vector.i
+	@echo ... index_impl/std/vector/vector.s
 .PHONY : help
 
 

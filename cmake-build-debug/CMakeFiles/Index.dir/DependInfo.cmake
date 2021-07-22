@@ -7,6 +7,9 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/macros/index_macros.cc.obj"
   "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros_end.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/macros/index_macros_end.cc.obj"
   "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/include.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/include.cc.obj"
+  "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros.cc.obj"
+  "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.cc.obj"
+  "C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/Index/Include/Include_Index/index_impl/ui/ui.cc.obj"
   "C:/Users/lukax/source/ide/clion/Index/main.cc" "C:/Users/lukax/source/ide/clion/Index/cmake-build-debug/CMakeFiles/Index.dir/main.cc.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "MSVC")

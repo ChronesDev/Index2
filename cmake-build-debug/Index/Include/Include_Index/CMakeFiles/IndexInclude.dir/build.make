@@ -110,9 +110,134 @@ Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\types.cc
 <<
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
 
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj: ..\Index\Include\Include_Index\index_impl\core\color\color.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/core/color/color.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\color\color.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/core/color/color.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\color\color.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/core/color/color.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\color\color.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj: ..\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/core/colors/colors.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/core/colors/colors.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/core/colors/colors.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj: ..\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/core/rect/rect.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/core/rect/rect.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/core/rect/rect.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj: ..\Index\Include\Include_Index\index_impl\core\size\size.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/core/size/size.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\size\size.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/core/size/size.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\size\size.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/core/size/size.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\size\size.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj: ..\Index\Include\Include_Index\index_impl\core\vector\vector.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/core/vector/vector.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/core/vector/vector.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/core/vector/vector.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\core\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\include.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/include.cc.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/include.cc.obj"
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\std\include.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\include.cc
@@ -137,7 +262,7 @@ Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\include.c
 
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\func\func.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\func\func.cc.obj: ..\Index\Include\Include_Index\index_impl\std\func\func.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/func/func.cc.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/func/func.cc.obj"
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\std\func\func.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\func\func.cc
@@ -162,7 +287,7 @@ Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\func\func
 
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\memory\memory.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\memory\memory.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/memory/memory.cc.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/memory/memory.cc.obj"
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\std\memory\memory.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\memory\memory.cc
@@ -185,9 +310,59 @@ Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\memory\me
 <<
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
 
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/nullable/nullable.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/std/nullable/nullable.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/std/nullable/nullable.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj: ..\Index\Include\Include_Index\index_impl\std\vector\vector.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/std/vector/vector.cc.obj"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/IndexInclude.dir/index_impl/std/vector/vector.cc.i"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe > CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.i @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
+Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/IndexInclude.dir/index_impl/std/vector/vector.cc.s"
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
+	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
+ /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoNUL /FAs /FaCMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.s /c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\std\vector\vector.cc
+<<
+	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug
+
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\include.cc.obj: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\flags.make
 Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\include.cc.obj: ..\Index\Include\Include_Index\index_impl\include.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/include.cc.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object Index/Include/Include_Index/CMakeFiles/IndexInclude.dir/index_impl/include.cc.obj"
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 	C:\PROGRA~2\MICROS~2\2019\COMMUN~1\VC\Tools\MSVC\1429~1.300\bin\Hostx86\x86\cl.exe @<<
  /nologo /TP $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) /FoCMakeFiles\IndexInclude.dir\index_impl\include.cc.obj /FdCMakeFiles\IndexInclude.dir\IndexInclude.pdb /FS -c C:\Users\lukax\source\ide\clion\Index\Index\Include\Include_Index\index_impl\include.cc
@@ -214,9 +389,16 @@ Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\include.cc.s:
 IndexInclude_OBJECTS = \
 "CMakeFiles\IndexInclude.dir\index_impl\core\include.cc.obj" \
 "CMakeFiles\IndexInclude.dir\index_impl\core\types.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj" \
 "CMakeFiles\IndexInclude.dir\index_impl\std\include.cc.obj" \
 "CMakeFiles\IndexInclude.dir\index_impl\std\func\func.cc.obj" \
 "CMakeFiles\IndexInclude.dir\index_impl\std\memory\memory.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj" \
+"CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj" \
 "CMakeFiles\IndexInclude.dir\index_impl\include.cc.obj"
 
 # External object files for target IndexInclude
@@ -224,13 +406,20 @@ IndexInclude_EXTERNAL_OBJECTS =
 
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\include.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\types.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\color\color.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\colors\colors.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\rect\rect.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\size\size.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\core\vector\vector.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\include.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\func\func.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\memory\memory.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\nullable\nullable.cc.obj
+Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\std\vector\vector.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\index_impl\include.cc.obj
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\build.make
 Index\Include\Include_Index\IndexInclude.lib: Index\Include\Include_Index\CMakeFiles\IndexInclude.dir\objects1.rsp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library IndexInclude.lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX static library IndexInclude.lib"
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug\Index\Include\Include_Index
 	$(CMAKE_COMMAND) -P CMakeFiles\IndexInclude.dir\cmake_clean_target.cmake
 	cd C:\Users\lukax\source\ide\clion\Index\cmake-build-debug

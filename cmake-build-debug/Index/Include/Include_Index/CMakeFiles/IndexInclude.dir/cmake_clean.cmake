@@ -1,10 +1,17 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/IndexInclude.dir/index_impl/core/color/color.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/core/colors/colors.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/core/include.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/core/rect/rect.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/core/size/size.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/core/types.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/core/vector/vector.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/include.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/func/func.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/include.cc.obj"
   "CMakeFiles/IndexInclude.dir/index_impl/std/memory/memory.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/std/nullable/nullable.cc.obj"
+  "CMakeFiles/IndexInclude.dir/index_impl/std/vector/vector.cc.obj"
   "IndexInclude.lib"
   "IndexInclude.pdb"
 )

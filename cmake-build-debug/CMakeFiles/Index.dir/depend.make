@@ -5,21 +5,58 @@ CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\macros\index_macros.
 
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\macros\index_macros_end.cc.obj: ..\Index\Include\Include_Index\index_impl\macros\index_macros_end.cc
 
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\color\color.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\include.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\size\size.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\types.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\core\vector\vector.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\func\func.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
 CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\include.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\include.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\ui.cc
+
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj: ..\Index\Include\Include_Index\index_impl\macros\index_macros.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc
+
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj: ..\Index\Include\Include_Index\index_impl\macros\index_macros_end.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc
+
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\color\color.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\colors\colors.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\include.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\size\size.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\types.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\core\vector\vector.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\func\func.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
+CMakeFiles\Index.dir\Index\Include\Include_Index\index_impl\ui\ui.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\ui.cc
 
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\color\color.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\colors\colors.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\include.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\rect\rect.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\size\size.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\types.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\core\vector\vector.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\include.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\macros\index_macros.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\macros\index_macros_end.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\func\func.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\include.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\memory\memory.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\std\nullable\nullable.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\include.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\macros\index_ui_macros_end.cc
+CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_impl\ui\ui.cc
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_ui_macros
 CMakeFiles\Index.dir\main.cc.obj: ..\Index\Include\Include_Index\index_ui_macros_end
 CMakeFiles\Index.dir\main.cc.obj: ..\main.cc

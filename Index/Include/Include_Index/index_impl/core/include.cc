@@ -1,4 +1,5 @@
 #include "types.cc"
+#include "alignment/alignment.cc"
 #include "color/color.cc"
 #include "colors/colors.cc"
 #include "rect/rect.cc"

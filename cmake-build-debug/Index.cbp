@@ -5,7 +5,7 @@
 		<Option title="Index"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="msvc8"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\fix\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\include\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\memory\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
@@ -187,6 +187,9 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index">
 			<Option target="IndexInclude"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/alignment/alignment.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/color/color.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
@@ -208,13 +211,16 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/vector/vector.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
-		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/include.cc">
-			<Option target="IndexInclude"/>
-		</Unit>
-		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/windows_fix.cc">
-			<Option target="IndexInclude"/>
-		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include/ntdll.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include/windows_fix.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros.cc">
@@ -222,6 +228,12 @@
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/index_macros_end.cc">
 			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/memory/include.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/memory/memory.cc">
+			<Option target="IndexInclude"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/func/func.cc">
 			<Option target="IndexInclude"/>
@@ -233,6 +245,9 @@
 			<Option target="IndexInclude"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/nullable/nullable.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/stack/stack.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc">
@@ -343,11 +358,14 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/core/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\core\"/>
 		</Unit>
-		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/fix/CMakeLists.txt">
-			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\fix\"/>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/include/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\include\"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/macros/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\macros\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/memory/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\memory\"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\std\"/>

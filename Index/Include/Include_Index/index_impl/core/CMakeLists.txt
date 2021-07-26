@@ -1,6 +1,7 @@
 target_sources(IndexInclude PRIVATE
         include.cc
         types.cc
+        alignment/alignment.cc
         color/color.cc
         colors/colors.cc
         rect/rect.cc

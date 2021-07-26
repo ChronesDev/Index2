@@ -1,5 +1,9 @@
 #pragma once
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-err58-cpp"
+
+#include <variant>
 #include <imgui.h>
 
 #include "../core/include.cc"
@@ -14,88 +18,116 @@ namespace Index::UI
 
 namespace Index::UI
 {
-    class RenderContext
-    {
-    public:
-        ImDrawList& Render;
-        ImDrawList& ForegroundRender;
-        ImDrawList& BackgroundRender;
-    };
+    struct IRenderState;
+    struct UIElement;
+}
 
-    struct LayoutInfo
-    {
-        Nullable<Size> Size = Null;
-    };
+namespace Index::UI::RenderContext
+{
+    // Values
+    extern bool RebuildTree;
+    extern Stack<IRenderState*> CurrentStates;
+    extern Stack<Rect> ContentArea;
+}
 
-    struct RenderInfo
+namespace Index::UI
+{
+    typedef Func<void()> IRenderCommand;
+
+    struct IRenderState
     {
-        Rect Area;
-        Vec2F GetSize() const { return { Area.Width, Area.Height }; };
-        Vec2F GetStart() const { return { Area.X, Area.Y }; };
-        Vec2F GetEnd() const { return { Area.X + Area.Width, Area.Y + Area.Height }; };
-        __declspec(property(get = GetSize)) Vec2F Size;
-        __declspec(property(get = GetStart)) Vec2F Start;
-        __declspec(property(get = GetEnd)) Vec2F End;
-        RenderInfo ContentArea(Vec4F padding) {
-            return RenderInfo{
-                .Area = Rect{
-                    Area.X + std::min(padding.X, Size.X / 2),
-                    Area.Y + std::min(padding.Y, Size.Y / 2),
-                    Area.Width - std::min(padding.Z, Size.X / 2),
-                    Area.Height - std::min(padding.W, Size.Y / 2)
+        List<std::variant<IRenderCommand, IRenderState*>> RenderList;
+        void Render() {
+            for (auto r : RenderList) {
+                if (std::holds_alternative<IRenderCommand>(r)) {
+                    auto func = std::get<IRenderCommand>(r);
+                    if (func) func();
                 }
-            };
-        }
-    };
-
-    struct UIElement
-    {
-        virtual LayoutInfo Render(RenderContext& e, RenderInfo i) = 0;
-    };
-
-    struct Builder : public UIElement
-    {
-        Func<UIElement*()> Build = nullptr;
-        Builder() = default;
-        explicit Builder(Func<UIElement*()> e) {
-            Build = std::move(e);
-        }
-        template<class T = UIElement, class... Args> static IPtr<T> New(Args&&... args) {
-            if constexpr (std::is_same<T, Builder>::value) return INew<Builder>(std::forward<Args>(args)...);
-            else return std::static_pointer_cast<T>(INew<Builder>(std::forward<Args>(args)...));
-        }
-        LayoutInfo Render(RenderContext& e, RenderInfo i) override {
-            if (Build) {
-                UIElement* element = Build();
-                if (element) {
-                    return element->Render(e, i);
+                else {
+                    auto renderState = std::get<IRenderState*>(r);
+                    if (renderState) renderState->Render();
                 }
             }
-            return LayoutInfo {
-                .Size = i.Size
-            };
         }
-    };
-
-    struct Stack : public UIElement
-    {
-        List<IPtr<UIElement>> Content;
-        explicit Stack(List<IPtr<UIElement>> e) {
-            Content = std::move(e);
+        void AddCommand(IRenderCommand command) {
+            RenderList.Push(command);
         }
-        template<class T = UIElement> static IPtr<T> New(List<IPtr<UIElement>> e) {
-            if constexpr (std::is_same<T, Stack>::value) return INew<Stack>(e);
-            else return std::static_pointer_cast<T>(INew<Stack>(e));
-        }
-        LayoutInfo Render(RenderContext& e, RenderInfo i) override {
-            for(auto& ui : Content) {
-                if (ui != nullptr) {
-                    ui->Render(e, i);
-                }
-            }
-            return LayoutInfo {
-                .Size = i.Size
-            };
+        void AddState(IRenderState* state) {
+            if (!state) return;
+            RenderList.Push(state);
         }
     };
 }
+
+namespace Index::UI
+{
+    struct UIElement
+    {
+        virtual void Build() = 0;
+    };
+
+    struct State : UIElement, IRenderState
+    {
+        List<IPtr<UIElement>> Content;
+        void Build() override {
+            (+RenderContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
+            for (auto& c : Content) {
+                if (c) {
+                    c->Build();
+                }
+            }
+        }
+        void Rebuild() {
+            namespace context = RenderContext;
+            bool isRebuilding = context::RebuildTree;
+            context::RebuildTree = true;
+            Build();
+            context::RebuildTree = isRebuilding;
+        }
+    };
+}
+
+#define NEW_CLASS(class_name, properties) struct New {                                  \
+    properties                                                                          \
+    operator Index::IPtr<UIElement>() {                                                 \
+        return std::static_pointer_cast<UIElement>(Index::INew<class_name>(*this));     \
+    }                                                                                   \
+    operator Index::IPtr<class_name>() {                                                \
+        return Index::INew<class_name>(*this);                                          \
+    }                                                                                   \
+};
+
+#define NEW_CONSTRUCTOR(class_name) explicit class_name(New e)
+
+#define ThisState (+Index::UI::RenderContext::CurrentStates)
+
+// HERE
+
+namespace Index::UI
+{
+    struct Rectangle : UIElement
+    {
+        NEW_CLASS(Rectangle, );
+        NEW_CONSTRUCTOR(Rectangle) {
+
+        }
+        void Build() override {
+            ThisState->AddCommand([]{
+                ImGui::GetForegroundDrawList()->AddRect({0,0}, {10,10}, ToImColor(Colors::Lime));
+            });
+        }
+    };
+}
+
+#undef NEW_CLASS
+#undef NEW_CONSTRUCTOR
+#undef ThisState
+
+namespace Index::UI::RenderContext
+{
+    // Values
+    inline bool RebuildTree = true;
+    inline Stack<IRenderState*> CurrentStates;
+    inline Stack<Rect> ContentArea;
+}
+#pragma clang diagnostic pop

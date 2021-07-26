@@ -6,33 +6,32 @@
 
 #include <index_ui_macros>
 
+#define n ::New
+
 int main()
 {
+    using namespace Index;
+    using namespace Index::UI;
+
+    Mem.PatchChars(nullptr, "\x00\x00");
+    Mem.PatchBytes(nullptr, { 0x00, 0x00 });
+    Mem.Patch(nullptr, {0x0, 0x0});
+
+    return 0;
+
     OnRender = []() {
 
-        using namespace Index;
-        using namespace Index::UI;
-        using namespace Index::UI::ImUI;
+        ui_ref u = Rectangle n {
 
-        var size = WindowSize;
-        var e = RenderContext {
-            .Render = *(ImGui::GetForegroundDrawList()),
-            .ForegroundRender = *(ImGui::GetForegroundDrawList()),
-            .BackgroundRender = *(ImGui::GetBackgroundDrawList())
-        };
-        var i = RenderInfo {
-            .Area = Rect {
-                0, 0, size.X, size.Y
-            }
         };
 
-        var render = Stack::New({
-            Rectangle::New({
-                .Fill = Colors::Lime
-            })
-        });
+        IPtr<UI::Rectangle> r = Rectangle n {
 
-        render->Render(e, i);
+        };
+
+        Mem.ReadStatic<int>(10);
+        // Input Hook
+        Mem.FindSignature("Minecraft.Windows", "48 89 5C 24 ?? 57 48 83 EC ?? 8B 05 ?? ?? ?? ?? 8B DA 89 54 24 ??");
 
     };
 

@@ -37,7 +37,7 @@ namespace Index
 	typedef char32_t U32Char;
 
 	typedef unsigned long long IntPtr;
-    typedef long long SIntPtr;
+    typedef signed long long SIntPtr;
 
 	typedef Int8 int8;
 	typedef Int16 int16;

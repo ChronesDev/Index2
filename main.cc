@@ -15,7 +15,8 @@ int main()
 
     Mem.PatchChars(nullptr, "\x00\x00");
     Mem.PatchBytes(nullptr, { 0x00, 0x00 });
-    Mem.Patch(nullptr, {0x0, 0x0});
+    Mem.Patch(nullptr, { 0x0, 0x0 });
+    Mem.Write<int>(nullptr, 10);
 
     return 0;
 

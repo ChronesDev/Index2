@@ -10,6 +10,10 @@
     template<class... TArgs> \
     __forceinline this_return_type this_function(TArgs&&... args) { return this->base_function(std::forward<TArgs>(args)...); }
 
+#define ALIAS_RECLASS_FUNCTION_CONST(this_return_type, this_function, base_function) \
+    template<class... TArgs> \
+    __forceinline this_return_type this_function(TArgs&&... args) const { return this->base_function(std::forward<TArgs>(args)...); }
+
 namespace Index
 {
     template<class T>
@@ -42,7 +46,7 @@ namespace Index
         __declspec(property(get = front, put = SetFirst)) T& First;
         __declspec(property(get = back, put = SetLast)) T& Last;
     public:
-        ALIAS_RECLASS_FUNCTION(void, At, at)
+        ALIAS_RECLASS_FUNCTION_CONST(T&, At, at)
         ALIAS_RECLASS_FUNCTION(void, Add, push_back)
         ALIAS_RECLASS_FUNCTION(void, Push, push_back)
         ALIAS_RECLASS_FUNCTION(void, Pop, pop_back)
@@ -57,3 +61,4 @@ namespace Index
 
 #undef ALIAS_RECLASS_CONSTRUCTOR
 #undef ALIAS_RECLASS_FUNCTION
+#undef ALIAS_RECLASS_FUNCTION_CONST

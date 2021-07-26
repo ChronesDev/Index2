@@ -10,6 +10,10 @@
     template<class... TArgs> \
     __forceinline this_return_type this_function(TArgs&&... args) { return this->base_function(std::forward<TArgs>(args)...); }
 
+#define ALIAS_RECLASS_FUNCTION_CONST(this_return_type, this_function, base_function) \
+    template<class... TArgs> \
+    __forceinline this_return_type this_function(TArgs&&... args) const { return this->base_function(std::forward<TArgs>(args)...); }
+
 namespace Index
 {
     template<class T>
@@ -29,7 +33,7 @@ namespace Index
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION(bool, OwnerBefore, owner_before)
+        ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
     };
 
     template<class T>
@@ -51,8 +55,8 @@ namespace Index
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION(bool, OwnerBefore, owner_before)
-        ALIAS_RECLASS_FUNCTION(long, UseCount, use_count)
+        ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
+        ALIAS_RECLASS_FUNCTION_CONST(long, UseCount, use_count)
     };
 
     template<class T>
@@ -87,3 +91,4 @@ namespace Index
 
 #undef ALIAS_RECLASS_CONSTRUCTOR
 #undef ALIAS_RECLASS_FUNCTION
+#undef ALIAS_RECLASS_FUNCTION_CONST

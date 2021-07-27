@@ -20,16 +20,14 @@ int main()
         bool isHovered = false;
         void Construct() override {
             ui_self_init;
-            next = Builder n {[]{
-                ui_static_ret(Holder n {
-                    content {
-                        self.next
-                    }
-                });
-            }};
-            next = Holder n {
-
+            add = Holder n {
+                content {
+                    next
+                }
             };
+
+            next = Holder n { };
+            next = Holder n { };
         }
     };
 

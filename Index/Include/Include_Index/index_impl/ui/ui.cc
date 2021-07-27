@@ -145,6 +145,22 @@ namespace Index::UI
         }
     };
 
+    struct Wrap : UIElement
+    {
+        IPtr<UIElement> Content;
+        NEW_CLASS(Wrap, IPtr<UIElement> Content;);
+        NEW_CONSTRUCTOR(Wrap) {
+            Content = std::move(e.Content);
+        }
+        void Build() override {
+            if (Content) Content->Build();
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            if (Content) Content->HandleNotification(e);
+            if (e->Handled) return;
+        }
+    };
+
     struct Builder : UIElement
     {
         Func<Index::UI::UIElement*()> BuildFunc;
@@ -254,7 +270,7 @@ namespace Index::UI
         }
         void HandleNotification(IPtr<INotification>& e) override {
             for (auto& c : _Content) {
-                HandleNotification(e);
+                if (c) c->HandleNotification(e);
                 if (e->Handled) return;
             }
         }
@@ -306,7 +322,7 @@ namespace Index::UI
         }
         void HandleNotification(IPtr<INotification>& e) override {
             for (auto& c : _Content) {
-                HandleNotification(e);
+                if (c) c->HandleNotification(e);
                 if (e->Handled) return;
             }
         }

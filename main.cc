@@ -20,14 +20,10 @@ int main()
         bool isHovered = false;
         void Construct() override {
             ui_self_init;
-            add = Holder n {
-                content {
-                    next
-                }
-            };
+            add = Wrap n { next };
+            next = Holder n {{
 
-            next = Holder n { };
-            next = Holder n { };
+            }};
         }
     };
 

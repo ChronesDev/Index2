@@ -70,7 +70,7 @@ namespace Index::UI
     struct UIElement
     {
         virtual void Build() = 0;
-        virtual void HandleNotification(IPtr<INotification>& e) = 0;
+        virtual void Notify(INotification* e) = 0;
     };
 
     struct State : UIElement, IRenderState
@@ -90,9 +90,9 @@ namespace Index::UI
             Build();
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             for (auto& c : Content) {
-                HandleNotification(e);
+                Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -122,7 +122,7 @@ namespace Index::UI
         NEW_CLASS(Empty,);
         NEW_CONSTRUCTOR(Empty) { }
         void Build() override { }
-        void HandleNotification(IPtr<INotification>& e) override { }
+        void Notify(INotification* e) override { }
     };
 
     struct Holder : UIElement
@@ -137,9 +137,9 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             for (auto& c : Content) {
-                HandleNotification(e);
+                Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -155,9 +155,8 @@ namespace Index::UI
         void Build() override {
             if (Content) Content->Build();
         }
-        void HandleNotification(IPtr<INotification>& e) override {
-            if (Content) Content->HandleNotification(e);
-            if (e->Handled) return;
+        void Notify(INotification* e) override {
+            if (Content) Content->Notify(e);
         }
     };
 
@@ -174,11 +173,10 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             if (BuildFunc) {
                 auto c = BuildFunc();
-                if (c) c->HandleNotification(e);
-                if (e->Handled) return;
+                if (c) c->Notify(e);
             }
         }
     };
@@ -205,11 +203,10 @@ namespace Index::UI
             Build();
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             if (BuildFunc) {
                 auto c = BuildFunc();
-                if (c) c->HandleNotification(e);
-                if (e->Handled) return;
+                if (c) c->Notify(e);
             }
         }
     };
@@ -225,9 +222,9 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             for (auto& c : Content) {
-                HandleNotification(e);
+                Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -268,9 +265,9 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             for (auto& c : _Content) {
-                if (c) c->HandleNotification(e);
+                if (c) c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -320,9 +317,9 @@ namespace Index::UI
             Build();
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
-        void HandleNotification(IPtr<INotification>& e) override {
+        void Notify(INotification* e) override {
             for (auto& c : _Content) {
-                if (c) c->HandleNotification(e);
+                if (c) c->Notify(e);
                 if (e->Handled) return;
             }
         }

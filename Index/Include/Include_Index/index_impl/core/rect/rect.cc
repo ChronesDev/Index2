@@ -12,5 +12,17 @@ namespace Index
         Rect(float x, float y, Size size) : X(x), Y(y), Width(size.Width), Height(size.Height) { }
         Rect(Vec2F vec, float width, float height) : X(vec.X), Y(vec.Y), Width(width), Height(height) { }
         Rect(Vec2F vec, Size size) : X(vec.X), Y(vec.Y), Width(size.Width), Height(size.Height) { }
+        [[nodiscard]] Vec2F GetFirstPoint() const {
+            return { X, Y };
+        }
+        [[nodiscard]] Vec2F GetSecondPoint() const {
+            return { X + Width, Y + Height };
+        }
+        [[nodiscard]] Vec2F GetCenter() const {
+            return { X + (Width / 2), Y + (Height / 2) };
+        }
+        __declspec(property(get = GetFirstPoint)) Vec2F First;
+        __declspec(property(get = GetSecondPoint)) Vec2F Second;
+        __declspec(property(get = GetCenter)) Vec2F Center;
     };
 }

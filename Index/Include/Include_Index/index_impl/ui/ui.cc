@@ -1,11 +1,17 @@
 #pragma once
 
 #include <variant>
-#include <limits>
 
 #include "../core/include.cc"
 #include "../std/include.cc"
 
+// Important
+namespace Index::UI
+{
+    constexpr float NullF = Limits::FloatMax;
+}
+
+// Structs
 namespace Index::UI
 {
     struct IRenderState;
@@ -31,17 +37,16 @@ namespace Index::UI
     };
 }
 
-// UI Layout
+// LayoutInfo
 namespace Index::UI
 {
-    struct UILayout
+    struct LayoutInfo
     {
-        Vec2F MinSize { 0, 0 };
-        Vec2<Nullable<float>> Size { Null, Null };
-        Vec2F MaxSize { Limits::MaxValueOf<float>(), Limits::MaxValueOf<float>() };
+        Rect Area;
     };
-}
+};
 
+// RenderCommands
 namespace Index::UI
 {
     typedef Func<void()> IRenderCommand;
@@ -74,29 +79,34 @@ namespace Index::UI
     };
 }
 
+// UIElement, State
 namespace Index::UI
 {
     struct UIElement
     {
-        virtual void Build() = 0;
+        Vec2F MinSize { NullF, NullF };
+        Vec2F MaxSize { NullF, NullF };
+        Vec2F Size { NullF, NullF };
+        Align Alignment = Align::Stretch;
+        virtual void Build(LayoutInfo i) = 0;
         virtual void Notify(INotification* e) = 0;
     };
 
     struct State : UIElement, IRenderState
     {
         List<IPtr<UIElement>> Content;
-        void Build() override {
+        void Build(LayoutInfo i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
             for (auto& c : Content) {
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
-        void Rebuild() {
+        void Rebuild(LayoutInfo i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
-            Build();
+            Build(i);
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
         void Notify(INotification* e) override {
@@ -107,6 +117,19 @@ namespace Index::UI
         }
     };
 }
+
+#define DEFAULT_MEMBERS                                          \
+Index::Vec2F MinSize { Index::UI::NullF, Index::UI::NullF };     \
+Index::Vec2F MaxSize { Index::UI::NullF, Index::UI::NullF };     \
+Index::Vec2F Size { Index::UI::NullF, Index::UI::NullF };        \
+Index::Align Alignment = Index::Align::Stretch;
+
+#define SET_DEFAULT_MEMBERS     \
+this->MinSize = e.MinSize;      \
+this->MaxSize = e.MaxSize;      \
+this->Size = e.Size;            \
+this->Alignment = e.Alignment;
+
 
 #define NEW_CLASS(class_name, properties) struct New {                                              \
     properties                                                                                      \
@@ -122,15 +145,14 @@ namespace Index::UI
 
 #define ThisState (+Index::UI::UIContext::CurrentStates)
 
-// HERE
-
+// Normal Elements
 namespace Index::UI
 {
     struct Empty : UIElement
     {
         NEW_CLASS(Empty,);
         NEW_CONSTRUCTOR(Empty) { }
-        void Build() override { }
+        void Build(LayoutInfo i) override { }
         void Notify(INotification* e) override { }
     };
 
@@ -141,9 +163,9 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Holder) {
             Content = std::move(e.Content);
         }
-        void Build() override {
+        void Build(LayoutInfo i) override {
             for (auto& c : Content) {
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
         void Notify(INotification* e) override {
@@ -161,14 +183,15 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Wrap) {
             Content = std::move(e.Content);
         }
-        void Build() override {
-            if (Content) Content->Build();
+        void Build(LayoutInfo i) override {
+            if (Content) Content->Build(i);
         }
         void Notify(INotification* e) override {
             if (Content) Content->Notify(e);
         }
     };
 
+    // TODO: Add _Content member
     struct Builder : UIElement
     {
         Func<Index::UI::UIElement*()> BuildFunc;
@@ -176,10 +199,10 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Builder) {
             BuildFunc = e.BuildFunc;
         }
-        void Build() override {
+        void Build(LayoutInfo i) override {
             if (BuildFunc) {
                 auto c = BuildFunc();
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
         void Notify(INotification* e) override {
@@ -190,6 +213,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add _Content member
     struct StatefulBuilder : UIElement, IRenderState
     {
         Func<Index::UI::UIElement*()> BuildFunc;
@@ -197,19 +221,19 @@ namespace Index::UI
         NEW_CONSTRUCTOR(StatefulBuilder) {
             BuildFunc = e.BuildFunc;
         }
-        void Build() override {
+        void Build(LayoutInfo i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
             if (BuildFunc) {
                 auto c = BuildFunc();
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
-        void Rebuild() {
+        void Rebuild(LayoutInfo i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
-            Build();
+            Build(i);
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
         void Notify(INotification* e) override {
@@ -226,9 +250,9 @@ namespace Index::UI
         NEW_CONSTRUCTOR(NextElement) {
             Content = std::move(e.Content);
         }
-        void Build() override {
+        void Build(LayoutInfo i) override {
             for (auto& c : Content) {
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
         void Notify(INotification* e) override {
@@ -266,12 +290,12 @@ namespace Index::UI
         __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
     public:
         virtual void Construct() = 0;
-        void Build() override {
+        void Build(LayoutInfo i) override {
             GetNewNext();
             _Content.Clear();
             Construct();
             for (auto& c : _Content) {
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
         void Notify(INotification* e) override {
@@ -309,7 +333,7 @@ namespace Index::UI
         __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
     public:
         virtual void Construct() = 0;
-        void Build() override {
+        void Build(LayoutInfo i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
@@ -317,13 +341,13 @@ namespace Index::UI
             _Content.Clear();
             Construct();
             for (auto& c : _Content) {
-                if (c) c->Build();
+                if (c) c->Build(i);
             }
         }
-        void Rebuild() {
+        void Rebuild(LayoutInfo i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
-            Build();
+            Build(i);
             Index::UI::UIContext::RebuildTree = isRebuilding;
         }
         void Notify(INotification* e) override {
@@ -335,6 +359,34 @@ namespace Index::UI
     };
 }
 
+// Layout Elements
+namespace Index::UI
+{
+    struct StackH : UIElement
+    {
+        DEFAULT_MEMBERS;
+        List<IPtr<UIElement>> Content;
+        NEW_CLASS(StackH, DEFAULT_MEMBERS; List<IPtr<UIElement>> Content;);
+        NEW_CONSTRUCTOR(StackH) {
+            SET_DEFAULT_MEMBERS;
+            Content = std::move(e.Content);
+        }
+        void Build(LayoutInfo i) override {
+            for (auto& c : Content) {
+                if (c) c->Build(i);
+            }
+        }
+        void Notify(INotification* e) override {
+            for (auto& c : Content) {
+                Notify(e);
+                if (e->Handled) return;
+            }
+        }
+    };
+}
+
+#undef DEFAULT_MEMBERS
+#undef SET_DEFAULT_MEMBERS
 #undef NEW_CLASS
 #undef NEW_CONSTRUCTOR
 #undef ThisState

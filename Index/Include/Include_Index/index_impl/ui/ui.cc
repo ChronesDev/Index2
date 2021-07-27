@@ -1,9 +1,7 @@
 #pragma once
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cert-err58-cpp"
-
 #include <variant>
+#include <limits>
 
 #include "../core/include.cc"
 #include "../std/include.cc"
@@ -30,6 +28,17 @@ namespace Index::UI
     {
         bool Handled = false;
         Int64 Id = -1;
+    };
+}
+
+// UI Layout
+namespace Index::UI
+{
+    struct UILayout
+    {
+        Vec2F MinSize { 0, 0 };
+        Vec2<Nullable<float>> Size { Null, Null };
+        Vec2F MaxSize { Limits::MaxValueOf<float>(), Limits::MaxValueOf<float>() };
     };
 }
 
@@ -367,5 +376,3 @@ namespace Index::UI::UIContext
         Root->Render();
     }
 }
-
-#pragma clang diagnostic pop

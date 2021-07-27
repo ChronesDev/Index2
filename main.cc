@@ -31,7 +31,9 @@ int main()
 
     OnRender = []() {
 
-        UIContext::Render();
+        ImDrawList& d = *ImGui::GetForegroundDrawList();
+
+
 
     };
 

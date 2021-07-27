@@ -161,12 +161,18 @@ namespace Index::UI
             _Next = NextElement::New();
             return _Next;
         }
-
-        __declspec(property(get = GetNewNext)) IPtr<UIElement> next;
+        void SetNextContent(IPtr<UIElement> c) {
+            if (c.IsNull) return;
+            if (_Next) {
+                _Next->Content.Add(std::move(c));
+            }
+        }
+        __declspec(property(get = GetNewNext, put = SetNextContent)) IPtr<UIElement> next;
     public:
         virtual void Construct() = 0;
         void Build() override {
             GetNewNext();
+            Construct();
         }
     };
 

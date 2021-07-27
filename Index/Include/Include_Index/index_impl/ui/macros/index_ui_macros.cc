@@ -19,3 +19,5 @@ return _ret.Ptr;
 #define ui_func []() -> void
 
 #define ui_ref Index::IPtr<Index::UI::UIElement>
+
+#define ui_state (+Index::UI::UIContext::CurrentStates)

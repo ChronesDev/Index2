@@ -5,7 +5,7 @@
 		<Option title="Index"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="msvc8"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\include\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\memory\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Index\;CMake Files\Index\Include\;CMake Files\Index\Include\Include_Index\;CMake Files\Index\Include\Include_Index\index_impl\;CMake Files\Index\Include\Include_Index\index_impl\core\;CMake Files\Index\Include\Include_Index\index_impl\include\;CMake Files\Index\Include\Include_Index\index_impl\macros\;CMake Files\Index\Include\Include_Index\index_impl\memory\;CMake Files\Index\Include\Include_Index\index_impl\std\;CMake Files\Index\Include\Include_Index\index_impl\ui\;CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\;CMake Files\Index\Include\Include_Index\index_impl\ui\notification\;CMake Files\Index\Lib\;CMake Files\Index\Lib\ImGui\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="C:/Users/lukax/source/ide/clion/Index/cmake-build-debug"/>
@@ -271,6 +271,15 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/macros/index_ui_macros_end.cc">
 			<Option target="Index"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/notification/include.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/notification/notification.cc">
+			<Option target="Index"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/notification/notifications.cc">
+			<Option target="Index"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ui.cc">
 			<Option target="Index"/>
 		</Unit>
@@ -375,6 +384,9 @@
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/ImUI/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\ui\ImUI\"/>
+		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/ui/notification/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\Index\Include\Include_Index\index_impl\ui\notification\"/>
 		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Lib/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\Index\Lib\"/>

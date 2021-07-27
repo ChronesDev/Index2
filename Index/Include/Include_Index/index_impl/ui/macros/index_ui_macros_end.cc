@@ -8,3 +8,4 @@
 #undef ui_self_init
 #undef ui_func
 #undef ui_ref
+#undef ui_state

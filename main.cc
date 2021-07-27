@@ -13,13 +13,26 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
+    UIContext::BeginBuild();
+
+    struct Button : Element
+    {
+        bool isHovered = false;
+        void Construct() override {
+            ui_self_init;
+            if (self.isHovered) {
+                ui_state->AddCommand([]{
+
+                });
+            }
+        }
+    };
+
+    UIContext::EndBuild();
+
     OnRender = []() {
 
-        (+Index::UI::UIContext::CurrentStates)->AddCommand([]{
-            ui_ref r = Builder n {[]{
-                return nullptr;
-            }};
-        });
+        UIContext::Render();
 
     };
 

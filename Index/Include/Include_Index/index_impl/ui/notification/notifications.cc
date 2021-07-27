@@ -1,3 +1,5 @@
+#pragma once
+
 #include "notification.cc"
 
 // Keyboard Notifications

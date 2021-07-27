@@ -20,11 +20,16 @@ int main()
         bool isHovered = false;
         void Construct() override {
             ui_self_init;
-            if (self.isHovered) {
-                ui_state->AddCommand([]{
-
+            next = Builder n {[]{
+                ui_static_ret(Holder n {
+                    content {
+                        self.next
+                    }
                 });
-            }
+            }};
+            next = Holder n {
+
+            };
         }
     };
 

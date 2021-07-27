@@ -23,6 +23,16 @@ namespace Index::UI::UIContext
     extern Stack<IRenderState*> CurrentStates;
 }
 
+// Notification
+namespace Index::UI
+{
+    struct INotification
+    {
+        bool Handled = false;
+        Int64 Id = -1;
+    };
+}
+
 namespace Index::UI
 {
     typedef Func<void()> IRenderCommand;
@@ -42,6 +52,9 @@ namespace Index::UI
                 }
             }
         }
+        void ClearRenderList() {
+            RenderList.Clear();
+        }
         void AddCommand(IRenderCommand command) {
             RenderList.Push(command);
         }
@@ -57,6 +70,7 @@ namespace Index::UI
     struct UIElement
     {
         virtual void Build() = 0;
+        virtual void HandleNotification(IPtr<INotification>& e) = 0;
     };
 
     struct State : UIElement, IRenderState
@@ -64,6 +78,8 @@ namespace Index::UI
         List<IPtr<UIElement>> Content;
         void Build() override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
+            if (!UIContext::RebuildTree) return;
+            this->ClearRenderList();
             for (auto& c : Content) {
                 if (c) c->Build();
             }
@@ -73,6 +89,12 @@ namespace Index::UI
             Index::UI::UIContext::RebuildTree = true;
             Build();
             Index::UI::UIContext::RebuildTree = isRebuilding;
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            for (auto& c : Content) {
+                HandleNotification(e);
+                if (e->Handled) return;
+            }
         }
     };
 }
@@ -100,6 +122,27 @@ namespace Index::UI
         NEW_CLASS(Empty,);
         NEW_CONSTRUCTOR(Empty) { }
         void Build() override { }
+        void HandleNotification(IPtr<INotification>& e) override { }
+    };
+
+    struct Holder : UIElement
+    {
+        List<IPtr<UIElement>> Content;
+        NEW_CLASS(Holder, List<IPtr<UIElement>> Content;);
+        NEW_CONSTRUCTOR(Holder) {
+            Content = std::move(e.Content);
+        }
+        void Build() override {
+            for (auto& c : Content) {
+                if (c) c->Build();
+            }
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            for (auto& c : Content) {
+                HandleNotification(e);
+                if (e->Handled) return;
+            }
+        }
     };
 
     struct Builder : UIElement
@@ -115,6 +158,13 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
+        void HandleNotification(IPtr<INotification>& e) override {
+            if (BuildFunc) {
+                auto c = BuildFunc();
+                if (c) c->HandleNotification(e);
+                if (e->Handled) return;
+            }
+        }
     };
 
     struct StatefulBuilder : UIElement, IRenderState
@@ -125,7 +175,9 @@ namespace Index::UI
             BuildFunc = e.BuildFunc;
         }
         void Build() override {
+            (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
+            this->ClearRenderList();
             if (BuildFunc) {
                 auto c = BuildFunc();
                 if (c) c->Build();
@@ -136,6 +188,13 @@ namespace Index::UI
             Index::UI::UIContext::RebuildTree = true;
             Build();
             Index::UI::UIContext::RebuildTree = isRebuilding;
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            if (BuildFunc) {
+                auto c = BuildFunc();
+                if (c) c->HandleNotification(e);
+                if (e->Handled) return;
+            }
         }
     };
 
@@ -150,12 +209,19 @@ namespace Index::UI
                 if (c) c->Build();
             }
         }
+        void HandleNotification(IPtr<INotification>& e) override {
+            for (auto& c : Content) {
+                HandleNotification(e);
+                if (e->Handled) return;
+            }
+        }
     };
 
     struct Element : UIElement
     {
     private:
         IPtr<NextElement> _Next;
+        List<IPtr<UIElement>> _Content;
     public:
         IPtr<UIElement> GetNewNext() {
             _Next = NextElement::New();
@@ -168,17 +234,82 @@ namespace Index::UI
             }
         }
         __declspec(property(get = GetNewNext, put = SetNextContent)) IPtr<UIElement> next;
+        void AddContent(IPtr<UIElement> c) {
+            _Content.Add(std::move(c));
+        }
+        __declspec(property(put = AddContent)) IPtr<UIElement> add;
+        List<IPtr<UIElement>>& GetContent() {
+            return _Content;
+        }
+        __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
     public:
         virtual void Construct() = 0;
         void Build() override {
             GetNewNext();
+            _Content.Clear();
             Construct();
+            for (auto& c : _Content) {
+                if (c) c->Build();
+            }
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            for (auto& c : _Content) {
+                HandleNotification(e);
+                if (e->Handled) return;
+            }
         }
     };
 
     struct StatefulElement : UIElement, IRenderState
     {
-
+    private:
+        IPtr<NextElement> _Next;
+        List<IPtr<UIElement>> _Content;
+    public:
+        IPtr<UIElement> GetNewNext() {
+            _Next = NextElement::New();
+            return _Next;
+        }
+        void SetNextContent(IPtr<UIElement> c) {
+            if (c.IsNull) return;
+            if (_Next) {
+                _Next->Content.Add(std::move(c));
+            }
+        }
+        __declspec(property(get = GetNewNext, put = SetNextContent)) IPtr<UIElement> next;
+        void AddContent(IPtr<UIElement> c) {
+            _Content.Add(std::move(c));
+        }
+        __declspec(property(put = AddContent)) IPtr<UIElement> add;
+        List<IPtr<UIElement>>& GetContent() {
+            return _Content;
+        }
+        __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
+    public:
+        virtual void Construct() = 0;
+        void Build() override {
+            (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
+            if (!UIContext::RebuildTree) return;
+            this->ClearRenderList();
+            GetNewNext();
+            _Content.Clear();
+            Construct();
+            for (auto& c : _Content) {
+                if (c) c->Build();
+            }
+        }
+        void Rebuild() {
+            bool isRebuilding = Index::UI::UIContext::RebuildTree;
+            Index::UI::UIContext::RebuildTree = true;
+            Build();
+            Index::UI::UIContext::RebuildTree = isRebuilding;
+        }
+        void HandleNotification(IPtr<INotification>& e) override {
+            for (auto& c : _Content) {
+                HandleNotification(e);
+                if (e->Handled) return;
+            }
+        }
     };
 }
 

@@ -38,6 +38,22 @@ namespace Index
         }
         __declspec(property(get = GetIsHCentered)) bool IsHCentered;
         __declspec(property(get = GetIsVCentered)) bool IsVCentered;
+        [[nodiscard]] constexpr bool GetIsHLeft() const {
+            return _HorizontalAlignment == -1;
+        }
+        [[nodiscard]] constexpr bool GetIsVTop() const {
+            return _HorizontalAlignment == -1;
+        }
+        __declspec(property(get = GetIsHLeft)) bool IsHLeft;
+        __declspec(property(get = GetIsVTop)) bool IsVTop;
+        [[nodiscard]] constexpr bool GetIsHRight() const {
+            return _HorizontalAlignment == 1;
+        }
+        [[nodiscard]] constexpr bool GetIsVBottom() const {
+            return _HorizontalAlignment == 1;
+        }
+        __declspec(property(get = GetIsHRight)) bool IsHRight;
+        __declspec(property(get = GetIsVBottom)) bool IsVBottom;
     public:
         static const Align Stretch;
         static const Align Center;

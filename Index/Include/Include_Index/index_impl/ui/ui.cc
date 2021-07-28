@@ -10,6 +10,21 @@ namespace Index::UI
 {
     // NullF: The Float value that represents Null
     constexpr float NullF = Limits::FloatMax;
+
+    // If value is not NullF then value else other
+    constexpr float FloatValueOr(float value, float other) {
+        return value == NullF ? other : value;
+    }
+
+    // If value is not NullF then value else other
+    constexpr float FloatValueOr(float value1, float value2, float other) {
+        return FloatValueOr(value2, FloatValueOr(value1, other));
+    }
+
+    // If value is not NullF then value else other
+    constexpr float FloatValueOr(float value1, float value2, float value3, float other) {
+        return FloatValueOr(value3, FloatValueOr(value2, FloatValueOr(value1, other)));
+    }
 }
 
 // Structs
@@ -45,6 +60,12 @@ namespace Index::UI
     struct Layout
     {
         Rect Area;
+        [[nodiscard]] float GetWidth() const { return Area.Width; }
+        void SetWidth(float value) { Area.Width = value; }
+        __declspec(property(get = GetWidth, put = SetWidth)) float Width;
+        [[nodiscard]] float GetHeight() const { return Area.Height; }
+        void SetHeight(float value) { Area.Height = value; }
+        __declspec(property(get = GetHeight, put = SetHeight)) float Height;
     };
 };
 
@@ -92,7 +113,7 @@ namespace Index::UI
         Align Alignment = Align::Stretch;
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
-        virtual LayoutInfo GetCenteredLayoutInfo();
+        virtual LayoutInfo MeasureCenterSize();
     };
 }
 
@@ -114,7 +135,7 @@ namespace Index::UI
             float& w = i.Size.Width, h = i.Size.Height;
             for (auto& c : content) {
                 if (!c) continue;
-                auto info = c->GetCenteredLayoutInfo();
+                auto info = c->MeasureCenterSize();
                 if (info.Width != NullF) {
                     if (info.Width >= (w == NullF ? 0 : w)) {
                         w = info.Width;
@@ -133,7 +154,7 @@ namespace Index::UI
             float& w = i.Size.Width, h = i.Size.Height;
             for (auto& c : content) {
                 if (!c) continue;
-                auto info = c->GetCenteredLayoutInfo();
+                auto info = c->MeasureCenterSize();
                 if (info.Width != NullF) {
                     if (info.Width >= (w == NullF ? 0 : w)) {
                         w = info.Width;
@@ -152,7 +173,7 @@ namespace Index::UI
             float& w = i.Size.Width, h = i.Size.Height;
             for (auto& c : content) {
                 if (!c) continue;
-                auto info = c->GetCenteredLayoutInfo();
+                auto info = c->MeasureCenterSize();
                 if (info.Width != NullF) {
                     if (info.Width >= (w == NullF ? 0 : w)) {
                         w = info.Width;
@@ -168,7 +189,7 @@ namespace Index::UI
             {
                 auto *c = me;
                 if (!c) goto jmp_Continue;
-                auto info = c->GetCenteredLayoutInfo();
+                auto info = c->MeasureCenterSize();
                 if (info.Width != NullF)
                 {
                     if (info.Width >= (w == NullF ? 0 : w))
@@ -194,7 +215,7 @@ namespace Index::UI
 // UIElement Implementation
 namespace Index::UI
 {
-    inline LayoutInfo UIElement::GetCenteredLayoutInfo() {
+    inline LayoutInfo UIElement::MeasureCenterSize() {
         LayoutInfo i {
             .Size = MinSize
         };
@@ -287,7 +308,7 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        LayoutInfo GetCenteredLayoutInfo() override {
+        LayoutInfo MeasureCenterSize() override {
             return LayoutInfo::FromList(Content);
         }
     };
@@ -305,8 +326,8 @@ namespace Index::UI
         void Notify(INotification* e) override {
             if (Content) Content->Notify(e);
         }
-        LayoutInfo GetCenteredLayoutInfo() override {
-            if (Content) return Content->GetCenteredLayoutInfo();
+        LayoutInfo MeasureCenterSize() override {
+            if (Content) return Content->MeasureCenterSize();
             return { };
         }
     };
@@ -484,7 +505,6 @@ namespace Index::UI
 {
     struct StackH : UIElement
     {
-        DEFAULT_MEMBERS;
         List<IPtr<UIElement>> Content;
         NEW_CLASS(StackH, DEFAULT_MEMBERS; List<IPtr<UIElement>> Content;);
         NEW_CONSTRUCTOR(StackH) {
@@ -492,7 +512,26 @@ namespace Index::UI
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
+            auto ci = MeasureCenterSize();
+            Rect r;
+            if (Alignment.IsHStretched) {
+                r.X = i.Area.X;
+            }
+            if (Alignment.IsHLeft) {
+                r.X = i.Area.X;
+            }
+            if (Alignment.IsHCentered) {
+                r.X = i.Area.X + ((i.Width - Max(0.f, ci.Width)) / 2);
+            }
+            if (Alignment.IsHRight) {
+                r.X = i.Area.X + (i.Width - Max(0.f, ci.Width));
+            }
+            float& x = r.X;
+            for (auto& c : Content) {
+                if (c->Alignment.IsHCentered) {
 
+                }
+            }
         }
         void Notify(INotification* e) override {
             for (auto& c : Content) {
@@ -500,18 +539,18 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        LayoutInfo GetCenteredLayoutInfo() override {
+        LayoutInfo MeasureCenterSize() override {
             LayoutInfo i {
                 .Size {
-                    MinSize.Width,
-                    MinSize.Height
+                    FloatValueOr(Size.Width, MinSize.Width, 0),
+                    FloatValueOr(Size.Height, MinSize.Height, 0)
                 }
             };
             float& w = i.Size.Width, h = i.Size.Height;
             float nw = 0;
             for (auto& c : Content) {
                 if (!c) continue;
-                auto info = c->GetCenteredLayoutInfo();
+                auto info = c->MeasureCenterSize();
                 if (info.Width != NullF) {
                     nw += info.Width;
                 }

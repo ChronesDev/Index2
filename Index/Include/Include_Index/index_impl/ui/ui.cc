@@ -92,7 +92,7 @@ namespace Index::UI
         Align Alignment = Align::Stretch;
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
-        virtual LayoutInfo GetLayoutInfo();
+        virtual LayoutInfo GetCenteredLayoutInfo();
     };
 }
 
@@ -108,8 +108,85 @@ namespace Index::UI
         [[nodiscard]] float GetHeight() const { return Size.Height; }
         void SetHeight(float value) { Size.Height = value; }
         __declspec(property(get = GetHeight, put = SetHeight)) float Height;
-        __forceinline void Apply(UIElement* e) {
-            Size = { NullF, NullF };
+    public:
+        static LayoutInfo FromList(List<IPtr<UIElement>>& content) {
+            LayoutInfo i;
+            float& w = i.Size.Width, h = i.Size.Height;
+            for (auto& c : content) {
+                if (!c) continue;
+                auto info = c->GetCenteredLayoutInfo();
+                if (info.Width != NullF) {
+                    if (info.Width >= (w == NullF ? 0 : w)) {
+                        w = info.Width;
+                    }
+                }
+                if (info.Height != NullF) {
+                    if (info.Height >= (h == NullF ? 0 : h)) {
+                        h = info.Height;
+                    }
+                }
+            }
+            return i;
+        }
+        static LayoutInfo FromSpan(Span<UIElement*> content) {
+            LayoutInfo i;
+            float& w = i.Size.Width, h = i.Size.Height;
+            for (auto& c : content) {
+                if (!c) continue;
+                auto info = c->GetCenteredLayoutInfo();
+                if (info.Width != NullF) {
+                    if (info.Width >= (w == NullF ? 0 : w)) {
+                        w = info.Width;
+                    }
+                }
+                if (info.Height != NullF) {
+                    if (info.Height >= (h == NullF ? 0 : h)) {
+                        h = info.Height;
+                    }
+                }
+            }
+            return i;
+        }
+        static LayoutInfo FromListAnd(List<IPtr<UIElement>>& content, UIElement* me) {
+            LayoutInfo i;
+            float& w = i.Size.Width, h = i.Size.Height;
+            for (auto& c : content) {
+                if (!c) continue;
+                auto info = c->GetCenteredLayoutInfo();
+                if (info.Width != NullF) {
+                    if (info.Width >= (w == NullF ? 0 : w)) {
+                        w = info.Width;
+                    }
+                }
+                if (info.Height != NullF) {
+                    if (info.Height >= (h == NullF ? 0 : h)) {
+                        h = info.Height;
+                    }
+                }
+            }
+
+            {
+                auto *c = me;
+                if (!c) goto jmp_Continue;
+                auto info = c->GetCenteredLayoutInfo();
+                if (info.Width != NullF)
+                {
+                    if (info.Width >= (w == NullF ? 0 : w))
+                    {
+                        w = info.Width;
+                    }
+                }
+                if (info.Height != NullF)
+                {
+                    if (info.Height >= (h == NullF ? 0 : h))
+                    {
+                        h = info.Height;
+                    }
+                }
+            }
+            jmp_Continue:
+
+            return i;
         }
     };
 }
@@ -117,9 +194,10 @@ namespace Index::UI
 // UIElement Implementation
 namespace Index::UI
 {
-    LayoutInfo UIElement::GetLayoutInfo() {
-        LayoutInfo i;
-        i.Apply(this);
+    inline LayoutInfo UIElement::GetCenteredLayoutInfo() {
+        LayoutInfo i {
+            .Size = MinSize
+        };
         return i;
     }
 }
@@ -209,8 +287,8 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        virtual LayoutInfo GetLayoutInfo() {
-
+        LayoutInfo GetCenteredLayoutInfo() override {
+            return LayoutInfo::FromList(Content);
         }
     };
 
@@ -227,13 +305,9 @@ namespace Index::UI
         void Notify(INotification* e) override {
             if (Content) Content->Notify(e);
         }
-        virtual LayoutInfo GetLayoutInfo() {
-            LayoutInfo i {
-                .Size { MaxSize.Width, MaxSize.Height }
-            };
-            if (!Alignment.IsHStretched) i.Width = Max(Size.Width, MinSize.Width);
-            if (!Alignment.IsVStretched) i.Height = Max(Size.Height, MinSize.Height);
-            return i;
+        LayoutInfo GetCenteredLayoutInfo() override {
+            if (Content) return Content->GetCenteredLayoutInfo();
+            return { };
         }
     };
 
@@ -418,18 +492,42 @@ namespace Index::UI
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
-            if (Alignment.IsHStretched) {
 
-            }
-            for (auto& c : Content) {
-                if (c) c->Build(i);
-            }
         }
         void Notify(INotification* e) override {
             for (auto& c : Content) {
                 Notify(e);
                 if (e->Handled) return;
             }
+        }
+        LayoutInfo GetCenteredLayoutInfo() override {
+            LayoutInfo i {
+                .Size {
+                    MinSize.Width,
+                    MinSize.Height
+                }
+            };
+            float& w = i.Size.Width, h = i.Size.Height;
+            float nw = 0;
+            for (auto& c : Content) {
+                if (!c) continue;
+                auto info = c->GetCenteredLayoutInfo();
+                if (info.Width != NullF) {
+                    nw += info.Width;
+                }
+                if (info.Height != NullF) {
+                    if (info.Height >= (h == NullF ? 0 : h)) {
+                        h = info.Height;
+                    }
+                }
+            }
+            w = Max(nw, w);
+            return {
+                .Size {
+                    Min(w, MaxSize.Width),
+                    Min(h, MaxSize.Height),
+                }
+            };
         }
     };
 }

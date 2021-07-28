@@ -14,6 +14,14 @@ namespace Index
         static const __int8 _Stretch = 0;
         static const __int8 _Center = 2;
     public:
+        [[nodiscard]] constexpr bool GetIsStretched() const {
+            return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
+        }
+        [[nodiscard]] constexpr bool GetIsCentered() const {
+            return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
+        }
+        __declspec(property(get = GetIsStretched)) bool IsStretched;
+        __declspec(property(get = GetIsCentered)) bool IsCentered;
         [[nodiscard]] constexpr bool GetIsHStretched() const {
             return _HorizontalAlignment == _Stretch;
         }

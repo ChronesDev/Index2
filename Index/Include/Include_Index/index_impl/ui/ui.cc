@@ -10,8 +10,6 @@ namespace Index::UI
 {
     // NullF: The Float value that represents Null
     constexpr float NullF = Limits::FloatMax;
-
-    constexpr
 }
 
 // Structs
@@ -19,6 +17,7 @@ namespace Index::UI
 {
     struct IRenderState;
     struct UIElement;
+    struct LayoutInfo;
     struct State;
 }
 
@@ -40,17 +39,12 @@ namespace Index::UI
     };
 }
 
-// Layout LayoutInfo
+// Layout
 namespace Index::UI
 {
     struct Layout
     {
         Rect Area;
-    };
-
-    struct CenterLayoutInfo
-    {
-        Size Size;
     };
 };
 
@@ -92,16 +86,47 @@ namespace Index::UI
 {
     struct UIElement
     {
-        Vec2F MinSize { NullF, NullF };
-        Vec2F MaxSize { NullF, NullF };
-        Vec2F Size { NullF, NullF };
+        Size MinSize { NullF, NullF };
+        Size MaxSize { NullF, NullF };
+        Size Size { NullF, NullF };
         Align Alignment = Align::Stretch;
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
-        virtual Layout GetCenterLayoutInfo() = 0;
-        __declspec(property(get = GetCenterLayoutInfo)) Layout CenterLayoutInfo;
+        virtual LayoutInfo GetLayoutInfo();
     };
+}
 
+// LayoutInfo
+namespace Index::UI
+{
+    struct LayoutInfo
+    {
+        Size Size { NullF, NullF };
+        [[nodiscard]] float GetWidth() const { return Size.Width; }
+        void SetWidth(float value) { Size.Width = value; }
+        __declspec(property(get = GetWidth, put = SetWidth)) float Width;
+        [[nodiscard]] float GetHeight() const { return Size.Height; }
+        void SetHeight(float value) { Size.Height = value; }
+        __declspec(property(get = GetHeight, put = SetHeight)) float Height;
+        __forceinline void Apply(UIElement* e) {
+            Size = { NullF, NullF };
+        }
+    };
+}
+
+// UIElement Implementation
+namespace Index::UI
+{
+    LayoutInfo UIElement::GetLayoutInfo() {
+        LayoutInfo i;
+        i.Apply(this);
+        return i;
+    }
+}
+
+// State
+namespace Index::UI
+{
     struct State : UIElement, IRenderState
     {
         List<IPtr<UIElement>> Content;
@@ -129,9 +154,9 @@ namespace Index::UI
 }
 
 #define DEFAULT_MEMBERS                                          \
-Index::Vec2F MinSize { Index::UI::NullF, Index::UI::NullF };     \
-Index::Vec2F MaxSize { Index::UI::NullF, Index::UI::NullF };     \
-Index::Vec2F Size { Index::UI::NullF, Index::UI::NullF };        \
+Index::Size MinSize { Index::UI::NullF, Index::UI::NullF };     \
+Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF };     \
+Index::Size Size { Index::UI::NullF, Index::UI::NullF };        \
 Index::Align Alignment = Index::Align::Stretch;
 
 #define SET_DEFAULT_MEMBERS     \
@@ -164,7 +189,6 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Empty) { }
         void Build(Layout i) override { }
         void Notify(INotification* e) override { }
-        Layout GetCenterLayoutInfo() override { }
     };
 
     struct Holder : UIElement
@@ -185,8 +209,8 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        Layout GetCenterLayoutInfo() override {
-            // TODO: Combine layout info
+        virtual LayoutInfo GetLayoutInfo() {
+
         }
     };
 
@@ -202,6 +226,14 @@ namespace Index::UI
         }
         void Notify(INotification* e) override {
             if (Content) Content->Notify(e);
+        }
+        virtual LayoutInfo GetLayoutInfo() {
+            LayoutInfo i {
+                .Size { MaxSize.Width, MaxSize.Height }
+            };
+            if (!Alignment.IsHStretched) i.Width = Max(Size.Width, MinSize.Width);
+            if (!Alignment.IsVStretched) i.Height = Max(Size.Height, MinSize.Height);
+            return i;
         }
     };
 

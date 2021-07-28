@@ -6,6 +6,8 @@
 
 #include <index_ui_macros>
 
+#include <memory_resource>
+
 #define n ::New
 
 int main()
@@ -26,6 +28,10 @@ int main()
             }};
         }
     };
+
+    int i[10];
+    int* iptr = i;
+    auto a = stackalloc(int, 10);
 
     UIContext::EndBuild();
 

@@ -8,7 +8,10 @@
 // Important
 namespace Index::UI
 {
+    // NullF: The Float value that represents Null
     constexpr float NullF = Limits::FloatMax;
+
+    constexpr
 }
 
 // Structs
@@ -37,12 +40,17 @@ namespace Index::UI
     };
 }
 
-// LayoutInfo
+// Layout LayoutInfo
 namespace Index::UI
 {
-    struct LayoutInfo
+    struct Layout
     {
         Rect Area;
+    };
+
+    struct CenterLayoutInfo
+    {
+        Size Size;
     };
 };
 
@@ -88,14 +96,16 @@ namespace Index::UI
         Vec2F MaxSize { NullF, NullF };
         Vec2F Size { NullF, NullF };
         Align Alignment = Align::Stretch;
-        virtual void Build(LayoutInfo i) = 0;
+        virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
+        virtual Layout GetCenterLayoutInfo() = 0;
+        __declspec(property(get = GetCenterLayoutInfo)) Layout CenterLayoutInfo;
     };
 
     struct State : UIElement, IRenderState
     {
         List<IPtr<UIElement>> Content;
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
@@ -103,7 +113,7 @@ namespace Index::UI
                 if (c) c->Build(i);
             }
         }
-        void Rebuild(LayoutInfo i) {
+        void Rebuild(Layout i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
             Build(i);
@@ -152,8 +162,9 @@ namespace Index::UI
     {
         NEW_CLASS(Empty,);
         NEW_CONSTRUCTOR(Empty) { }
-        void Build(LayoutInfo i) override { }
+        void Build(Layout i) override { }
         void Notify(INotification* e) override { }
+        Layout GetCenterLayoutInfo() override { }
     };
 
     struct Holder : UIElement
@@ -163,7 +174,7 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Holder) {
             Content = std::move(e.Content);
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             for (auto& c : Content) {
                 if (c) c->Build(i);
             }
@@ -174,6 +185,9 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
+        Layout GetCenterLayoutInfo() override {
+            // TODO: Combine layout info
+        }
     };
 
     struct Wrap : UIElement
@@ -183,7 +197,7 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Wrap) {
             Content = std::move(e.Content);
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             if (Content) Content->Build(i);
         }
         void Notify(INotification* e) override {
@@ -199,7 +213,7 @@ namespace Index::UI
         NEW_CONSTRUCTOR(Builder) {
             BuildFunc = e.BuildFunc;
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             if (BuildFunc) {
                 auto c = BuildFunc();
                 if (c) c->Build(i);
@@ -221,7 +235,7 @@ namespace Index::UI
         NEW_CONSTRUCTOR(StatefulBuilder) {
             BuildFunc = e.BuildFunc;
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
@@ -230,7 +244,7 @@ namespace Index::UI
                 if (c) c->Build(i);
             }
         }
-        void Rebuild(LayoutInfo i) {
+        void Rebuild(Layout i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
             Build(i);
@@ -250,7 +264,7 @@ namespace Index::UI
         NEW_CONSTRUCTOR(NextElement) {
             Content = std::move(e.Content);
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             for (auto& c : Content) {
                 if (c) c->Build(i);
             }
@@ -290,7 +304,7 @@ namespace Index::UI
         __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
     public:
         virtual void Construct() = 0;
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             GetNewNext();
             _Content.Clear();
             Construct();
@@ -333,7 +347,7 @@ namespace Index::UI
         __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
     public:
         virtual void Construct() = 0;
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
             this->ClearRenderList();
@@ -344,7 +358,7 @@ namespace Index::UI
                 if (c) c->Build(i);
             }
         }
-        void Rebuild(LayoutInfo i) {
+        void Rebuild(Layout i) {
             bool isRebuilding = Index::UI::UIContext::RebuildTree;
             Index::UI::UIContext::RebuildTree = true;
             Build(i);
@@ -371,7 +385,10 @@ namespace Index::UI
             SET_DEFAULT_MEMBERS;
             Content = std::move(e.Content);
         }
-        void Build(LayoutInfo i) override {
+        void Build(Layout i) override {
+            if (Alignment.IsHStretched) {
+
+            }
             for (auto& c : Content) {
                 if (c) c->Build(i);
             }

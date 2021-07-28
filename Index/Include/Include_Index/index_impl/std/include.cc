@@ -2,6 +2,7 @@
 #include "limits/limits.cc"
 #include "memory/memory.cc"
 #include "nullable/nullable.cc"
+#include "span/span.cc"
 #include "stack/stack.cc"
 #include "string/string.cc"
 #include "vector/vector.cc"

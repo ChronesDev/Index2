@@ -206,6 +206,7 @@ namespace Index
             VirtualProtect((void*)at, length, oldProtection, (PDWORD)&oldProtection2);
         }
     public:
+        /*
         Nullable<IntPtr> FindSignature(string moduleName, string signature)
         {
             char pattern[100];
@@ -338,6 +339,8 @@ namespace Index
             }
             pattern[j] = mask[j] = '\0';
         }
+
+        */
     public:
         static Memory New()
         {

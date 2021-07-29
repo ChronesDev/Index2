@@ -106,7 +106,17 @@ inline int Entry()
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
+        static Index::Vec2F lastWindowSize { 0, 0 };
         WindowSize = { static_cast<float>(g_d3dpp.BackBufferWidth), static_cast<float>(g_d3dpp.BackBufferHeight) };
+        if (lastWindowSize.X != WindowSize.X && lastWindowSize.Y != WindowSize.Y) {
+            lastWindowSize = WindowSize;
+            Index::UI::UIContext::Root->Rebuild({
+                .Area {
+                    0, 0,
+                    WindowSize
+                }
+            });
+        }
 
         if (OnRender)
         {

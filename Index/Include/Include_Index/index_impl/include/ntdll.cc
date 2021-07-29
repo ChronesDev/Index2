@@ -1,3 +1,5 @@
+/*
+
 #ifndef _NTDLL_H
 #define _NTDLL_H
 
@@ -9394,3 +9396,5 @@ TpAlpcUnregisterCompletionList(
 #endif // _NTDLL_H
 
 #include "windows_fix.cc"
+
+ */

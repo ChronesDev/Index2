@@ -25,6 +25,43 @@ namespace Index::UI
     constexpr float FloatValueOr(float value1, float value2, float value3, float other) {
         return FloatValueOr(value3, FloatValueOr(value2, FloatValueOr(value1, other)));
     }
+
+    __forceinline Rect AlignRect(Rect box, Size content, Align align, Size minSize = {0, 0}) {
+        Rect r;
+        if (align.IsHStretched) {
+            r.X = box.X;
+            r.Width = r.Width;
+        }
+        if (align.IsHLeft) {
+            r.X = box.X;
+            r.Width = minSize.Width;
+        }
+        if (align.IsHCentered) {
+            r.X = box.X + ((box.Width - Max(0.f, minSize.Width)) / 2);
+            r.Width = minSize.Width;
+        }
+        if (align.IsHRight) {
+            r.X = box.X + (box.Width - Max(0.f, minSize.Width));
+            r.Width = minSize.Width;
+        }
+        if (align.IsVStretched) {
+            r.Y = box.Y;
+            r.Height = minSize.Height;
+        }
+        if (align.IsVTop) {
+            r.X = box.X;
+            r.Height = minSize.Height;
+        }
+        if (align.IsVCentered) {
+            r.Y = box.X + ((box.Height - Max(0.f, minSize.Height)) / 2);
+            r.Height = minSize.Height;
+        }
+        if (align.IsVBottom) {
+            r.Y = box.X + (box.Height - Max(0.f, minSize.Height));
+            r.Height = minSize.Height;
+        }
+        return r;
+    }
 }
 
 // Structs
@@ -102,6 +139,15 @@ namespace Index::UI
     };
 }
 
+// UILayout
+namespace Index::UI
+{
+    struct UILayout
+    {
+
+    };
+};
+
 // UIElement, State
 namespace Index::UI
 {
@@ -114,6 +160,48 @@ namespace Index::UI
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
         virtual LayoutInfo MeasureCenterSize();
+        __forceinline Rect AlignContentRect(Layout i, Index::Size content, Index::Size minSize = {NullF, NullF}) {
+            if (minSize.Width == NullF) {
+                minSize.Width = 0;
+            }
+            if (minSize.Height == NullF) {
+                minSize.Height = 0;
+            }
+            Rect r;
+            if (Alignment.IsHStretched) {
+                r.X = i.Area.X;
+                r.Width = r.Width;
+            }
+            if (Alignment.IsHLeft) {
+                r.X = i.Area.X;
+                r.Width = minSize.Width;
+            }
+            if (Alignment.IsHCentered) {
+                r.X = i.Area.X + ((i.Area.Width - Max(0.f, minSize.Width)) / 2);
+                r.Width = minSize.Width;
+            }
+            if (Alignment.IsHRight) {
+                r.X = i.Area.X + (i.Area.Width - Max(0.f, minSize.Width));
+                r.Width = minSize.Width;
+            }
+            if (Alignment.IsVStretched) {
+                r.Y = i.Area.Y;
+                r.Height = minSize.Height;
+            }
+            if (Alignment.IsVTop) {
+                r.X = i.Area.X;
+                r.Height = minSize.Height;
+            }
+            if (Alignment.IsVCentered) {
+                r.Y = i.Area.X + ((i.Area.Height - Max(0.f, minSize.Height)) / 2);
+                r.Height = minSize.Height;
+            }
+            if (Alignment.IsVBottom) {
+                r.Y = i.Area.X + (i.Area.Height - Max(0.f, minSize.Height));
+                r.Height = minSize.Height;
+            }
+            return r;
+        }
     };
 }
 
@@ -217,7 +305,10 @@ namespace Index::UI
 {
     inline LayoutInfo UIElement::MeasureCenterSize() {
         LayoutInfo i {
-            .Size = MinSize
+            .Size = {
+                FloatValueOr(0, Size.Width, MinSize.Width),
+                FloatValueOr(0, Size.Height, MinSize.Height)
+            }
         };
         return i;
     }
@@ -229,6 +320,10 @@ namespace Index::UI
     struct State : UIElement, IRenderState
     {
         List<IPtr<UIElement>> Content;
+        State() = default;
+        explicit State(List<IPtr<UIElement>> content) {
+            Content = std::move(content);
+        }
         void Build(Layout i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
             if (!UIContext::RebuildTree) return;
@@ -252,20 +347,20 @@ namespace Index::UI
     };
 }
 
-#define DEFAULT_MEMBERS                                          \
+#define INDEX_UI_DEFAULT_NEW_MEBERS                             \
 Index::Size MinSize { Index::UI::NullF, Index::UI::NullF };     \
 Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF };     \
 Index::Size Size { Index::UI::NullF, Index::UI::NullF };        \
 Index::Align Alignment = Index::Align::Stretch;
 
-#define SET_DEFAULT_MEMBERS     \
-this->MinSize = e.MinSize;      \
-this->MaxSize = e.MaxSize;      \
-this->Size = e.Size;            \
+#define INDEX_UI_SET_DEFAULT_MEMBERS     \
+this->MinSize = e.MinSize;               \
+this->MaxSize = e.MaxSize;               \
+this->Size = e.Size;                     \
 this->Alignment = e.Alignment;
 
 
-#define NEW_CLASS(class_name, properties) struct New {                                              \
+#define INDEX_UI_NEW_CLASS(class_name, properties) struct New {                                     \
     properties                                                                                      \
     operator Index::IPtr<Index::UI::UIElement>() {                                                  \
         return std::static_pointer_cast<Index::UI::UIElement>(Index::INew<class_name>(*this));      \
@@ -273,19 +368,23 @@ this->Alignment = e.Alignment;
     operator Index::IPtr<class_name>() {                                                            \
         return Index::INew<class_name>(*this);                                                      \
     }                                                                                               \
+    IPtr<Index::UI::UIElement> GetUIRef() {                                                         \
+        return Index::INew<class_name>(*this);                                                      \
+    }                                                                                               \
+    __declspec(property(get = GetUIRef)) IPtr<Index::UI::UIElement> UIRef;                          \
 };
 
-#define NEW_CONSTRUCTOR(class_name) explicit class_name(New e)
+#define INDEX_UI_NEW_CONSTRUCTOR(class_name) explicit class_name(New e)
 
-#define ThisState (+Index::UI::UIContext::CurrentStates)
+#define INDEX_UI_THISSTATE (+Index::UI::UIContext::CurrentStates)
 
 // Normal Elements
 namespace Index::UI
 {
     struct Empty : UIElement
     {
-        NEW_CLASS(Empty,);
-        NEW_CONSTRUCTOR(Empty) { }
+        INDEX_UI_NEW_CLASS(Empty,);
+        INDEX_UI_NEW_CONSTRUCTOR(Empty) { }
         void Build(Layout i) override { }
         void Notify(INotification* e) override { }
     };
@@ -293,8 +392,8 @@ namespace Index::UI
     struct Holder : UIElement
     {
         List<IPtr<UIElement>> Content;
-        NEW_CLASS(Holder, List<IPtr<UIElement>> Content;);
-        NEW_CONSTRUCTOR(Holder) {
+        INDEX_UI_NEW_CLASS(Holder, List<IPtr<UIElement>> Content;);
+        INDEX_UI_NEW_CONSTRUCTOR(Holder) {
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
@@ -316,8 +415,8 @@ namespace Index::UI
     struct Wrap : UIElement
     {
         IPtr<UIElement> Content;
-        NEW_CLASS(Wrap, IPtr<UIElement> Content;);
-        NEW_CONSTRUCTOR(Wrap) {
+        INDEX_UI_NEW_CLASS(Wrap, IPtr<UIElement> Content;);
+        INDEX_UI_NEW_CONSTRUCTOR(Wrap) {
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
@@ -336,8 +435,8 @@ namespace Index::UI
     struct Builder : UIElement
     {
         Func<Index::UI::UIElement*()> BuildFunc;
-        NEW_CLASS(Builder, Func<Index::UI::UIElement*()> BuildFunc;);
-        NEW_CONSTRUCTOR(Builder) {
+        INDEX_UI_NEW_CLASS(Builder, Func<Index::UI::UIElement*()> BuildFunc;);
+        INDEX_UI_NEW_CONSTRUCTOR(Builder) {
             BuildFunc = e.BuildFunc;
         }
         void Build(Layout i) override {
@@ -358,8 +457,8 @@ namespace Index::UI
     struct StatefulBuilder : UIElement, IRenderState
     {
         Func<Index::UI::UIElement*()> BuildFunc;
-        NEW_CLASS(StatefulBuilder, Func<Index::UI::UIElement*()> BuildFunc;);
-        NEW_CONSTRUCTOR(StatefulBuilder) {
+        INDEX_UI_NEW_CLASS(StatefulBuilder, Func<Index::UI::UIElement*()> BuildFunc;);
+        INDEX_UI_NEW_CONSTRUCTOR(StatefulBuilder) {
             BuildFunc = e.BuildFunc;
         }
         void Build(Layout i) override {
@@ -387,8 +486,8 @@ namespace Index::UI
 
     struct NextElement : UIElement {
         List<IPtr<UIElement>> Content;
-        NEW_CLASS(NextElement, List<IPtr<UIElement>> Content;);
-        NEW_CONSTRUCTOR(NextElement) {
+        INDEX_UI_NEW_CLASS(NextElement, List<IPtr<UIElement>> Content;);
+        INDEX_UI_NEW_CONSTRUCTOR(NextElement) {
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
@@ -401,6 +500,9 @@ namespace Index::UI
                 Notify(e);
                 if (e->Handled) return;
             }
+        }
+        LayoutInfo MeasureCenterSize() override {
+            return LayoutInfo::FromList(Content);
         }
     };
 
@@ -506,31 +608,28 @@ namespace Index::UI
     struct StackH : UIElement
     {
         List<IPtr<UIElement>> Content;
-        NEW_CLASS(StackH, DEFAULT_MEMBERS; List<IPtr<UIElement>> Content;);
-        NEW_CONSTRUCTOR(StackH) {
-            SET_DEFAULT_MEMBERS;
+        INDEX_UI_NEW_CLASS(StackH, INDEX_UI_DEFAULT_NEW_MEBERS; List<IPtr<UIElement>> Content;);
+        INDEX_UI_NEW_CONSTRUCTOR(StackH) {
+            INDEX_UI_SET_DEFAULT_MEMBERS;
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
             auto ci = MeasureCenterSize();
-            Rect r;
-            if (Alignment.IsHStretched) {
-                r.X = i.Area.X;
-            }
-            if (Alignment.IsHLeft) {
-                r.X = i.Area.X;
-            }
-            if (Alignment.IsHCentered) {
-                r.X = i.Area.X + ((i.Width - Max(0.f, ci.Width)) / 2);
-            }
-            if (Alignment.IsHRight) {
-                r.X = i.Area.X + (i.Width - Max(0.f, ci.Width));
-            }
+            Rect r = AlignContentRect(i, ci.Size, {
+                FloatValueOr(0, Size.Width, MinSize.Width),
+                FloatValueOr(0, Size.Height, MinSize.Height)
+            });
             float& x = r.X;
             for (auto& c : Content) {
-                if (c->Alignment.IsHCentered) {
-
-                }
+                if (c.IsNull) continue;
+                auto ci2 = c->MeasureCenterSize();
+                c->Build({
+                    .Area {
+                        x, r.Y,
+                        ci2.Width, r.Height
+                    }
+                });
+                x += ci2.Width;
             }
         }
         void Notify(INotification* e) override {
@@ -570,12 +669,6 @@ namespace Index::UI
         }
     };
 }
-
-#undef DEFAULT_MEMBERS
-#undef SET_DEFAULT_MEMBERS
-#undef NEW_CLASS
-#undef NEW_CONSTRUCTOR
-#undef ThisState
 
 /// Values
 namespace Index::UI::UIContext

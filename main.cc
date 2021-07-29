@@ -6,8 +6,6 @@
 
 #include <index_ui_macros>
 
-#include <memory_resource>
-
 #define n ::New
 
 int main()
@@ -17,25 +15,42 @@ int main()
 
     UIContext::BeginBuild();
 
-    struct Button : Element
+    struct MainApp : StatefulElement
     {
-        bool isHovered = false;
-        void Construct() override {
-            ui_self_init;
-            add = Wrap n { next };
-            next = Holder n {{
-
-            }};
+        void Construct() override
+        {
+            ui_list list;
+            for (int i = 0; i < 255; i++) {
+                list.Add(ImUI::Rectangle n {
+                    .Size { 3, 10 },
+                    .Fill = Color::RGB(i, i, i)
+                });
+            }
+            add = StackH n {
+                .Size { 100, 100 },
+                .Alignment = Align::LeftBottom,
+                content list
+            };
         }
     };
+
+    IPtr<UIElement> root = ImUI::WindowRoot n { content {
+        INew<MainApp>()
+    }};
+
+    UIContext::Root = root.As<State>();
 
     UIContext::EndBuild();
 
     OnRender = []() {
 
-        ImDrawList& d = *ImGui::GetForegroundDrawList();
+        ImDrawList& db = *ImGui::GetBackgroundDrawList();
+        UIContext::DrawList = ImGui::GetForegroundDrawList();
 
+        // Background
+        db.AddRectFilled({0, 0}, {WindowSize.X, WindowSize.Y}, ToImColor(Colors::Orange));
 
+        UIContext::Render();
 
     };
 

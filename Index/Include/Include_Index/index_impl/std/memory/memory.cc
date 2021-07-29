@@ -23,7 +23,27 @@ namespace Index
         using std::shared_ptr<T>::shared_ptr;
         ALIAS_RECLASS_CONSTRUCTOR(IPtr, std::shared_ptr<T>)
     public:
-        bool GetIsNull() { return this->operator bool(); }
+        template<class TTo>
+        IPtr<TTo> As() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> StaticAs() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> DynamicAs() {
+            return std::dynamic_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ConstAs() {
+            return std::const_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ReinterpretAs() {
+            return std::reinterpret_pointer_cast<TTo>(*this);
+        }
+        bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
     public:
         __declspec(property(get = GetIsNull)) bool IsNull;
@@ -43,7 +63,7 @@ namespace Index
         using std::weak_ptr<T>::weak_ptr;
         ALIAS_RECLASS_CONSTRUCTOR(RPtr, std::weak_ptr<T>)
     public:
-        bool GetIsNull() { return this->operator bool(); }
+        bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
         IPtr<T> Lock() { return this->lock(); }
     public:
@@ -69,7 +89,7 @@ namespace Index
         __forceinline UPtr(std::unique_ptr<T>&& other) : std::unique_ptr<T>(std::forward<std::unique_ptr<T>>(other)) {
         }
     public:
-        bool GetIsNull() { return this->operator bool(); }
+        bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
     public:
         __declspec(property(get = GetIsNull)) bool IsNull;

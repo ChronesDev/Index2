@@ -112,10 +112,10 @@ namespace Index
     struct Vec3D : public Vec3<double> { using Vec3<double>::Vec3; Vec3D(Vec3<double> v) { static_cast<Vec3<double>&>(*this) = v; } };
     struct Vec4D : public Vec4<double> { using Vec4<double>::Vec4; Vec4D(Vec4<double> v) { static_cast<Vec4<double>&>(*this) = v; } };
 
-    struct Vec1B : public Vec1<char> { using Vec1<char>::Vec1; Vec1B(Vec1<char> v) { static_cast<Vec1<char>&>(*this) = v; } };
-    struct Vec2B : public Vec2<char> { using Vec2<char>::Vec2; Vec2B(Vec2<char> v) { static_cast<Vec2<char>&>(*this) = v; } };
-    struct Vec3B : public Vec3<char> { using Vec3<char>::Vec3; Vec3B(Vec3<char> v) { static_cast<Vec3<char>&>(*this) = v; } };
-    struct Vec4B : public Vec4<char> { using Vec4<char>::Vec4; Vec4B(Vec4<char> v) { static_cast<Vec4<char>&>(*this) = v; } };
+    struct Vec1B : public Vec1<__int8> { using Vec1<__int8>::Vec1; Vec1B(Vec1<__int8> v) { static_cast<Vec1<__int8>&>(*this) = v; } };
+    struct Vec2B : public Vec2<__int8> { using Vec2<__int8>::Vec2; Vec2B(Vec2<__int8> v) { static_cast<Vec2<__int8>&>(*this) = v; } };
+    struct Vec3B : public Vec3<__int8> { using Vec3<__int8>::Vec3; Vec3B(Vec3<__int8> v) { static_cast<Vec3<__int8>&>(*this) = v; } };
+    struct Vec4B : public Vec4<__int8> { using Vec4<__int8>::Vec4; Vec4B(Vec4<__int8> v) { static_cast<Vec4<__int8>&>(*this) = v; } };
 
     struct Vec1S : public Vec1<short> { using Vec1<short>::Vec1; Vec1S(Vec1<short> v) { static_cast<Vec1<short>&>(*this) = v; } };
     struct Vec2S : public Vec2<short> { using Vec2<short>::Vec2; Vec2S(Vec2<short> v) { static_cast<Vec2<short>&>(*this) = v; } };

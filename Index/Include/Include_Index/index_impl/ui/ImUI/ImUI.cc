@@ -38,7 +38,7 @@ namespace Index::UI::ImUI
             }
             operator Index::IPtr<WindowRoot>() { return Index::INew<WindowRoot>(*this); }
         };
-        INDEX_UI_NEW_CONSTRUCTOR(WindowRoot) {
+        INDEX_UI_NEW_CONSTRUCTOR_ARGS(WindowRoot, New) {
             WindowSize = e.WindowSize;
             Content = std::move(e.Content);
         }
@@ -56,14 +56,16 @@ namespace Index::UI::ImUI
     struct Rectangle : UIElement
     {
         Color Fill;
-        INDEX_UI_NEW_CLASS(Rectangle, INDEX_UI_DEFAULT_NEW_MEBERS; Color Fill;);
-        INDEX_UI_NEW_CONSTRUCTOR(Rectangle)
-        {
+        INDEX_UI_ARGS {
+            INDEX_UI_DEFAULT_NEW_MEBERS;
+            Color Fill;
+        };
+        INDEX_UI_NEW_CLASS(Rectangle);
+        INDEX_UI_NEW_CONSTRUCTOR(Rectangle) {
             INDEX_UI_SET_DEFAULT_MEMBERS;
             Fill = e.Fill;
         }
-        void Build(Layout i) override
-        {
+        void Build(Layout i) override {
             auto fill = Fill;
             auto r = LayoutUtils::CalculateUIElementSubrect(this, i);
             INDEX_UI_THISSTATE->RenderList.Add([fill, r]{

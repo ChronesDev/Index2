@@ -148,7 +148,7 @@ namespace Index::UI
     };
 };
 
-// UIElement, State
+// UIElement
 namespace Index::UI
 {
     struct UIElement

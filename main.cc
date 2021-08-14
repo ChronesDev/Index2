@@ -13,53 +13,26 @@
 using namespace Index;
 using namespace Index::UI;
 
-struct S : Index::UI::UIElement
+struct MainApp : StatefulElement
 {
-    IPtr<UIElement> Content;
-    struct Args
+    void Construct() override
     {
-        IPtr<UIElement> Content;
-    };
-    template<class T = UIElement>
-    struct New : public IPtr<T>
-    {
-        explicit New(Args e) {
-            if constexpr (!std::is_same<UIElement, T>::value) {
-                static_cast<IPtr<T>&>(*this) = INew<S>(e).As<UIElement>();
+        ui_list list;
+        add = Container n {{
+            .Size { 100, 100 },
+            alignment Center,
+            content {
+                Index::UI::ImUI::Rectangle n {{
+                    .Fill = Colors::Pink
+                }}
             }
-            if constexpr (std::is_same<S, T>::value) {
-                static_cast<IPtr<T>&>(*this) = INew<S>(e);
-            }
-            else {
-                static_cast<IPtr<T>&>(*this) = INew<S>(e).As<T>();
-            }
-        }
-    };
-    explicit S(Args e) {
-        Content = std::move(e.Content);
-    }
-    virtual void Build(Layout i) override
-    {
-
-    }
-    virtual void Notify(INotification *e) override
-    {
-
+        }};
     }
 };
 
 int main()
 {
     UIContext::BeginBuild();
-
-    struct MainApp : StatefulElement
-    {
-        void Construct() override
-        {
-            ui_list list;
-            list.Add(Container n {})
-        }
-    };
 
     IPtr<UIElement> root = ImUI::WindowRoot n { content {
         INew<MainApp>()

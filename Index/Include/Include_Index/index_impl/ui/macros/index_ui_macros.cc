@@ -9,6 +9,8 @@
 
 #define content .Content =
 
+#define alignment .Alignment = Index::Align::
+
 #define ui_list Index::List<Index::IPtr<Index::UI::UIElement>>
 
 #define ui_static_ret(content) static Index::IPtr<UIElement> _ret = content; \

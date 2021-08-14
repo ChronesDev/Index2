@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ui.cc"
 
 #define INDEX_UI_DEFAULT_NEW_MEBERS                             \
@@ -12,41 +14,61 @@ this->MaxSize = e.MaxSize;               \
 this->Size = e.Size;                     \
 this->Alignment = e.Alignment;
 
-#define INDEX_UI_ARGS struct ARGS
+#define INDEX_UI_ARGS struct Args
 
-#define INDEX_UI_NEW_CLASS(class_name, args_name) template<class T = UIElement>         \
-struct New : public IPtr<T>                                                             \
+#define INDEX_UI_NEW_CLASS(class_name) template<class T = Index::UI::UIElement>                    \
+struct New : public Index::IPtr<T>                                                      \
 {                                                                                       \
-    explicit New(args_name e) {                                                         \
-        if constexpr (!std::is_same<UIElement, T>::value) {                             \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>(e).As<UIElement>();         \
+    explicit New(Args e) {                                                              \
+        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                      \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<Index::UI::UIElement>();    \
         }                                                                               \
         if constexpr (std::is_same<class_name, T>::value) {                             \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>(e);                         \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e);                         \
         }                                                                               \
         else {                                                                          \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>(e).As<T>();                 \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<T>();                 \
         }                                                                               \
     }                                                                                   \
 };
 
-#define INDEX_UI_NEW_CLASS_EMPTY(class_name)      template<class T = UIElement>         \
-struct New : public IPtr<T>                                                             \
-{                                                                                       \
-    explicit New() {                                                                    \
-        if constexpr (!std::is_same<UIElement, T>::value) {                             \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>().As<UIElement>();          \
-        }                                                                               \
-        if constexpr (std::is_same<class_name, T>::value) {                             \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>();                          \
-        }                                                                               \
-        else {                                                                          \
-            static_cast<IPtr<T>&>(*this) = INew<class_name>().As<T>();                  \
-        }                                                                               \
-    }                                                                                   \
+#define INDEX_UI_NEW_CLASS_ARGS(class_name, args_name) template<class T = Index::UI::UIElement>            \
+struct New : public Index::IPtr<T>                                                              \
+{                                                                                               \
+    explicit New(args_name e) {                                                                 \
+        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                     \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<Index::UI::UIElement>();   \
+        }                                                                                       \
+        if constexpr (std::is_same<class_name, T>::value) {                                     \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e);                   \
+        }                                                                                       \
+        else {                                                                                  \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<T>();           \
+        }                                                                                       \
+    }                                                                                           \
 };
 
-#define INDEX_UI_NEW_CONSTRUCTOR(class_name) explicit class_name(New e)
+#define INDEX_UI_NEW_CLASS_EMPTY(class_name) template<class T = Index::UI::UIElement>          \
+struct New : public Index::IPtr<T>                                                              \
+{                                                                                               \
+    explicit New() {                                                                            \
+        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                     \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>().As<Index::UI::UIElement>();    \
+        }                                                                                       \
+        if constexpr (std::is_same<class_name, T>::value) {                                     \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>();                    \
+        }                                                                                       \
+        else {                                                                                  \
+            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>().As<T>();            \
+        }                                                                                       \
+    }                                                                                           \
+};
+
+#define INDEX_UI_NEW_CONSTRUCTOR(class_name) explicit class_name(Args e)
+
+#define INDEX_UI_NEW_CONSTRUCTOR_ARGS(class_name, args_name) explicit class_name(args_name e)
+
+#define INDEX_UI_NEW_CONSTRUCTOR_EMPTY(class_name) explicit class_name()
 
 #define INDEX_UI_THISSTATE (+Index::UI::UIContext::CurrentStates)
 
@@ -55,8 +77,8 @@ namespace Index::UI
 {
     struct Empty : UIElement
     {
-        INDEX_UI_NEW_CLASS_EMPTY(Empty,);
-        INDEX_UI_NEW_CONSTRUCTOR(Empty) { }
+        INDEX_UI_NEW_CLASS_EMPTY(Empty);
+        INDEX_UI_NEW_CONSTRUCTOR_EMPTY(Empty) { }
         void Build(Layout i) override { }
         void Notify(INotification* e) override { }
     };
@@ -64,9 +86,9 @@ namespace Index::UI
     struct Holder : UIElement
     {
         List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(Holder, List<IPtr<UIElement>>);
-        INDEX_UI_NEW_CONSTRUCTOR(Holder) {
-            Content = std::move(e.Content);
+        INDEX_UI_NEW_CLASS_ARGS(Holder, List<IPtr<UIElement>>);
+        INDEX_UI_NEW_CONSTRUCTOR_ARGS(Holder, List<IPtr<UIElement>>) {
+            Content = std::move(e);
         }
         void Build(Layout i) override {
             for (auto& c : Content) {
@@ -87,7 +109,10 @@ namespace Index::UI
     struct Wrap : UIElement
     {
         IPtr<UIElement> Content;
-        INDEX_UI_NEW_CLASS(Wrap, IPtr<UIElement> Content;);
+        INDEX_UI_ARGS {
+            IPtr<UIElement> Content;
+        };
+        INDEX_UI_NEW_CLASS(Wrap);
         INDEX_UI_NEW_CONSTRUCTOR(Wrap) {
             Content = std::move(e.Content);
         }
@@ -107,9 +132,12 @@ namespace Index::UI
     struct Builder : UIElement
     {
         Func<Index::UI::UIElement*()> BuildFunc;
-        INDEX_UI_NEW_CLASS(Builder, Func<Index::UI::UIElement*()> BuildFunc;);
+        INDEX_UI_ARGS {
+            Func<Index::UI::UIElement*()> BuildFunc;
+        };
+        INDEX_UI_NEW_CLASS(Builder);
         INDEX_UI_NEW_CONSTRUCTOR(Builder) {
-            BuildFunc = e.BuildFunc;
+            BuildFunc = std::move(e.BuildFunc);
         }
         void Build(Layout i) override {
             if (BuildFunc) {
@@ -129,9 +157,12 @@ namespace Index::UI
     struct StatefulBuilder : UIElement, IRenderState
     {
         Func<Index::UI::UIElement*()> BuildFunc;
-        INDEX_UI_NEW_CLASS(StatefulBuilder, Func<Index::UI::UIElement*()> BuildFunc;);
+        INDEX_UI_ARGS {
+            Func<Index::UI::UIElement*()> BuildFunc;
+        };
+        INDEX_UI_NEW_CLASS(StatefulBuilder);
         INDEX_UI_NEW_CONSTRUCTOR(StatefulBuilder) {
-            BuildFunc = e.BuildFunc;
+            BuildFunc = std::move(e.BuildFunc);
         }
         void Build(Layout i) override {
             (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
@@ -158,10 +189,10 @@ namespace Index::UI
 
     struct NextElement : UIElement {
         List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(NextElement, List<IPtr<UIElement>> Content;);
-        INDEX_UI_NEW_CONSTRUCTOR(NextElement) {
-            Content = std::move(e.Content);
+        explicit NextElement(List<IPtr<UIElement>> content) {
+            Content = std::move(content);
         }
+        NextElement() = default;
         void Build(Layout i) override {
             for (auto& c : Content) {
                 if (c) c->Build(i);
@@ -185,7 +216,7 @@ namespace Index::UI
         List<IPtr<UIElement>> _Content;
     public:
         IPtr<UIElement> GetNewNext() {
-            _Next = NextElement::New();
+            _Next = INew<NextElement>();
             return _Next;
         }
         void SetNextContent(IPtr<UIElement> c) {
@@ -228,7 +259,7 @@ namespace Index::UI
         List<IPtr<UIElement>> _Content;
     public:
         IPtr<UIElement> GetNewNext() {
-            _Next = NextElement::New();
+            _Next = INew<NextElement>();
             return _Next;
         }
         void SetNextContent(IPtr<UIElement> c) {
@@ -280,7 +311,11 @@ namespace Index::UI
     struct Container : UIElement
     {
         List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(Container, INDEX_UI_DEFAULT_NEW_MEBERS; List<IPtr<UIElement>> Content;);
+        INDEX_UI_ARGS {
+            INDEX_UI_DEFAULT_NEW_MEBERS;
+            List<IPtr<UIElement>> Content;
+        };
+        INDEX_UI_NEW_CLASS(Container);
         INDEX_UI_NEW_CONSTRUCTOR(Container) {
             INDEX_UI_SET_DEFAULT_MEMBERS;
             Content = std::move(e.Content);
@@ -309,7 +344,11 @@ namespace Index::UI
     struct StackH : UIElement
     {
         List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(StackH, INDEX_UI_DEFAULT_NEW_MEBERS; List<IPtr<UIElement>> Content;);
+        INDEX_UI_ARGS {
+            INDEX_UI_DEFAULT_NEW_MEBERS;
+            List<IPtr<UIElement>> Content;
+        };
+        INDEX_UI_NEW_CLASS(StackH);
         INDEX_UI_NEW_CONSTRUCTOR(StackH) {
             INDEX_UI_SET_DEFAULT_MEMBERS;
             Content = std::move(e.Content);
@@ -353,7 +392,11 @@ namespace Index::UI
     struct StackV : UIElement
     {
         List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(StackV, INDEX_UI_DEFAULT_NEW_MEBERS; List<IPtr<UIElement>> Content;);
+        INDEX_UI_ARGS {
+            INDEX_UI_DEFAULT_NEW_MEBERS;
+            List<IPtr<UIElement>> Content;
+        };
+        INDEX_UI_NEW_CLASS(StackV);
         INDEX_UI_NEW_CONSTRUCTOR(StackV) {
             INDEX_UI_SET_DEFAULT_MEMBERS;
             Content = std::move(e.Content);

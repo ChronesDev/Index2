@@ -159,117 +159,48 @@ namespace Index::UI
         Align Alignment = Align::Stretch;
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
-        virtual LayoutInfo MeasureCenterSize();
-
+        virtual Index::Size MeasureMinSize();
     };
 }
 
-// LayoutInfo
-namespace Index::UI
+// LayoutUtils
+namespace Index::UI::LayoutUtils
 {
-    struct LayoutInfo
-    {
-        Size Size { NullF, NullF };
-        [[nodiscard]] float GetWidth() const { return Size.Width; }
-        void SetWidth(float value) { Size.Width = value; }
-        __declspec(property(get = GetWidth, put = SetWidth)) float Width;
-        [[nodiscard]] float GetHeight() const { return Size.Height; }
-        void SetHeight(float value) { Size.Height = value; }
-        __declspec(property(get = GetHeight, put = SetHeight)) float Height;
-    public:
-        static LayoutInfo FromList(List<IPtr<UIElement>>& content) {
-            LayoutInfo i;
-            float& w = i.Size.Width, h = i.Size.Height;
-            for (auto& c : content) {
-                if (!c) continue;
-                auto info = c->MeasureCenterSize();
-                if (info.Width != NullF) {
-                    if (info.Width >= (w == NullF ? 0 : w)) {
-                        w = info.Width;
-                    }
-                }
-                if (info.Height != NullF) {
-                    if (info.Height >= (h == NullF ? 0 : h)) {
-                        h = info.Height;
-                    }
-                }
-            }
-            return i;
-        }
-        static LayoutInfo FromSpan(Span<UIElement*> content) {
-            LayoutInfo i;
-            float& w = i.Size.Width, h = i.Size.Height;
-            for (auto& c : content) {
-                if (!c) continue;
-                auto info = c->MeasureCenterSize();
-                if (info.Width != NullF) {
-                    if (info.Width >= (w == NullF ? 0 : w)) {
-                        w = info.Width;
-                    }
-                }
-                if (info.Height != NullF) {
-                    if (info.Height >= (h == NullF ? 0 : h)) {
-                        h = info.Height;
-                    }
-                }
-            }
-            return i;
-        }
-        static LayoutInfo FromListAnd(List<IPtr<UIElement>>& content, UIElement* me) {
-            LayoutInfo i;
-            float& w = i.Size.Width, h = i.Size.Height;
-            for (auto& c : content) {
-                if (!c) continue;
-                auto info = c->MeasureCenterSize();
-                if (info.Width != NullF) {
-                    if (info.Width >= (w == NullF ? 0 : w)) {
-                        w = info.Width;
-                    }
-                }
-                if (info.Height != NullF) {
-                    if (info.Height >= (h == NullF ? 0 : h)) {
-                        h = info.Height;
-                    }
-                }
-            }
-
-            {
-                auto *c = me;
-                if (!c) goto jmp_Continue;
-                auto info = c->MeasureCenterSize();
-                if (info.Width != NullF)
-                {
-                    if (info.Width >= (w == NullF ? 0 : w))
-                    {
-                        w = info.Width;
-                    }
-                }
-                if (info.Height != NullF)
-                {
-                    if (info.Height >= (h == NullF ? 0 : h))
-                    {
-                        h = info.Height;
-                    }
-                }
-            }
-            jmp_Continue:
-
-            return i;
-        }
-    };
+    inline Size CalculateMinSize(UIElement* element) {
+        float minWidth = Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(0, element->MinSize.Width));
+        float minHeight = Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(0, element->MinSize.Height));
+        return { minWidth, minHeight };
+    }
+    inline Size CalculateMinSize(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
+        float minWidth = Min(Min(size.Width, maxSize.Width), FloatValueOr(0, size.Width));
+        float minHeight = Min(Min(size.Height, maxSize.Height), FloatValueOr(0, size.Height));
+        return { minWidth, minHeight };
+    }
+    inline float CalculateMinWidth(UIElement* element) {
+        return Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(0, element->MinSize.Width));
+    }
+    inline float CalculateMinHeight(UIElement* element) {
+        return Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(0, element->MinSize.Height));
+    }
+    inline float CalculateMinWidth(float width, float minWidth, float maxWidth = NullF) {
+        return Min(Min(width, maxWidth), FloatValueOr(0, minWidth));
+    }
+    inline float CalculateMinHeight(float height, float minHeight, float maxHeight = NullF) {
+        return Min(Min(height, maxHeight), FloatValueOr(0, maxHeight));
+    }
+    inline float CalculateMinWidth(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
+        return Min(Min(size.Width, maxSize.Width), FloatValueOr(0, size.Width));
+    }
+    inline float CalculateMinHeight(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
+        return Min(Min(size.Height, maxSize.Height), FloatValueOr(0, size.Height));
+    }
 }
 
 // UIElement Implementation
 namespace Index::UI
 {
-    inline LayoutInfo UIElement::MeasureCenterSize() {
-        LayoutInfo i {
-            .Size = {
-                FloatValueOr(0, Size.Width, MinSize.Width),
-                FloatValueOr(0, Size.Height, MinSize.Height)
-            }
-        };
-        return i;
+    inline Index::Size UIElement::MeasureMinSize() {
+        return LayoutUtils::CalculateMinSize(this);
     }
 }
 
@@ -366,7 +297,7 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        LayoutInfo MeasureCenterSize() override {
+        Size MeasureMinSize() override {
             return LayoutInfo::FromList(Content);
         }
     };
@@ -384,8 +315,8 @@ namespace Index::UI
         void Notify(INotification* e) override {
             if (Content) Content->Notify(e);
         }
-        LayoutInfo MeasureCenterSize() override {
-            if (Content) return Content->MeasureCenterSize();
+        Index::Size MeasureMinSize() override {
+            if (Content) return Content->MeasureMinSize();
             return { };
         }
     };
@@ -460,8 +391,8 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        LayoutInfo MeasureCenterSize() override {
-            return LayoutInfo::FromList(Content);
+        Index::Size MeasureMinSize() override {
+            return LayoutInfo::FromList(Content).Size;
         }
     };
 
@@ -581,7 +512,7 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-        LayoutInfo MeasureCenterSize() override {
+        Index::Size MeasureMinSize() override {
 
         }
     };

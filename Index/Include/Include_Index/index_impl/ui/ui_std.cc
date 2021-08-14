@@ -362,7 +362,7 @@ namespace Index::UI
                     .Area = Rect {
                         r.X + x,
                         r.Y,
-                        r.Size
+                        { mins.Width, r.Height }
                     }
                 });
                 x += mins.Width;
@@ -410,7 +410,7 @@ namespace Index::UI
                              .Area = Rect {
                                  r.X,
                                  r.Y + y,
-                                 r.Size
+                                 { r.Width, mins.Height }
                              }
                          });
                 y += mins.Height;

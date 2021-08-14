@@ -167,32 +167,32 @@ namespace Index::UI
 namespace Index::UI::LayoutUtils
 {
     inline Size CalculateMinSize(UIElement* element) {
-        float minWidth = Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(element->MinSize.Width, 0));
-        float minHeight = Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(element->MinSize.Height, 0));
+        float minWidth = Min(element->MaxSize.Width, Max(FloatValueOr(element->Size.Width, 0), FloatValueOr(element->MinSize.Width, 0)));
+        float minHeight = Min(element->MaxSize.Height, Max(FloatValueOr(element->Size.Height, 0), FloatValueOr(element->MinSize.Height, 0)));
         return { minWidth, minHeight };
     }
     inline Size CalculateMinSize(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        float minWidth = Min(Min(size.Width, maxSize.Width), FloatValueOr(size.Width, 0));
-        float minHeight = Min(Min(size.Height, maxSize.Height), FloatValueOr(size.Height, 0));
+        float minWidth = Min(maxSize.Width, Max(FloatValueOr(size.Width, 0), FloatValueOr(minSize.Width, 0)));
+        float minHeight = Min(maxSize.Height, Max(FloatValueOr(size.Height, 0), FloatValueOr(minSize.Height, 0)));
         return { minWidth, minHeight };
     }
     inline float CalculateMinWidth(UIElement* element) {
-        return Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(element->MinSize.Width, 0));
+        return Min(element->MaxSize.Width, Max(FloatValueOr(element->Size.Width, 0), FloatValueOr(element->MinSize.Width, 0)));
     }
     inline float CalculateMinHeight(UIElement* element) {
-        return Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(element->MinSize.Height, 0));
+        return Min(element->MaxSize.Width, Max(FloatValueOr(element->Size.Height, 0), FloatValueOr(element->MinSize.Height, 0)));
     }
     inline float CalculateMinWidth(float width, float minWidth, float maxWidth = NullF) {
-        return Min(Min(width, maxWidth), FloatValueOr(minWidth, 0));
+        return Min(maxWidth, Max(FloatValueOr(width, 0), FloatValueOr(minWidth, 0)));
     }
     inline float CalculateMinHeight(float height, float minHeight, float maxHeight = NullF) {
-        return Min(Min(height, maxHeight), FloatValueOr(maxHeight, 0));
+        return Min(maxHeight, Max(FloatValueOr(height, 0), FloatValueOr(minHeight, 0)));
     }
     inline float CalculateMinWidth(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        return Min(Min(size.Width, maxSize.Width), FloatValueOr(size.Width, 0));
+        return Min(maxSize.Width, Max(FloatValueOr(size.Width, 0), FloatValueOr(minSize.Width, 0)));
     }
     inline float CalculateMinHeight(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        return Min(Min(size.Height, maxSize.Height), FloatValueOr(size.Height, 0));
+        return Min(maxSize.Height, Max(FloatValueOr(size.Height, 0), FloatValueOr(minSize.Height, 0)));
     }
     inline bool CanRectFitInto(Rect rect, Rect parent) {
         return rect.Width <= parent.Width && rect.Height <= parent.Height;

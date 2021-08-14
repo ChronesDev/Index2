@@ -50,22 +50,6 @@ struct S : Index::UI::UIElement
 
 int main()
 {
-    ui_ref r = Wrap n {
-        content Wrap n {
-            content Holder n {
-               content {
-                   ImUI::Rectangle n{
-                       .Fill = Color::RGBA(0, 0, 0, 255)
-                   }u,
-                   ImUI::Rectangle n{
-                       .Fill = Color::RGBA(255, 255, 255, 127)
-                   }u
-               }
-            }u
-        }u,
-    };
-
-    /*
     UIContext::BeginBuild();
 
     struct MainApp : StatefulElement
@@ -73,29 +57,12 @@ int main()
         void Construct() override
         {
             ui_list list;
-            for (int i = 0; i < 255; i++) {
-                list.Add(ImUI::Rectangle n {
-                    .Size { 3, 10 },
-                    .Fill = Color::RGB(i, i, i)
-                });
-            }
-            add = StackH n {
-                .Size { 100, 100 },
-                .Alignment = Align::LeftBottom,
-                content list
-            };
+            list.Add(Container n {})
         }
     };
 
     IPtr<UIElement> root = ImUI::WindowRoot n { content {
-        INew<MainApp>(),
-        Holder n {
-            content {
-                Holder n {
-
-                }
-            }
-        }
+        INew<MainApp>()
     }};
 
     UIContext::Root = root.As<State>();
@@ -114,9 +81,8 @@ int main()
 
     };
 
-    //Entry();
+    Entry();
 
-    */
 
     return 0;
 }

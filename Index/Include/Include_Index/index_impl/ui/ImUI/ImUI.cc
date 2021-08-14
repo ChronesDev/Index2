@@ -3,6 +3,7 @@
 #include <iostream>
 #include <imgui.h>
 #include "../ui.cc"
+#include "../ui_std.cc"
 
 namespace Index::UI
 {
@@ -64,8 +65,9 @@ namespace Index::UI::ImUI
         void Build(Layout i) override
         {
             auto fill = Fill;
-            INDEX_UI_THISSTATE->RenderList.Add([i, fill]{
-                UIContext::DrawList->AddRectFilled(ToImVec2(i.Area.First), ToImVec2(i.Area.Second), ToImColor(fill));
+            auto r = LayoutUtils::CalculateUIElementSubrect(this, i);
+            INDEX_UI_THISSTATE->RenderList.Add([fill, r]{
+                UIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(fill));
             });
         }
         void Notify(INotification* e) override { }

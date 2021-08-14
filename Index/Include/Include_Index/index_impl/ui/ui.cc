@@ -167,32 +167,38 @@ namespace Index::UI
 namespace Index::UI::LayoutUtils
 {
     inline Size CalculateMinSize(UIElement* element) {
-        float minWidth = Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(0, element->MinSize.Width));
-        float minHeight = Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(0, element->MinSize.Height));
+        float minWidth = Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(element->MinSize.Width, 0));
+        float minHeight = Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(element->MinSize.Height, 0));
         return { minWidth, minHeight };
     }
     inline Size CalculateMinSize(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        float minWidth = Min(Min(size.Width, maxSize.Width), FloatValueOr(0, size.Width));
-        float minHeight = Min(Min(size.Height, maxSize.Height), FloatValueOr(0, size.Height));
+        float minWidth = Min(Min(size.Width, maxSize.Width), FloatValueOr(size.Width, 0));
+        float minHeight = Min(Min(size.Height, maxSize.Height), FloatValueOr(size.Height, 0));
         return { minWidth, minHeight };
     }
     inline float CalculateMinWidth(UIElement* element) {
-        return Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(0, element->MinSize.Width));
+        return Min(Min(element->Size.Width, element->MaxSize.Width), FloatValueOr(element->MinSize.Width, 0));
     }
     inline float CalculateMinHeight(UIElement* element) {
-        return Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(0, element->MinSize.Height));
+        return Min(Min(element->Size.Height, element->MaxSize.Height), FloatValueOr(element->MinSize.Height, 0));
     }
     inline float CalculateMinWidth(float width, float minWidth, float maxWidth = NullF) {
-        return Min(Min(width, maxWidth), FloatValueOr(0, minWidth));
+        return Min(Min(width, maxWidth), FloatValueOr(minWidth, 0));
     }
     inline float CalculateMinHeight(float height, float minHeight, float maxHeight = NullF) {
-        return Min(Min(height, maxHeight), FloatValueOr(0, maxHeight));
+        return Min(Min(height, maxHeight), FloatValueOr(maxHeight, 0));
     }
     inline float CalculateMinWidth(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        return Min(Min(size.Width, maxSize.Width), FloatValueOr(0, size.Width));
+        return Min(Min(size.Width, maxSize.Width), FloatValueOr(size.Width, 0));
     }
     inline float CalculateMinHeight(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
-        return Min(Min(size.Height, maxSize.Height), FloatValueOr(0, size.Height));
+        return Min(Min(size.Height, maxSize.Height), FloatValueOr(size.Height, 0));
+    }
+    inline bool CanRectFitInto(Rect rect, Rect parent) {
+        return rect.Width <= parent.Width && rect.Height <= parent.Height;
+    }
+    inline bool CanSizeFitInto(Size rect, Size parent) {
+        return rect.Width <= parent.Width && rect.Height <= parent.Height;
     }
     inline Size CalculateMinSizeFrom(List<IPtr<UIElement>>& content) {
         float minWidth = 0;
@@ -227,6 +233,54 @@ namespace Index::UI::LayoutUtils
             parentCenter.Y - (rectSize.Height / 2),
             rectSize
         };
+    }
+    inline Rect AlignRect(Size minSize, Rect parent, Align a) {
+        Size mins = {
+            FloatValueOr(minSize.Width, 0),
+            FloatValueOr(minSize.Height, 0)
+        };
+        Vec2F pos;
+        Size size;
+        if (a.IsHStretched) {
+            size.Width = Max(mins.Width, parent.Width);
+            pos.X = parent.Center.X - (size.Width / 2);
+        }
+        if (a.IsHCentered) {
+            size.Width = mins.Width;
+            pos.X = parent.Center.X - (size.Width / 2);
+        }
+        if (a.IsHLeft) {
+            size.Width = mins.Width;
+            pos.X = parent.First.X;
+        }
+        if (a.IsHRight) {
+            size.Width = mins.Width;
+            pos.X = parent.Second.X - size.Width;
+        }
+        if (a.IsVStretched) {
+            size.Height = Max(mins.Height, parent.Height);
+            pos.Y = parent.Center.Y - (size.Height / 2);
+        }
+        if (a.IsVCentered) {
+            size.Height = mins.Height;
+            pos.Y = parent.Center.Y - (size.Height / 2);
+        }
+        if (a.IsVTop) {
+            size.Height = mins.Height;
+            pos.Y = parent.First.Y;
+        }
+        if (a.IsVBottom) {
+            size.Height = mins.Height;
+            pos.Y = parent.Second.Y - size.Height;
+        }
+        return { pos, size };
+    }
+    inline Rect CalculateUIElementSubrect(UIElement* e, Layout i) {
+        Align a = e->Alignment;
+        Size mins = e->MeasureMinSize();
+        Size maxs = e->MaxSize;
+        Rect r = i.Area;
+        return AlignRect(mins, r, e->Alignment);
     }
 }
 
@@ -267,287 +321,6 @@ namespace Index::UI
                 Notify(e);
                 if (e->Handled) return;
             }
-        }
-    };
-}
-
-#define INDEX_UI_DEFAULT_NEW_MEBERS                             \
-Index::Size MinSize { Index::UI::NullF, Index::UI::NullF };     \
-Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF };     \
-Index::Size Size { Index::UI::NullF, Index::UI::NullF };        \
-Index::Align Alignment = Index::Align::Stretch;
-
-#define INDEX_UI_SET_DEFAULT_MEMBERS     \
-this->MinSize = e.MinSize;               \
-this->MaxSize = e.MaxSize;               \
-this->Size = e.Size;                     \
-this->Alignment = e.Alignment;
-
-
-#define INDEX_UI_NEW_CLASS(class_name, properties) struct New {                                     \
-    properties                                                                                      \
-    operator Index::IPtr<Index::UI::UIElement>() {                                                  \
-        return std::static_pointer_cast<Index::UI::UIElement>(Index::INew<class_name>(*this));      \
-    }                                                                                               \
-    operator Index::IPtr<class_name>() {                                                            \
-        return Index::INew<class_name>(*this);                                                      \
-    }                                                                                               \
-    IPtr<Index::UI::UIElement> GetUIRef() {                                                         \
-        return Index::INew<class_name>(*this);                                                      \
-    }                                                                                               \
-    __declspec(property(get = GetUIRef)) IPtr<Index::UI::UIElement> UIRef;                          \
-};
-
-#define INDEX_UI_NEW_CONSTRUCTOR(class_name) explicit class_name(New e)
-
-#define INDEX_UI_THISSTATE (+Index::UI::UIContext::CurrentStates)
-
-// Normal Elements
-namespace Index::UI
-{
-    struct Empty : UIElement
-    {
-        INDEX_UI_NEW_CLASS(Empty,);
-        INDEX_UI_NEW_CONSTRUCTOR(Empty) { }
-        void Build(Layout i) override { }
-        void Notify(INotification* e) override { }
-    };
-
-    struct Holder : UIElement
-    {
-        List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(Holder, List<IPtr<UIElement>> Content;);
-        INDEX_UI_NEW_CONSTRUCTOR(Holder) {
-            Content = std::move(e.Content);
-        }
-        void Build(Layout i) override {
-            for (auto& c : Content) {
-                if (c) c->Build(i);
-            }
-        }
-        void Notify(INotification* e) override {
-            for (auto& c : Content) {
-                Notify(e);
-                if (e->Handled) return;
-            }
-        }
-        Size MeasureMinSize() override {
-            return LayoutInfo::FromList(Content);
-        }
-    };
-
-    struct Wrap : UIElement
-    {
-        IPtr<UIElement> Content;
-        INDEX_UI_NEW_CLASS(Wrap, IPtr<UIElement> Content;);
-        INDEX_UI_NEW_CONSTRUCTOR(Wrap) {
-            Content = std::move(e.Content);
-        }
-        void Build(Layout i) override {
-            if (Content) Content->Build(i);
-        }
-        void Notify(INotification* e) override {
-            if (Content) Content->Notify(e);
-        }
-        Index::Size MeasureMinSize() override {
-            if (Content) return Content->MeasureMinSize();
-            return { };
-        }
-    };
-
-    // TODO: Add _Content member
-    struct Builder : UIElement
-    {
-        Func<Index::UI::UIElement*()> BuildFunc;
-        INDEX_UI_NEW_CLASS(Builder, Func<Index::UI::UIElement*()> BuildFunc;);
-        INDEX_UI_NEW_CONSTRUCTOR(Builder) {
-            BuildFunc = e.BuildFunc;
-        }
-        void Build(Layout i) override {
-            if (BuildFunc) {
-                auto c = BuildFunc();
-                if (c) c->Build(i);
-            }
-        }
-        void Notify(INotification* e) override {
-            if (BuildFunc) {
-                auto c = BuildFunc();
-                if (c) c->Notify(e);
-            }
-        }
-    };
-
-    // TODO: Add _Content member
-    struct StatefulBuilder : UIElement, IRenderState
-    {
-        Func<Index::UI::UIElement*()> BuildFunc;
-        INDEX_UI_NEW_CLASS(StatefulBuilder, Func<Index::UI::UIElement*()> BuildFunc;);
-        INDEX_UI_NEW_CONSTRUCTOR(StatefulBuilder) {
-            BuildFunc = e.BuildFunc;
-        }
-        void Build(Layout i) override {
-            (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
-            if (!UIContext::RebuildTree) return;
-            this->ClearRenderList();
-            if (BuildFunc) {
-                auto c = BuildFunc();
-                if (c) c->Build(i);
-            }
-        }
-        void Rebuild(Layout i) {
-            bool isRebuilding = Index::UI::UIContext::RebuildTree;
-            Index::UI::UIContext::RebuildTree = true;
-            Build(i);
-            Index::UI::UIContext::RebuildTree = isRebuilding;
-        }
-        void Notify(INotification* e) override {
-            if (BuildFunc) {
-                auto c = BuildFunc();
-                if (c) c->Notify(e);
-            }
-        }
-    };
-
-    struct NextElement : UIElement {
-        List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(NextElement, List<IPtr<UIElement>> Content;);
-        INDEX_UI_NEW_CONSTRUCTOR(NextElement) {
-            Content = std::move(e.Content);
-        }
-        void Build(Layout i) override {
-            for (auto& c : Content) {
-                if (c) c->Build(i);
-            }
-        }
-        void Notify(INotification* e) override {
-            for (auto& c : Content) {
-                Notify(e);
-                if (e->Handled) return;
-            }
-        }
-        Index::Size MeasureMinSize() override {
-            return LayoutInfo::FromList(Content).Size;
-        }
-    };
-
-    struct Element : UIElement
-    {
-    private:
-        IPtr<NextElement> _Next;
-        List<IPtr<UIElement>> _Content;
-    public:
-        IPtr<UIElement> GetNewNext() {
-            _Next = NextElement::New();
-            return _Next;
-        }
-        void SetNextContent(IPtr<UIElement> c) {
-            if (c.IsNull) return;
-            if (_Next) {
-                _Next->Content.Add(std::move(c));
-            }
-        }
-        __declspec(property(get = GetNewNext, put = SetNextContent)) IPtr<UIElement> next;
-        void AddContent(IPtr<UIElement> c) {
-            _Content.Add(std::move(c));
-        }
-        __declspec(property(put = AddContent)) IPtr<UIElement> add;
-        List<IPtr<UIElement>>& GetContent() {
-            return _Content;
-        }
-        __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
-    public:
-        virtual void Construct() = 0;
-        void Build(Layout i) override {
-            GetNewNext();
-            _Content.Clear();
-            Construct();
-            for (auto& c : _Content) {
-                if (c) c->Build(i);
-            }
-        }
-        void Notify(INotification* e) override {
-            for (auto& c : _Content) {
-                if (c) c->Notify(e);
-                if (e->Handled) return;
-            }
-        }
-    };
-
-    struct StatefulElement : UIElement, IRenderState
-    {
-    private:
-        IPtr<NextElement> _Next;
-        List<IPtr<UIElement>> _Content;
-    public:
-        IPtr<UIElement> GetNewNext() {
-            _Next = NextElement::New();
-            return _Next;
-        }
-        void SetNextContent(IPtr<UIElement> c) {
-            if (c.IsNull) return;
-            if (_Next) {
-                _Next->Content.Add(std::move(c));
-            }
-        }
-        __declspec(property(get = GetNewNext, put = SetNextContent)) IPtr<UIElement> next;
-        void AddContent(IPtr<UIElement> c) {
-            _Content.Add(std::move(c));
-        }
-        __declspec(property(put = AddContent)) IPtr<UIElement> add;
-        List<IPtr<UIElement>>& GetContent() {
-            return _Content;
-        }
-        __declspec(property(get = GetContent)) List<IPtr<UIElement>>& Content;
-    public:
-        virtual void Construct() = 0;
-        void Build(Layout i) override {
-            (+UIContext::CurrentStates)->AddState(static_cast<IRenderState*>(this));
-            if (!UIContext::RebuildTree) return;
-            this->ClearRenderList();
-            GetNewNext();
-            _Content.Clear();
-            Construct();
-            for (auto& c : _Content) {
-                if (c) c->Build(i);
-            }
-        }
-        void Rebuild(Layout i) {
-            bool isRebuilding = Index::UI::UIContext::RebuildTree;
-            Index::UI::UIContext::RebuildTree = true;
-            Build(i);
-            Index::UI::UIContext::RebuildTree = isRebuilding;
-        }
-        void Notify(INotification* e) override {
-            for (auto& c : _Content) {
-                if (c) c->Notify(e);
-                if (e->Handled) return;
-            }
-        }
-    };
-}
-
-// Layout Elements
-namespace Index::UI
-{
-    struct StackH : UIElement
-    {
-        List<IPtr<UIElement>> Content;
-        INDEX_UI_NEW_CLASS(StackH, INDEX_UI_DEFAULT_NEW_MEBERS; List<IPtr<UIElement>> Content;);
-        INDEX_UI_NEW_CONSTRUCTOR(StackH) {
-            INDEX_UI_SET_DEFAULT_MEMBERS;
-            Content = std::move(e.Content);
-        }
-        void Build(Layout i) override {
-
-        }
-        void Notify(INotification* e) override {
-            for (auto& c : Content) {
-                Notify(e);
-                if (e->Handled) return;
-            }
-        }
-        Index::Size MeasureMinSize() override {
-
         }
     };
 }

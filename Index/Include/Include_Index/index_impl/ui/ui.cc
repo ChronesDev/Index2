@@ -194,6 +194,40 @@ namespace Index::UI::LayoutUtils
     inline float CalculateMinHeight(Size size, Size minSize, Size maxSize = { NullF, NullF }) {
         return Min(Min(size.Height, maxSize.Height), FloatValueOr(0, size.Height));
     }
+    inline Size CalculateMinSizeFrom(List<IPtr<UIElement>>& content) {
+        float minWidth = 0;
+        float minHeight = 0;
+        for (auto& c : content) {
+            auto size = c->MeasureMinSize();
+            minWidth = Max(minWidth, size.Width);
+            minHeight = Max(minHeight, size.Height);
+        }
+        return {
+            minWidth, minHeight
+        };
+    }
+    inline Rect CenterRect(Rect rect, Rect parent) {
+        auto parentCenter = parent.Center;
+        auto rectSize = rect.Size;
+        return Rect {
+            parentCenter.X - (rectSize.Width / 2),
+            parentCenter.Y - (rectSize.Height / 2),
+            rectSize
+        };
+    }
+    inline Rect ClampCenterRect(Rect rect, Rect parent) {
+        auto parentCenter = parent.Center;
+        auto parentSize = parent.Size;
+        auto rectSize = Size {
+            Min(rect.Width, parent.Width),
+            Min(rect.Height, parent.Height)
+        };
+        return Rect {
+            parentCenter.X - (rectSize.Width / 2),
+            parentCenter.Y - (rectSize.Height / 2),
+            rectSize
+        };
+    }
 }
 
 // UIElement Implementation

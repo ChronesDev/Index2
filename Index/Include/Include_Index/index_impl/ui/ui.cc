@@ -160,48 +160,7 @@ namespace Index::UI
         virtual void Build(Layout i) = 0;
         virtual void Notify(INotification* e) = 0;
         virtual LayoutInfo MeasureCenterSize();
-        __forceinline Rect AlignContentRect(Layout i, Index::Size content, Index::Size minSize = {NullF, NullF}) {
-            if (minSize.Width == NullF) {
-                minSize.Width = 0;
-            }
-            if (minSize.Height == NullF) {
-                minSize.Height = 0;
-            }
-            Rect r;
-            if (Alignment.IsHStretched) {
-                r.X = i.Area.X;
-                r.Width = r.Width;
-            }
-            if (Alignment.IsHLeft) {
-                r.X = i.Area.X;
-                r.Width = minSize.Width;
-            }
-            if (Alignment.IsHCentered) {
-                r.X = i.Area.X + ((i.Area.Width - Max(0.f, minSize.Width)) / 2);
-                r.Width = minSize.Width;
-            }
-            if (Alignment.IsHRight) {
-                r.X = i.Area.X + (i.Area.Width - Max(0.f, minSize.Width));
-                r.Width = minSize.Width;
-            }
-            if (Alignment.IsVStretched) {
-                r.Y = i.Area.Y;
-                r.Height = minSize.Height;
-            }
-            if (Alignment.IsVTop) {
-                r.X = i.Area.X;
-                r.Height = minSize.Height;
-            }
-            if (Alignment.IsVCentered) {
-                r.Y = i.Area.X + ((i.Area.Height - Max(0.f, minSize.Height)) / 2);
-                r.Height = minSize.Height;
-            }
-            if (Alignment.IsVBottom) {
-                r.Y = i.Area.X + (i.Area.Height - Max(0.f, minSize.Height));
-                r.Height = minSize.Height;
-            }
-            return r;
-        }
+
     };
 }
 
@@ -614,23 +573,7 @@ namespace Index::UI
             Content = std::move(e.Content);
         }
         void Build(Layout i) override {
-            auto ci = MeasureCenterSize();
-            Rect r = AlignContentRect(i, ci.Size, {
-                FloatValueOr(0, Size.Width, MinSize.Width),
-                FloatValueOr(0, Size.Height, MinSize.Height)
-            });
-            float& x = r.X;
-            for (auto& c : Content) {
-                if (c.IsNull) continue;
-                auto ci2 = c->MeasureCenterSize();
-                c->Build({
-                    .Area {
-                        x, r.Y,
-                        ci2.Width, r.Height
-                    }
-                });
-                x += ci2.Width;
-            }
+
         }
         void Notify(INotification* e) override {
             for (auto& c : Content) {
@@ -639,33 +582,7 @@ namespace Index::UI
             }
         }
         LayoutInfo MeasureCenterSize() override {
-            LayoutInfo i {
-                .Size {
-                    FloatValueOr(Size.Width, MinSize.Width, 0),
-                    FloatValueOr(Size.Height, MinSize.Height, 0)
-                }
-            };
-            float& w = i.Size.Width, h = i.Size.Height;
-            float nw = 0;
-            for (auto& c : Content) {
-                if (!c) continue;
-                auto info = c->MeasureCenterSize();
-                if (info.Width != NullF) {
-                    nw += info.Width;
-                }
-                if (info.Height != NullF) {
-                    if (info.Height >= (h == NullF ? 0 : h)) {
-                        h = info.Height;
-                    }
-                }
-            }
-            w = Max(nw, w);
-            return {
-                .Size {
-                    Min(w, MaxSize.Width),
-                    Min(h, MaxSize.Height),
-                }
-            };
+
         }
     };
 }

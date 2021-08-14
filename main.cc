@@ -65,24 +65,6 @@ int main()
         }u,
     };
 
-    ui_ref r2 = S n {{
-        content S n {{
-            content S n {{
-                content S n {{
-                    content S n {{
-                        content S n {{
-                            content S n {{
-                                content S n {{
-
-                                }}
-                            }}
-                        }}
-                    }}
-                }}
-            }}
-        }}
-    }};
-
     /*
     UIContext::BeginBuild();
 

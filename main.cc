@@ -23,28 +23,55 @@ struct MainApp : StatefulElement
             alignment Center,
             content {
                 INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 10 },
-                    .Fill = Colors::Black
-                }),
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 30 },
-                    .Fill = Colors::Blue
-                }),
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 10 },
+                    .Size { NullF, 20 },
                     .Fill = Colors::Orange
                 }),
                 INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 10 },
-                    .Fill = Colors::Black
+                    .Size { NullF, 20 },
+                    .Fill = Colors::Lime
                 }),
                 INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 30 },
-                    .Fill = Colors::Blue
+                    .Size { NullF, 20 },
+                    .Fill = Colors::White
                 }),
+            }
+        }};
+        add = StackV n {{
+            .Size { 100, NullF },
+            alignment LeftTop,
+            content {
                 INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 10 },
-                    .Fill = Colors::Orange
+                    .Size { NullF, 100 },
+                    .Fill = Colors::Yellow
+                }),
+            }
+        }};
+        add = StackV n {{
+            .Size { 100, NullF },
+            alignment RightTop,
+            content {
+                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
+                    .Size { NullF, 50 },
+                    .Fill = Colors::Red
+                }),
+            }
+        }};
+        add = StackV n {{
+            alignment Bottom,
+            content {
+                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
+                    .Size { NullF, 5 },
+                    .Fill = Colors::Red
+                }),
+            }
+        }};
+        add = StackV n {{
+            .Size { 100, NullF },
+            alignment BottomCenter,
+            content {
+                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
+                    .Size { NullF, 40 },
+                    .Fill = Colors::Aqua
                 }),
             }
         }};
@@ -73,7 +100,7 @@ int main()
         });
 
         // Background
-        db.AddRectFilled({0, 0}, {WindowSize.X, WindowSize.Y}, ToImColor(Colors::White));
+        db.AddRectFilled({0, 0}, {WindowSize.X, WindowSize.Y}, ToImColor(Colors::Black));
 
         UIContext::Render();
 

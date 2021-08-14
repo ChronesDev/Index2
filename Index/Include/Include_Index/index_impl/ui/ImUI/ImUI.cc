@@ -68,7 +68,6 @@ namespace Index::UI::ImUI
             auto fill = Fill;
             auto r = LayoutUtils::CalculateUIElementSubrect(this, i);
             INDEX_UI_THISSTATE->RenderList.Add([fill, r]{
-                std::cout << "Render Rect: " << r.X << " " << r.Y << " " << r.Width << std::endl;
                 UIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(fill));
             });
         }

@@ -26,7 +26,7 @@ namespace Index
             return _HorizontalAlignment == _Stretch;
         }
         [[nodiscard]] constexpr bool GetIsVStretched() const {
-            return _HorizontalAlignment == _Stretch;
+            return _VerticalAlignment == _Stretch;
         }
         __declspec(property(get = GetIsHStretched)) bool IsHStretched;
         __declspec(property(get = GetIsVStretched)) bool IsVStretched;
@@ -34,7 +34,7 @@ namespace Index
             return _HorizontalAlignment == _Center;
         }
         [[nodiscard]] constexpr bool GetIsVCentered() const {
-            return _HorizontalAlignment == _Center;
+            return _VerticalAlignment == _Center;
         }
         __declspec(property(get = GetIsHCentered)) bool IsHCentered;
         __declspec(property(get = GetIsVCentered)) bool IsVCentered;
@@ -42,7 +42,7 @@ namespace Index
             return _HorizontalAlignment == -1;
         }
         [[nodiscard]] constexpr bool GetIsVTop() const {
-            return _HorizontalAlignment == -1;
+            return _VerticalAlignment == -1;
         }
         __declspec(property(get = GetIsHLeft)) bool IsHLeft;
         __declspec(property(get = GetIsVTop)) bool IsVTop;
@@ -50,7 +50,7 @@ namespace Index
             return _HorizontalAlignment == 1;
         }
         [[nodiscard]] constexpr bool GetIsVBottom() const {
-            return _HorizontalAlignment == 1;
+            return _VerticalAlignment == 1;
         }
         __declspec(property(get = GetIsHRight)) bool IsHRight;
         __declspec(property(get = GetIsVBottom)) bool IsVBottom;
@@ -75,14 +75,14 @@ namespace Index
     inline const Align Align::Center           { _Center, _Center };
     inline const Align Align::Left             { -1, _Stretch };
     inline const Align Align::Right            { 1, _Stretch };
-    inline const Align Align::Top              { _Stretch, 1 };
-    inline const Align Align::Bottom           { _Stretch, -1 };
+    inline const Align Align::Top              { _Stretch, -1 };
+    inline const Align Align::Bottom           { _Stretch, 1 };
     inline const Align Align::LeftCenter       { -1, _Center };
     inline const Align Align::RightCenter      { 1, _Center };
-    inline const Align Align::TopCenter        { _Center, 1 };
-    inline const Align Align::BottomCenter     { _Center, -1 };
-    inline const Align Align::LeftTop          { -1, 1 };
-    inline const Align Align::LeftBottom       { -1, -1 };
-    inline const Align Align::RightTop         { 1, 1 };
-    inline const Align Align::RightBottom      { 1, -1 };
+    inline const Align Align::TopCenter        { _Center, -1 };
+    inline const Align Align::BottomCenter     { _Center, 1 };
+    inline const Align Align::LeftTop          { -1, -1 };
+    inline const Align Align::LeftBottom       { -1, 1 };
+    inline const Align Align::RightTop         { 1, -1 };
+    inline const Align Align::RightBottom      { 1, 1 };
 }

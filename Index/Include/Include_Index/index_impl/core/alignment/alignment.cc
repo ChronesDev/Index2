@@ -11,8 +11,8 @@ namespace Index
         __int8 _HorizontalAlignment = 0;
         __int8 _VerticalAlignment = 0;
     private:
-        static const __int8 _Stretch = 0;
-        static const __int8 _Center = 2;
+        static constexpr __int8 _Stretch = 0;
+        static constexpr __int8 _Center = 2;
     public:
         [[nodiscard]] constexpr bool GetIsStretched() const {
             return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
@@ -57,6 +57,8 @@ namespace Index
     public:
         static const Align Stretch;
         static const Align Center;
+        static const Align StretchCenter;
+        static const Align CenterStretch;
         static const Align Left;
         static const Align Right;
         static const Align Top;
@@ -73,6 +75,8 @@ namespace Index
 
     inline const Align Align::Stretch          { _Stretch, _Stretch };
     inline const Align Align::Center           { _Center, _Center };
+    inline const Align Align::StretchCenter    { _Stretch, _Center };
+    inline const Align Align::CenterStretch    { _Center, _Stretch };
     inline const Align Align::Left             { -1, _Stretch };
     inline const Align Align::Right            { 1, _Stretch };
     inline const Align Align::Top              { _Stretch, -1 };

@@ -16,53 +16,21 @@ this->Alignment = e.Alignment;
 
 #define INDEX_UI_ARGS struct Args
 
-#define INDEX_UI_NEW_CLASS(class_name) template<class T = Index::UI::UIElement>                    \
-struct New : public Index::IPtr<T>                                                      \
-{                                                                                       \
-    explicit New(Args e) {                                                              \
-        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                      \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<Index::UI::UIElement>();    \
-        }                                                                               \
-        if constexpr (std::is_same<class_name, T>::value) {                             \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e);                         \
-        }                                                                               \
-        else {                                                                          \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<T>();                 \
-        }                                                                               \
-    }                                                                                   \
-};
+#define INDEX_UI_NEW_CLASS(class_name)                                              \
+template<class T = Index::UI::UIElement> static Index::IPtr<T> New(Args&& args) {   \
+    return INew<class_name>(std::forward<Args>(args));                              \
+}
 
-#define INDEX_UI_NEW_CLASS_ARGS(class_name, args_name) template<class T = Index::UI::UIElement>            \
-struct New : public Index::IPtr<T>                                                              \
-{                                                                                               \
-    explicit New(args_name e) {                                                                 \
-        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                     \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<Index::UI::UIElement>();   \
-        }                                                                                       \
-        if constexpr (std::is_same<class_name, T>::value) {                                     \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e);                   \
-        }                                                                                       \
-        else {                                                                                  \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>(e).As<T>();           \
-        }                                                                                       \
-    }                                                                                           \
-};
+#define INDEX_UI_NEW_CLASS_ARGS(class_name, args_name)                                  \
+template<class T = Index::UI::UIElement> static Index::IPtr<T> New(args_name&& args) {  \
+    return INew<class_name>(std::forward<args_name>(args));                             \
+}
 
-#define INDEX_UI_NEW_CLASS_EMPTY(class_name) template<class T = Index::UI::UIElement>          \
-struct New : public Index::IPtr<T>                                                              \
-{                                                                                               \
-    explicit New() {                                                                            \
-        if constexpr (!std::is_same<Index::UI::UIElement, T>::value) {                                     \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>().As<Index::UI::UIElement>();    \
-        }                                                                                       \
-        if constexpr (std::is_same<class_name, T>::value) {                                     \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>();                    \
-        }                                                                                       \
-        else {                                                                                  \
-            static_cast<Index::IPtr<T>&>(*this) = Index::INew<class_name>().As<T>();            \
-        }                                                                                       \
-    }                                                                                           \
-};
+#define INDEX_UI_NEW_CLASS_EMPTY(class_name)                                        \
+template<class T = Index::UI::UIElement> static Index::IPtr<T> New() {              \
+    return INew<class_name>();                                                      \
+}
+
 
 #define INDEX_UI_NEW_CONSTRUCTOR(class_name) explicit class_name(Args e)
 

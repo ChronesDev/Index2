@@ -15,66 +15,22 @@ using namespace Index::UI;
 
 struct MainApp : StatefulElement
 {
-    void Construct() override
+    inline void Construct() override
     {
         ui_list list;
-        add = StackV n {{
-            .Size { 100, NullF },
-            alignment Center,
+        add = Container n ({
             content {
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 20 },
-                    .Fill = Colors::Orange
-                }),
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 20 },
-                    .Fill = Colors::Lime
-                }),
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 20 },
-                    .Fill = Colors::White
-                }),
+                StackH n ({
+                    alignment LeftCenter,
+                    content {
+                        ImUI::Rectangle n ({
+                            .Size { 10, 20 },
+                            .Fill = Colors::White
+                        })
+                    }
+                })
             }
-        }};
-        add = StackV n {{
-            .Size { 100, NullF },
-            alignment LeftTop,
-            content {
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 100 },
-                    .Fill = Colors::Yellow
-                }),
-            }
-        }};
-        add = StackV n {{
-            .Size { 100, NullF },
-            alignment RightTop,
-            content {
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 50 },
-                    .Fill = Colors::Red
-                }),
-            }
-        }};
-        add = StackV n {{
-            alignment Bottom,
-            content {
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 5 },
-                    .Fill = Colors::Red
-                }),
-            }
-        }};
-        add = StackV n {{
-            .Size { 100, NullF },
-            alignment BottomCenter,
-            content {
-                INew<Index::UI::ImUI::Rectangle>(Index::UI::ImUI::Rectangle::Args {
-                    .Size { NullF, 40 },
-                    .Fill = Colors::Aqua
-                }),
-            }
-        }};
+        });
     }
 };
 

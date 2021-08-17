@@ -18,7 +18,11 @@ int main()
     auto a = UI::Stack n ({
         StackH n ({
             content {
+                Wrap n ({
+                    UI::Stack n ({
 
+                    })
+                })
             }
         }),
     });

@@ -43,6 +43,9 @@ template<class T = Index::UI::UIElement> static Index::IPtr<T> New() {          
 return Index::INew<class_name>();                                                      \
 }
 
+#define INDEX_UI_NewC \
+template<class T = Index::UI::UIElement> static Index::IPtr<T> New
+
 #define INDEX_UI_Constructor(class_name) \
 explicit class_name(Args e)
 
@@ -51,6 +54,9 @@ explicit class_name(args_name e)
 
 #define INDEX_UI_ConstructorEmpty(class_name) \
 explicit class_name()
+
+#define INDEX_UI_ConstructorC(class_name, args) \
+explicit class_name(args)
 
 #pragma endregion
 
@@ -75,12 +81,15 @@ namespace Index::UI
         }
         void Render(UIContext* u, Layout i) override {
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 c->Render(u, i);
             }
         }
         void Notify(UINotification* e) override {
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 c->Notify(e);
+                if (e->Handled) return;
             }
         }
         Index::Size MeasureIntentSize(Layout i) override {
@@ -103,6 +112,7 @@ namespace Index::UI
             Rect r = GetSubrect(this, i);
             float x = 0;
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 auto mins = c->MeasureIntentSize(i);
                 c->Render(u, {
                     .Area = Rect {
@@ -116,7 +126,9 @@ namespace Index::UI
         }
         void Notify(UINotification* e) override {
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 c->Notify(e);
+                if (e->Handled) return;
             }
         }
         Index::Size MeasureIntentSize(Layout i) override {
@@ -139,6 +151,7 @@ namespace Index::UI
             Rect r = GetSubrect(this, i);
             float y = 0;
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 auto mins = c->MeasureIntentSize(i);
                 c->Render(u, {
                     .Area = Rect {
@@ -152,7 +165,9 @@ namespace Index::UI
         }
         void Notify(UINotification* e) override {
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 c->Notify(e);
+                if (e->Handled) return;
             }
         }
         Index::Size MeasureIntentSize(Layout i) override {
@@ -166,12 +181,8 @@ namespace Index::UI
         INDEX_UI_ConstructorArgs(SpacingH, float) {
             Size.Width = e;
         }
-        void Render(UIContext* u, Layout i) override {
-
-        }
-        void Notify(UINotification* e) override {
-
-        }
+        void Render(UIContext* u, Layout i) override { }
+        void Notify(UINotification* e) override { }
     };
 
     struct SpacingV : UIElement
@@ -180,11 +191,27 @@ namespace Index::UI
         INDEX_UI_ConstructorArgs(SpacingV, float) {
             Size.Height = e;
         }
-        void Render(UIContext* u, Layout i) override {
+        void Render(UIContext* u, Layout i) override { }
+        void Notify(UINotification* e) override { }
+    };
 
+    struct Wrap : UIElement
+    {
+        IPtr<UIElement> Content;
+        INDEX_UI_Args {
+            IPtr<UIElement> Content;
+        };
+        INDEX_UI_New(Wrap)
+        INDEX_UI_Constructor(Wrap) {
+            Content = std::move(e.Content);
+        }
+        void Render(UIContext* u, Layout i) override {
+            if (Content.IsNull) return;
+            Content->Render(u, i);
         }
         void Notify(UINotification* e) override {
-
+            if (Content.IsNull) return;
+            Content->Notify(e);
         }
     };
 }

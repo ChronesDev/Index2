@@ -381,6 +381,7 @@ Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
 Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content) {
     float minWidth = 0, minHeight = 0;
     for (auto& c : content) {
+        if (c.IsNull) continue;
         auto size = c->MeasureIntentSize(std::forward<Layout>(i));
         minWidth = Index::Max(minWidth, size.Width);
         minHeight = Index::Max(minHeight, size.Height);

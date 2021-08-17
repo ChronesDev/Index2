@@ -408,10 +408,10 @@ Index::Rect Index::UI::AlignRectNoStretch(Rect box, Size content, Align align)
 }
 
 Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
-    Size size = GetMinSize(e);
+    Size size = e->MeasureIntentSize(i);
     Rect r = AlignRect(i.Area, size, e->Alignment);
     Size nsize = Min(GetMaxSize(e), r.Size);
-    return AlignRect(i.Area, nsize, e->Alignment);
+    return AlignRectNoStretch(i.Area, nsize, e->Alignment);
 }
 
 Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content) {
@@ -467,4 +467,4 @@ void Index::UI::UIContext::SetRoot(IPtr<UIElement> root) {
 
 // ##################################### //
 #pragma endregion
-// ##################################### //
+// ###############################

@@ -17,45 +17,50 @@ int main()
 {
     UPtr<ImUI::ImUIContext> context = UNew<ImUI::ImUIContext>();
 
-    auto a = UI::Stack n ({
+    auto ui = UI::Stack n ({
         StackV n ({
-            .Alignment = Align::Center,
+            alignment Center,
             content {
-                FixedGrid n (Index::UI::FixedGrid::Args {
-                    .Size { 300, 140 },
+                StackH n ({
+                    content {
+                        ImUI::FillRect n ({
+                            .Size { 160, 100 },
+                            .Fill = Colors::Blue
+                        }),
+                        ImUI::FillRect n ({
+                            .Size { 160, 100 },
+                            .Fill = Colors::Red
+                        })
+                    }
+                }),
+                FixedGrid n ({
+                    .Size { NullF, 100 },
                     .Columns = 3,
-                    .Rows = 1,
                     content {
                         FixedGridElement n ({
-                            .Column = 2,
-                            .Row = 0,
+                            .Column = 0,
+                            .ColumnSpan = 3,
                             content {
                                 ImUI::FillRect n ({
-                                    .Fill = Colors::Blue
+                                    .Fill = Colors::Purple
                                 })
                             }
                         }),
                         FixedGridElement n ({
                             .Column = 0,
-                            .Row = 0,
-                            .ColumnSpan = 2,
                             content {
                                 ImUI::FillRect n ({
-                                    .Fill = Colors::Red
+                                    .Fill = Colors::Green
                                 })
                             }
                         })
                     }
-                }),
-                ImUI::FillRect n ({
-                    .MinSize { 0, 20 },
-                    .Fill = Colors::Green
                 })
             }
         })
     });
 
-    context->SetRoot(a);
+    context->SetRoot(ui);
 
     OnRender = [&]() {
 

@@ -132,7 +132,16 @@ namespace Index::UI
             }
         }
         Index::Size MeasureIntentSize(Layout i) override {
-            return GetIntentSizeFrom(i, Content);
+            Index::Size minSize = GetMinSize(this);
+            float width = 0;
+            for (auto& c : Content) {
+                auto size = c->MeasureIntentSize(i);
+                width += Validate(size.Width);
+                minSize.Height = Index::Max(size.Height, minSize.Height);
+            }
+            return {
+                Index::Max(minSize.Width, width), minSize.Height
+            };
         }
     };
 
@@ -157,10 +166,10 @@ namespace Index::UI
                     .Area = Rect {
                         r.X,
                         r.Y + y,
-                        { mins.Width, r.Height }
+                        { r.Width, mins.Height }
                     }
                 });
-                y += mins.Width;
+                y += mins.Height;
             }
         }
         void Notify(UINotification* e) override {
@@ -171,7 +180,16 @@ namespace Index::UI
             }
         }
         Index::Size MeasureIntentSize(Layout i) override {
-            return GetIntentSizeFrom(i, Content);
+            Index::Size minSize = GetMinSize(this);
+            float height = 0;
+            for (auto& c : Content) {
+                auto size = c->MeasureIntentSize(i);
+                height += Validate(size.Height);
+                minSize.Width = Index::Max(size.Width, minSize.Width);
+            }
+            return {
+                minSize.Width, Index::Max(minSize.Height, height)
+            };
         }
     };
 
@@ -298,6 +316,9 @@ namespace Index::UI
                 c->Notify(e);
                 if (e->Handled) return;
             }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return GetMinSize(this);
         }
     };
 }

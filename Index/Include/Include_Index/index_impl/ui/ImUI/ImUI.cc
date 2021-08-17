@@ -65,5 +65,9 @@ namespace Index::UI::ImUI
             ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Fill));
         }
         void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            auto s = UIElement::MeasureIntentSize(i);
+            return s;
+        }
     };
 }

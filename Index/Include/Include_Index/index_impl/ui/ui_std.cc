@@ -267,9 +267,23 @@ namespace Index::UI
             Content = std::move(e.Content);
         }
         void Render(UIContext* u, Layout i) override {
+            float columns = Columns == 0 ? 1 : Columns;
+            float rows = Rows == 0 ? 1 : Rows;
+            float columnSize = i.Width / columns;
+            float rowSize = i.Height / rows;
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-
+                int row = c->Row, column = c->Column;
+                column = Clamp<int>(column, 0, columns - 1);
+                row = Clamp<int>(row, 0, rows - 1);
+                int rowSpan = c->RowSpan, columnSpan = c->ColumnSpan;
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
             }
         }
     };

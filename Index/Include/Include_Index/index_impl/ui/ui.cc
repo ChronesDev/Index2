@@ -206,7 +206,6 @@ namespace Index::UI
 
         IPtr<UIElement> Root;
 
-        virtual void Render(Layout i) = 0;
         virtual void Notify(UINotification* e) = 0;
 
         void SetRoot(IPtr<UIElement> root);

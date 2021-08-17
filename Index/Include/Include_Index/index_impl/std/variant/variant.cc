@@ -14,7 +14,7 @@ __forceinline this_return_type this_function(TArgs&&... args) { return this->bas
 template<class... TArgs> \
 __forceinline this_return_type this_function(TArgs&&... args) const { return this->base_function(std::forward<TArgs>(args)...); }
 
-
+// TODO: Finish Variant class
 namespace Index
 {
     template<class... TTypes>
@@ -24,13 +24,10 @@ struct Variant : public std::variant<TTypes...>
         using std::variant<TTypes...>::variant;
         ALIAS_RECLASS_CONSTRUCTOR(Variant, std::variant<TTypes...>)
     public:
-        void SetFirst(char value) {
-
-        }
     public:
         //__declspec(property(get = capacity)) size_t Capacity;
     public:
-        //ALIAS_RECLASS_FUNCTION_CONST(bool, EndsWith, ends_with)
+        ALIAS_RECLASS_FUNCTION_CONST(void, Swap, swap)
     };
 }
 

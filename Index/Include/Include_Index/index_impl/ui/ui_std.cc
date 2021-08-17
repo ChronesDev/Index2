@@ -215,11 +215,22 @@ namespace Index::UI
         }
     };
 
-    struct GridElement : UIElementHolder
+    struct FixedGridElement : UIElementHolder
     {
-        INDEX_UI_NewArgs(GridElement, INDEX_UI_List)
-        INDEX_UI_ConstructorArgs(GridElement, INDEX_UI_List) {
-            Content = std::move(e);
+        int Column = 0, Row = 0;
+        int ColumnSpan = 1, RowSpan = 1;
+        INDEX_UI_Args {
+            int Column = 0, Row = 0;
+            int ColumnSpan = 1, RowSpan = 1;
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(FixedGridElement)
+        INDEX_UI_Constructor(FixedGridElement) {
+            Column = e.Column;
+            Row = e.Row;
+            ColumnSpan = e.ColumnSpan;
+            RowSpan = e.RowSpan;
+            INDEX_UI_SetHolderMembers
         }
         void Render(UIContext* u, Layout i) override {
             for (auto& c : Content) {
@@ -239,12 +250,28 @@ namespace Index::UI
         }
     };
 
-    struct Grid : UIElement
+    struct FixedGrid : UIElement
     {
-         struct Row
-         {
+        int Columns = 0, Rows = 0;
+        List<IPtr<FixedGridElement>> Content;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            int Columns = 0, Rows = 0;
+            List<IPtr<FixedGridElement>> Content;
+        };
+        INDEX_UI_New(FixedGrid)
+        INDEX_UI_Constructor(FixedGrid) {
+            INDEX_UI_SetDefaultMembers
+            Columns = e.Columns;
+            Rows = e.Rows;
+            Content = std::move(e.Content);
+        }
+        void Render(UIContext* u, Layout i) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
 
-         };
+            }
+        }
     };
 }
 

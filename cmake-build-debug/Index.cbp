@@ -262,6 +262,9 @@
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/string/string.cc">
 			<Option target="IndexInclude"/>
 		</Unit>
+		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/variant/variant.cc">
+			<Option target="IndexInclude"/>
+		</Unit>
 		<Unit filename="C:/Users/lukax/source/ide/clion/Index/Index/Include/Include_Index/index_impl/std/vector/vector.cc">
 			<Option target="IndexInclude"/>
 		</Unit>

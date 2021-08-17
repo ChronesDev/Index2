@@ -8,4 +8,5 @@ target_sources(IndexInclude PRIVATE
         span/span.cc
         stack/stack.cc
         string/string.cc
+        variant/variant.cc
         vector/vector.cc)

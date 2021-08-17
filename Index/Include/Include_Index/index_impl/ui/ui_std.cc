@@ -214,6 +214,38 @@ namespace Index::UI
             Content->Notify(e);
         }
     };
+
+    struct GridElement : UIElementHolder
+    {
+        INDEX_UI_NewArgs(GridElement, INDEX_UI_List)
+        INDEX_UI_ConstructorArgs(GridElement, INDEX_UI_List) {
+            Content = std::move(e);
+        }
+        void Render(UIContext* u, Layout i) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, i);
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return GetIntentSizeFrom(i, Content);
+        }
+    };
+
+    struct Grid : UIElement
+    {
+         struct Row
+         {
+
+         };
+    };
 }
 
 

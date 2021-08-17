@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <variant>
 
 #include "../core/include.cc"
@@ -73,6 +74,7 @@ namespace Index::UI
 
     __forceinline Rect AlignRect(Rect box, Size content, Align align);
     __forceinline Rect GetSubrect(UIElement* e, Layout i);
+    __forceinline Size GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content);
 }
 
 
@@ -103,6 +105,7 @@ namespace Index::UI
 
     struct UINotification
     {
+        UIContext* Context;
         bool Handled = false;
         Int64 Id = -1;
     };
@@ -163,7 +166,7 @@ namespace Index::UI
         Size MaxSize { NullF, NullF };
         Size Size { NullF, NullF };
         Align Alignment = Align::Stretch;
-        virtual void Render(Layout i) = 0;
+        virtual void Render(UIContext* u, Layout i) = 0;
         virtual void Notify(UINotification* e) = 0;
         virtual Index::Size MeasureIntentSize(Layout i);
     };
@@ -195,7 +198,18 @@ namespace Index::UI
 
     struct UIContext
     {
+        explicit UIContext();
+        ~UIContext();
 
+        virtual void Created() = 0;
+        virtual void Closing() = 0;
+
+        IPtr<UIElement> Root;
+
+        virtual void Render(Layout i) = 0;
+        virtual void Notify(UINotification* e) = 0;
+
+        void SetRoot(IPtr<UIElement> root);
     };
 
         // ##################################### //
@@ -363,6 +377,16 @@ Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
     Size size = GetMinSize(e);
     return AlignRect(i.Area, size, e->Alignment);
 }
+
+Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content) {
+    float minWidth = 0, minHeight = 0;
+    for (auto& c : content) {
+        auto size = c->MeasureIntentSize(std::forward<Layout>(i));
+        minWidth = Index::Max(minWidth, size.Width);
+        minHeight = Index::Max(minHeight, size.Height);
+    }
+    return { minWidth, minHeight };
+}
     #pragma endregion
 
 
@@ -386,6 +410,17 @@ inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
         #pragma endregion
 
         #pragma region UIContext
+Index::UI::UIContext::UIContext() {
+    Created();
+}
+
+Index::UI::UIContext::~UIContext() {
+    Closing();
+}
+
+void Index::UI::UIContext::SetRoot(IPtr<UIElement> root) {
+    Root = std::move(root);
+}
         #pragma endregion
 
     #pragma endregion

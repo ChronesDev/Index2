@@ -15,7 +15,13 @@ using namespace Index::UI;
 
 int main()
 {
+    auto a = UI::Stack n ({
+        StackH n ({
+            content {
 
+            }
+        }),
+    });
 
     OnRender = []() {
 

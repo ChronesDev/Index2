@@ -12,6 +12,8 @@ namespace Index
         Rect(float x, float y, Size size) : X(x), Y(y), Width(size.Width), Height(size.Height) { }
         Rect(Vec2F vec, float width, float height) : X(vec.X), Y(vec.Y), Width(width), Height(height) { }
         Rect(Vec2F vec, Size size) : X(vec.X), Y(vec.Y), Width(size.Width), Height(size.Height) { }
+        bool operator==(const Rect& other) const = default;
+        bool operator!=(const Rect& other) const = default;
         [[nodiscard]] Size GetSize() const {
             return { Width, Height };
         }

@@ -16,6 +16,8 @@ namespace Index
             A = a != 0 ? (float)a / 255.0f : 0;
         }
         explicit Color(RawColor rawColor) { R = rawColor.RawR; G = rawColor.RawG; B = rawColor.RawB; A = rawColor.RawA; }
+        bool operator==(const Color& other) const = default;
+        bool operator!=(const Color& other) const = default;
         Vec4F AsVec() const { return Vec4F { R * 255.0f, G * 255.0f, B * 255.0f, A * 255.0f }; };
         Vec4F AsRawVec() const { return Vec4F { R, G, B, A }; }
         static Color RGB(Vec3F rgb) { return Color(rgb.X, rgb.Y, rgb.Z); }

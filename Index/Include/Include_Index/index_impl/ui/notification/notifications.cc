@@ -5,17 +5,17 @@
 // Keyboard Notifications
 namespace Index::UI::Notifications
 {
-    struct KeyEventNotification : INotification
+    struct KeyEventNotification : UINotification
     {
         // Key
     };
 
-    struct KeyPressedNotification : INotification
+    struct KeyPressedNotification : UINotification
     {
         // Key
     };
 
-    struct KeyReleasedNotification : INotification
+    struct KeyReleasedNotification : UINotification
     {
         // Key
     };
@@ -24,13 +24,13 @@ namespace Index::UI::Notifications
 // Mouse Notifications
 namespace Index::UI::Notifications
 {
-    struct MouseMovedNotification : INotification
+    struct MouseMovedNotification : UINotification
     {
         // Delta Position
         // Mouse Position
     };
 
-    struct MouseScrolledNotification : INotification
+    struct MouseScrolledNotification : UINotification
     {
         // Scroll
     };

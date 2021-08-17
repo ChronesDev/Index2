@@ -16,17 +16,17 @@ namespace Index::UI::ImUI
 {
     struct ImUIContext : UIContext
     {
-        void Created() override {
+        inline void Created() override {
 
         }
-        void Closing() override {
+        inline void Closing() override {
 
         }
 
-        static bool IsRendering;
-        static ImDrawList* DrawList;
+        inline static bool IsRendering;
+        inline static ImDrawList* DrawList;
 
-        void Render(Size screenSize, ImDrawList* drawList) {
+        inline void Render(Size screenSize, ImDrawList* drawList) {
             if (IsRendering) throw "UI is already rendering.";
             IsRendering = true;
             DrawList = drawList;
@@ -38,7 +38,7 @@ namespace Index::UI::ImUI
             });
             IsRendering = false;
         }
-        void Notify(UINotification* e) override {
+        inline void Notify(UINotification* e) override {
             if (e == nullptr) throw "e was nullptr.";
             if (Root.IsNull) throw "Root was null.";
             Root->Notify(e);
@@ -62,7 +62,7 @@ namespace Index::UI::ImUI
         }
         void Render(UIContext* u, Layout i) override {
             auto r = GetSubrect(this, i);
-            ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Fill));
+            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Fill));
         }
         void Notify(UINotification* e) override { }
     };

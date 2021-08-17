@@ -224,7 +224,8 @@ namespace Index::UI
             int ColumnSpan = 1, RowSpan = 1;
             INDEX_UI_HolderMembers
         };
-        INDEX_UI_New(FixedGridElement)
+        template<class T = FixedGridElement>
+        static Index::IPtr<T> New(Args &&args) { return Index::INew<FixedGridElement>(std::forward<Args>(args)); }
         INDEX_UI_Constructor(FixedGridElement) {
             Column = e.Column;
             Row = e.Row;
@@ -267,16 +268,28 @@ namespace Index::UI
             Content = std::move(e.Content);
         }
         void Render(UIContext* u, Layout i) override {
+            Rect r = GetSubrect(this, i);
             float columns = Columns == 0 ? 1 : Columns;
             float rows = Rows == 0 ? 1 : Rows;
-            float columnSize = i.Width / columns;
-            float rowSize = i.Height / rows;
+            float columnSize = r.Width / columns;
+            float rowSize = r.Height / rows;
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                int row = c->Row, column = c->Column;
+                int column = c->Column, row = c->Row;
                 column = Clamp<int>(column, 0, columns - 1);
                 row = Clamp<int>(row, 0, rows - 1);
-                int rowSpan = c->RowSpan, columnSpan = c->ColumnSpan;
+                int columnSpan = c->ColumnSpan, rowSpan = c->RowSpan;
+                Index::Size size {
+                    (float)columnSpan * columnSize,
+                    (float)rowSpan * rowSize,
+                };
+                c->Render(u, {
+                    .Area {
+                        r.X + (columnSize * (float)column),
+                        r.Y + (rowSize * (float)row),
+                        size
+                    }
+                });
             }
         }
         void Notify(UINotification* e) override {

@@ -73,6 +73,7 @@ namespace Index::UI
     __forceinline Size GetMaxSize(UIElement* e);
 
     __forceinline Rect AlignRect(Rect box, Size content, Align align);
+    __forceinline Rect AlignRectNoStretch(Rect box, Size content, Align align);
     __forceinline Rect GetSubrect(UIElement* e, Layout i);
     __forceinline Size GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content);
 }
@@ -198,8 +199,8 @@ namespace Index::UI
 
     struct UIContext
     {
-        explicit UIContext();
-        ~UIContext();
+        inline explicit UIContext();
+        inline ~UIContext();
 
         virtual void Created() = 0;
         virtual void Closing() = 0;
@@ -208,7 +209,7 @@ namespace Index::UI
 
         virtual void Notify(UINotification* e) = 0;
 
-        void SetRoot(IPtr<UIElement> root);
+        inline void SetRoot(IPtr<UIElement> root);
     };
 
         // ##################################### //
@@ -372,9 +373,45 @@ Index::Rect Index::UI::AlignRect(Rect box, Size content, Align align) {
     return r;
 }
 
+Index::Rect Index::UI::AlignRectNoStretch(Rect box, Size content, Align align)
+{
+    Rect r { };
+    #pragma region Horizontal
+    if (align.IsHStretched || align.IsHCentered) {
+        r.Width = content.Width;
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHLeft) {
+        r.Width = content.Width;
+        r.X = box.First.X;
+    }
+    if (align.IsHRight) {
+        r.Width = content.Width;
+        r.X = box.Second.X - r.Width;
+    }
+    #pragma endregion
+    #pragma region Vertical
+    if (align.IsVStretched || align.IsVCentered) {
+        r.Height = content.Height;
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVTop) {
+        r.Height = content.Height;
+        r.Y = box.First.Y;
+    }
+    if (align.IsVBottom) {
+        r.Height = content.Height;
+        r.Y = box.Second.Y - r.Height;
+    }
+    #pragma endregion
+    return r;
+}
+
 Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
     Size size = GetMinSize(e);
-    return AlignRect(i.Area, size, e->Alignment);
+    Rect r = AlignRect(i.Area, size, e->Alignment);
+    Size nsize = Min(GetMaxSize(e), r.Size);
+    return AlignRect(i.Area, nsize, e->Alignment);
 }
 
 Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content) {
@@ -411,11 +448,11 @@ inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
 
         #pragma region UIContext
 Index::UI::UIContext::UIContext() {
-    Created();
+    //Created();
 }
 
 Index::UI::UIContext::~UIContext() {
-    Closing();
+    //Closing();
 }
 
 void Index::UI::UIContext::SetRoot(IPtr<UIElement> root) {

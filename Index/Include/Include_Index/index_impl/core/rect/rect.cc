@@ -33,5 +33,8 @@ namespace Index
         __declspec(property(get = GetFirstPoint)) Vec2F First;
         __declspec(property(get = GetSecondPoint)) Vec2F Second;
         __declspec(property(get = GetCenter)) Vec2F Center;
+        bool IsPointInside(Vec2F point) {
+            return (First.X <= point.X && First.Y <= point.Y) && (Second.X >= point.X && Second.Y >= point.Y);
+        }
     };
 }

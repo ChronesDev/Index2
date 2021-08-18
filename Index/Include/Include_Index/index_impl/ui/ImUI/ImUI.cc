@@ -16,10 +16,10 @@ namespace Index::UI::ImUI
 {
     struct ImUIContext : UIContext
     {
-        inline void Created() override {
+        ImUIContext() {
 
         }
-        inline void Closing() override {
+        ~ImUIContext() {
 
         }
 

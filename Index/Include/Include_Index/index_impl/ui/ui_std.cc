@@ -66,6 +66,30 @@ explicit class_name(args)
 
 
 
+
+// ##################################### //
+#pragma region Standard Library
+// ##################################### //
+
+namespace Index::UI
+{
+    struct UIElementRenderAreaCache
+    {
+        Nullable<Rect> LastArea;
+    };
+}
+
+// ##################################### //
+#pragma endregion
+// ##################################### //
+
+
+
+
+// ##################################### //
+#pragma region Standard Controls
+// ##################################### //
+
 namespace Index::UI
 {
     struct Empty : UIElement
@@ -193,6 +217,38 @@ namespace Index::UI
         }
     };
 
+    struct Container : UIElementHolder
+    {
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(Container)
+        INDEX_UI_Constructor(Container) {
+            INDEX_UI_SetDefaultMembers
+            INDEX_UI_SetHolderMembers
+        }
+        void Render(UIContext* u, Layout i) override {
+            Rect r = GetSubrect(this, i);
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, {
+                    .Area = r
+                });
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
+        }
+    };
+
     struct SpacingH : UIElement
     {
         INDEX_UI_NewArgs(SpacingH, float)
@@ -233,14 +289,15 @@ namespace Index::UI
         }
     };
 
-    struct FixedGridElement : UIElementHolder
+    struct FixedGridElement
     {
         int Column = 0, Row = 0;
         int ColumnSpan = 1, RowSpan = 1;
+        INDEX_UI_List Content;
         INDEX_UI_Args {
             int Column = 0, Row = 0;
             int ColumnSpan = 1, RowSpan = 1;
-            INDEX_UI_HolderMembers
+            INDEX_UI_List Content;
         };
         template<class T = FixedGridElement>
         static Index::IPtr<T> New(Args &&args) { return Index::INew<FixedGridElement>(std::forward<Args>(args)); }
@@ -249,22 +306,22 @@ namespace Index::UI
             Row = e.Row;
             ColumnSpan = e.ColumnSpan;
             RowSpan = e.RowSpan;
-            INDEX_UI_SetHolderMembers
+            Content = std::move(e.Content);
         }
-        void Render(UIContext* u, Layout i) override {
+        __forceinline void Render(UIContext* u, Layout i) {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
                 c->Render(u, i);
             }
         }
-        void Notify(UINotification* e) override {
+        __forceinline void Notify(UINotification* e) {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
                 c->Notify(e);
                 if (e->Handled) return;
             }
         }
-        Index::Size MeasureIntentSize(Layout i) override {
+        __forceinline Index::Size MeasureIntentSize(Layout i) {
             return GetIntentSizeFrom(i, Content);
         }
     };
@@ -321,7 +378,163 @@ namespace Index::UI
             return GetMinSize(this);
         }
     };
+
+    struct Dock : UIElement
+    {
+        enum class DockSide
+        {
+            Left, Top, Right, Bottom, Fill
+        };
+        struct DockHolder
+        {
+            DockSide Side;
+            INDEX_UI_List Content;
+            INDEX_UI_Args {
+                DockSide Side;
+                INDEX_UI_List Content;
+            };
+            INDEX_UI_Constructor(DockHolder) {
+                Side = e.Side;
+                Content = std::move(e.Content);
+            }
+            __forceinline void Render(UIContext* u, Layout i) {
+                for (auto& c : Content) {
+                    if (c.IsNull) continue;
+                    c->Render(u, i);
+                }
+            }
+            __forceinline void Notify(UINotification* e) {
+                for (auto& c : Content) {
+                    if (c.IsNull) continue;
+                    c->Notify(e);
+                    if (e->Handled) return;
+                }
+            }
+            __forceinline Index::Size MeasureIntentSize(Layout i) {
+                return GetIntentSizeFrom(i, Content);
+            }
+        };
+        static Align DockSideToAlign(DockSide side) {
+            switch (side) {
+                case DockSide::Left: return Align::Left;
+                case DockSide::Top: return Align::Top;
+                case DockSide::Right: return Align::Right;
+                case DockSide::Bottom: return Align::Bottom;
+                default: return Align::Stretch;
+            };
+        }
+        static IPtr<DockHolder> Left(INDEX_UI_List content) {
+            return INew<DockHolder>(DockHolder::Args{
+                DockSide::Left,
+                std::forward<INDEX_UI_List>(content)
+            });
+        }
+        static IPtr<DockHolder> Top(INDEX_UI_List content) {
+            return INew<DockHolder>(DockHolder::Args{
+                DockSide::Top,
+                std::forward<INDEX_UI_List>(content)
+            });
+        }
+        static IPtr<DockHolder> Right(INDEX_UI_List content) {
+            return INew<DockHolder>(DockHolder::Args{
+                DockSide::Right,
+                std::forward<INDEX_UI_List>(content)
+            });
+        }
+        static IPtr<DockHolder> Bottom(INDEX_UI_List content) {
+            return INew<DockHolder>(DockHolder::Args{
+                DockSide::Bottom,
+                std::forward<INDEX_UI_List>(content)
+            });
+        }
+        static IPtr<DockHolder> Fill(INDEX_UI_List content) {
+            return INew<DockHolder>(DockHolder::Args{
+                DockSide::Fill,
+                std::forward<INDEX_UI_List>(content)
+            });
+        }
+        bool FillLast = true;
+        List<IPtr<DockHolder>> Content;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            bool FillLast = true;
+            List<IPtr<DockHolder>> Content;
+        };
+        INDEX_UI_New(Dock)
+        INDEX_UI_Constructor(Dock) {
+            INDEX_UI_SetDefaultMembers
+            FillLast = e.FillLast;
+            Content = std::move(e.Content);
+        }
+        void Render(UIContext* u, Layout i) override {
+            Rect r = GetSubrect(this, i);
+            Rect leftPlace = r;
+            auto length = Content.Length;
+            for (int i2 = 0; i2 < length; i2++) {
+                auto& c = Content[i2];
+                if (c.IsNull) continue;
+                if (((i2 == (length - 1)) && FillLast) || c->Side == DockSide::Fill) {
+                    c->Render(u, {
+                        .Area = leftPlace
+                    });
+                    return;
+                }
+                auto contentSize = c->MeasureIntentSize(i);
+                auto contentAlign = DockSideToAlign(c->Side);
+                Rect area = leftPlace;
+                switch (c->Side) {
+                    case DockSide::Left:
+                    {
+                        area.Width = Index::Min(area.Width, contentSize.Width);
+                        leftPlace.X += area.Width;
+                        leftPlace.Width -= area.Width;
+                        break;
+                    }
+                    case DockSide::Top:
+                    {
+                        area.Height = Index::Min(area.Height, contentSize.Height);
+                        leftPlace.Y += area.Height;
+                        leftPlace.Height -= area.Height;
+                        break;
+                    }
+                    case DockSide::Right:
+                    {
+                        area.Width = Index::Min(area.Width, contentSize.Width);
+                        area.X = leftPlace.Second.X - area.Width;
+                        leftPlace.Width -= area.Width;
+                        break;
+                    }
+                    case DockSide::Bottom:
+                    {
+                        area.Height = Index::Min(area.Height, contentSize.Height);
+                        area.Y = leftPlace.Second.Y - area.Height;
+                        leftPlace.Height -= area.Height;
+                        break;
+                    }
+                    case DockSide::Fill:
+                        break;
+                }
+                c->Render(u, {
+                    .Area = area
+                });
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return GetMinSize(this);
+        }
+    };
 }
+
+// ##################################### //
+#pragma endregion
+// ##################################### //
 
 
 

@@ -202,9 +202,6 @@ namespace Index::UI
         inline explicit UIContext();
         inline ~UIContext();
 
-        virtual void Created() = 0;
-        virtual void Closing() = 0;
-
         IPtr<UIElement> Root;
 
         virtual void Notify(UINotification* e) = 0;

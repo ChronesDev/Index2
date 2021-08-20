@@ -19,7 +19,7 @@ namespace Index
 {
     template<class... TTypes>
 struct Variant : public std::variant<TTypes...>
-    {
+{
     public:
         using std::variant<TTypes...>::variant;
         ALIAS_RECLASS_CONSTRUCTOR(Variant, std::variant<TTypes...>)

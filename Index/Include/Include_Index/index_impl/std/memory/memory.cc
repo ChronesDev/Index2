@@ -17,6 +17,26 @@
 namespace Index
 {
     template<class T>
+    [[nodiscard]] constexpr std::remove_reference_t<T&&> Move(T&& _Arg) noexcept { // forward _Arg as movable
+        return static_cast<std::remove_reference_t<T>&&>(_Arg);
+    }
+
+    // FUNCTION TEMPLATE forward
+    template <class T>
+    [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>& e) noexcept { // forward an lvalue as either an lvalue or an rvalue
+        return static_cast<T&&>(e);
+    }
+
+    template <class T>
+    [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>&& e) noexcept { // forward an rvalue as an rvalue
+        static_assert(!std::is_lvalue_reference_v<T>, "bad forward call");
+        return static_cast<T&&>(e);
+    }
+}
+
+namespace Index
+{
+    template<class T>
     struct IPtr : public std::shared_ptr<T>
     {
     public:
@@ -89,6 +109,26 @@ namespace Index
         __forceinline UPtr(std::unique_ptr<T>&& other) : std::unique_ptr<T>(std::forward<std::unique_ptr<T>>(other)) {
         }
     public:
+        template<class TTo>
+        IPtr<TTo> As() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> StaticAs() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> DynamicAs() {
+            return std::dynamic_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ConstAs() {
+            return std::const_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ReinterpretAs() {
+            return std::reinterpret_pointer_cast<TTo>(*this);
+        }
         bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
     public:

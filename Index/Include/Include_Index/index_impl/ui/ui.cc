@@ -26,7 +26,7 @@ namespace Index::UI
 {
     struct UINotification;
     struct Layout;
-    struct UIElementCache;
+    struct UIElementLayoutCache;
     struct UIElement;
     struct UIElementHolder;
     struct UIContext;
@@ -144,10 +144,12 @@ namespace Index::UI
         #pragma region UIElementCache
         // ##################################### //
 
-    struct UIElementCache
+    struct UIElementLayoutCache
     {
         Nullable<Layout> LastLayout;
         Nullable<Size> LastIntentSize;
+        bool UseCachedSize = false;
+        void CacheLayout(Layout i);
     };
 
         // ##################################### //
@@ -162,7 +164,8 @@ namespace Index::UI
 
     struct UIElement
     {
-        UIElementCache Cache { };
+        UIElementLayoutCache Cache { };
+        string Name;
         Size MinSize { 0, 0 };
         Size MaxSize { NullF, NullF };
         Size Size { NullF, NullF };
@@ -185,6 +188,21 @@ namespace Index::UI
     struct UIElementHolder : UIElement
     {
         List<IPtr<UIElement>> Content;
+    };
+
+        // ##################################### //
+        #pragma endregion
+        // ##################################### //
+
+
+
+        // ##################################### //
+        #pragma region UIContext
+        // ##################################### //
+
+    struct UIAnimation : UIElement
+    {
+        void Render(UIContext* u, Layout i) final;
     };
 
         // ##################################### //
@@ -319,10 +337,13 @@ Index::Size Index::UI::GetMinSize(UIElement *e) {
      * 2. MinSize
      * 3. Size
      */
-    auto vsize = Validate(e->Size);
-    auto vminsize = Validate(e->MinSize);
-    auto vsize2 = Max(vsize, vminsize);
-    return Min(vsize2, e->MaxSize);
+    auto size = e->Size;
+    auto minSize = e->MinSize;
+    auto maxSize = e->MaxSize;
+    return {
+        size.Width != NullF ? size.Width : Min(Validate(minSize), Validate(maxSize)).Width,
+        size.Height != NullF ? size.Height : Min(Validate(minSize), Validate(maxSize)).Height
+    };
 }
 
 Index::Size Index::UI::GetMaxSize(UIElement *e) {
@@ -428,6 +449,12 @@ Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& conten
 
 
     #pragma region UIStuff
+
+        #pragma region UIElementLayoutCache
+inline void Index::UI::UIElementLayoutCache::CacheLayout(Layout i) {
+
+}
+        #pragma endregion
 
         #pragma region UIElement
 inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {

@@ -14,13 +14,11 @@
 using namespace Index;
 using namespace Index::UI;
 
-
 int main()
 {
-
     UPtr<ImUI::ImUIContext> context = UNew<ImUI::ImUIContext>();
 
-    auto ui = UI::Stack n ({
+    IPtr<UIElement> ui = UI::Stack n ({
         StackV n ({
             alignment Center,
             content {
@@ -62,6 +60,8 @@ int main()
     });
 
     context->SetRoot(ui);
+
+    ui.Value.Size = { };
 
     OnRender = [&]() {
 

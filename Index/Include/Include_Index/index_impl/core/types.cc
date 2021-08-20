@@ -68,5 +68,11 @@ namespace Index
 	typedef void Void;
 
 	typedef UInt64 IntPtr;
-	typedef UInt64 HashCode;
+    typedef Int64 SIntPtr;
+
+    typedef UInt64 HashCode;
+
+    typedef const char* CStr;
+
+    typedef CStr cstr;
 }

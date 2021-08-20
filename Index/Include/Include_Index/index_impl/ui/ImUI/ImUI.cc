@@ -26,16 +26,33 @@ namespace Index::UI::ImUI
         inline static bool IsRendering;
         inline static ImDrawList* DrawList;
 
+        std::chrono::high_resolution_clock Clock;
+        std::chrono::time_point<std::chrono::high_resolution_clock, TimeSpan> LastRenderTimePoint = Clock.now();
+
         inline void Render(Size screenSize, ImDrawList* drawList) {
+            // Check if it is already being rendered
             if (IsRendering) throw "UI is already rendering.";
             IsRendering = true;
+
+            // Setup DrawList
             DrawList = drawList;
+
+            // Setup DeltaTime
+            auto now = Clock.now();
+            DeltaTime = now - LastRenderTimePoint;
+            LastRenderTimePoint = now;
+
+            // Check if Root is null
             if (Root.IsNull) throw "Root was null.";
+
+            // Render
             Root->Render(this, {
                 .Area = {
                     0, 0, screenSize
                 }
             });
+
+            // Set IsRendering to false
             IsRendering = false;
         }
         inline void Notify(UINotification* e) override {

@@ -197,12 +197,12 @@ namespace Index::UI
 
 
         // ##################################### //
-        #pragma region UIContext
+        #pragma region UIAnimation
         // ##################################### //
 
     struct UIAnimation : UIElement
     {
-        void Render(UIContext* u, Layout i) final;
+        //void Render(UIContext* u, Layout i) final;
     };
 
         // ##################################### //
@@ -220,7 +220,16 @@ namespace Index::UI
         inline explicit UIContext();
         inline ~UIContext();
 
+        using TimeSpan = typename std::chrono::duration<double>;
+
         IPtr<UIElement> Root;
+        TimeSpan _DeltaTime;
+        TimeSpan GetDeltaTime();
+        void SetDeltaTime(TimeSpan deltaTime);
+        __declspec(property(get = GetDeltaTime, put = SetDeltaTime)) TimeSpan DeltaTime;
+        double _Delta = 0;
+        double GetDelta();
+        __declspec(property(get = GetDelta)) double Delta;
 
         virtual void Notify(UINotification* e) = 0;
 
@@ -479,7 +488,24 @@ Index::UI::UIContext::~UIContext() {
     //Closing();
 }
 
-void Index::UI::UIContext::SetRoot(IPtr<UIElement> root) {
+inline Index::UI::UIContext::TimeSpan Index::UI::UIContext::GetDeltaTime()
+{
+    return _DeltaTime;
+}
+
+inline void Index::UI::UIContext::SetDeltaTime(Index::UI::UIContext::TimeSpan deltaTime)
+{
+    _DeltaTime = deltaTime;
+    _Delta = deltaTime.count();
+}
+
+inline double Index::UI::UIContext::GetDelta()
+{
+    return _Delta;
+}
+
+inline void Index::UI::UIContext::SetRoot(IPtr<UIElement> root)
+{
     Root = std::move(root);
 }
         #pragma endregion

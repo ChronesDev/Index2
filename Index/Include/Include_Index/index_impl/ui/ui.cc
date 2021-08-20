@@ -13,15 +13,7 @@
 #pragma region Declaration
 // ##################################### //
 
-
-
-    // ##################################### //
-    #pragma region Prototypes
-    // ##################################### //
-
-
-
-
+// Prototypes
 namespace Index::UI
 {
     struct UINotification;
@@ -32,23 +24,7 @@ namespace Index::UI
     struct UIContext;
 }
 
-
-
-
-    // ##################################### //
-    #pragma endregion
-    // ##################################### //
-
-
-
-
-    // ##################################### //
-    #pragma region Important
-    // ##################################### //
-
-
-
-
+// Important
 namespace Index
 {
     __forceinline Vec2F Min(Vec2F v1, Vec2F v2);
@@ -57,6 +33,7 @@ namespace Index
     __forceinline Size Max(Size v1, Size v2);
 }
 
+// Important
 namespace Index::UI
 {
     // NullF: The Float value that represents Null
@@ -81,32 +58,40 @@ namespace Index::UI
     __forceinline Size GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content);
 }
 
-
-
-
-    // ##################################### //
-    #pragma endregion
-    // ##################################### //
-
-
-
-    // ##################################### //
-    #pragma region UIStuff
-    // ##################################### //
-
-
-
-
+// Dynamic
 namespace Index::UI
 {
+    // DynamicSizeCache
+    struct DynamicSizeCache : Size
+    {
+        using Size::Size;
+    };
 
+    // DynamicSize
+    struct DynamicSize
+    {
+        using DynamicFunc = Func<float()>;
+        DynamicSizeCache Cache { };
+        Variant<float, DynamicFunc> Width, Height;
+        DynamicSize() = default;
+        DynamicSize(float width, float height) : Width(width), Height(height) { }
+        DynamicSize(Vec2F vec) : Width(vec.X), Height(vec.Y) { }
+        void CacheContent() {
+            if (Width.Has<float>()) {
+                Cache.Width = Width.Get<float>();
+            }
+            else if (Width.Has<DynamicFunc>()) {
+                auto& func = Width.Get<DynamicFunc>();
+                if (func) Cache.Width = func();
+            }
+        }
+    };
+}
 
-
-
-        // ##################################### //
-        #pragma region INotification
-        // ##################################### //
-
+// UI Stuff
+namespace Index::UI
+{
+    // UINotification
     struct UINotification
     {
         UIContext* Context;
@@ -114,16 +99,7 @@ namespace Index::UI
         Int64 Id = -1;
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-        // ##################################### //
-        #pragma region Layout
-        // ##################################### //
-
+    // Layout
     struct Layout
     {
         Rect Area;
@@ -137,16 +113,7 @@ namespace Index::UI
         __declspec(property(get = GetHeight, put = SetHeight)) float Height;
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-        // ##################################### //
-        #pragma region UIElementCache
-        // ##################################### //
-
+    // UIElementCache
     struct UIElementLayoutCache
     {
         Nullable<Layout> LastLayout;
@@ -155,16 +122,7 @@ namespace Index::UI
         void CacheLayout(Layout i);
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-        // ##################################### //
-        #pragma region UIElement
-        // ##################################### //
-
+    // UIElement
     struct UIElement
     {
         UIElementLayoutCache Cache { };
@@ -178,46 +136,27 @@ namespace Index::UI
         virtual Index::Size MeasureIntentSize(Layout i);
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-        // ##################################### //
-        #pragma region UIElementHolder
-        // ##################################### //
-
-    struct UIElementHolder : UIElement
+    // UIElementHolder
+    struct UIElementHolder : virtual UIElement
     {
         List<IPtr<UIElement>> Content;
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-        // ##################################### //
-        #pragma region UIAnimation
-        // ##################################### //
-
-    struct UIAnimation : UIElement
+    // UIAnimation
+    struct UIAnimation
     {
-        //void Render(UIContext* u, Layout i) final;
+
     };
 
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
+    // UIDynamic
+    struct UIDynamic : virtual UIElement
+    {
+        struct Size MinSize { 0, 0 };
+        struct Size MaxSize { NullF, NullF };
+        struct Size Size { NullF, NullF };
+    };
 
-
-
-        // ##################################### //
-        #pragma region UIContext
-        // ##################################### //
-
+    // UIContext
     struct UIContext
     {
         inline explicit UIContext();
@@ -238,25 +177,7 @@ namespace Index::UI
 
         inline void SetRoot(IPtr<UIElement> root);
     };
-
-        // ##################################### //
-        #pragma endregion
-        // ##################################### //
-
-
-
-
 }
-
-
-
-
-    // ##################################### //
-    #pragma endregion
-    // ##################################### //
-
-
-
 
 // ##################################### //
 #pragma endregion
@@ -271,7 +192,8 @@ namespace Index::UI
 
 
 
-    #pragma region Important
+#pragma region Important
+
 Index::Vec2F Index::Min(Vec2F v1, Vec2F v2) {
     return {
         Index::Min(v1.X, v2.X),
@@ -454,21 +376,21 @@ Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& conten
     }
     return { minWidth, minHeight };
 }
-    #pragma endregion
+
+#pragma endregion
 
 
 
 
 
-    #pragma region UIStuff
+#pragma region UIStuff
 
-        #pragma region UIElementLayoutCache
+// UIElementLayoutCache
 inline void Index::UI::UIElementLayoutCache::CacheLayout(Layout i) {
 
 }
-        #pragma endregion
 
-        #pragma region UIElement
+// UIElement
 inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
     if (Cache.LastLayout.HasValue && Cache.LastIntentSize.HasValue) {
         if (Cache.LastLayout.Value == i) {
@@ -480,9 +402,8 @@ inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
     Cache.LastIntentSize = ret;
     return ret;
 }
-        #pragma endregion
 
-        #pragma region UIContext
+// UIContext
 Index::UI::UIContext::UIContext() {
     //Created();
 }
@@ -511,13 +432,12 @@ inline void Index::UI::UIContext::SetRoot(IPtr<UIElement> root)
 {
     Root = std::move(root);
 }
-        #pragma endregion
 
-    #pragma endregion
+#pragma endregion
 
 
 
 
 // ##################################### //
 #pragma endregion
-// ###############################
+// ##################################### //

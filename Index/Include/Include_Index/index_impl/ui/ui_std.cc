@@ -92,12 +92,12 @@ namespace Index::UI
 
 namespace Index::UI
 {
-    struct Empty : UIElement
+    struct Empty : virtual UIElement
     {
         INDEX_UI_ConstructorEmpty(Empty) { }
     };
 
-    struct Stack : UIElementHolder
+    struct Stack : virtual UIElementHolder
     {
         INDEX_UI_NewArgs(Stack, INDEX_UI_List)
         INDEX_UI_ConstructorArgs(Stack, INDEX_UI_List) {
@@ -121,7 +121,7 @@ namespace Index::UI
         }
     };
 
-    struct StackH : UIElementHolder
+    struct StackH : virtual UIElementHolder
     {
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
@@ -169,7 +169,7 @@ namespace Index::UI
         }
     };
 
-    struct StackV : UIElementHolder
+    struct StackV : virtual UIElementHolder
     {
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
@@ -217,7 +217,7 @@ namespace Index::UI
         }
     };
 
-    struct Container : UIElementHolder
+    struct Container : virtual UIElementHolder
     {
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
@@ -249,7 +249,7 @@ namespace Index::UI
         }
     };
 
-    struct SpacingH : UIElement
+    struct SpacingH : virtual UIElement
     {
         INDEX_UI_NewArgs(SpacingH, float)
         INDEX_UI_ConstructorArgs(SpacingH, float) {
@@ -259,7 +259,7 @@ namespace Index::UI
         void Notify(UINotification* e) override { }
     };
 
-    struct SpacingV : UIElement
+    struct SpacingV : virtual UIElement
     {
         INDEX_UI_NewArgs(SpacingV, float)
         INDEX_UI_ConstructorArgs(SpacingV, float) {
@@ -269,7 +269,7 @@ namespace Index::UI
         void Notify(UINotification* e) override { }
     };
 
-    struct Wrap : UIElement
+    struct Wrap : virtual UIElement
     {
         IPtr<UIElement> Content;
         INDEX_UI_Args {
@@ -326,7 +326,7 @@ namespace Index::UI
         }
     };
 
-    struct FixedGrid : UIElement
+    struct FixedGrid : virtual UIElement
     {
         int Columns = 0, Rows = 0;
         List<IPtr<FixedGridElement>> Content;
@@ -379,7 +379,7 @@ namespace Index::UI
         }
     };
 
-    struct Dock : UIElement
+    struct Dock : virtual UIElement
     {
         enum class DockSide
         {

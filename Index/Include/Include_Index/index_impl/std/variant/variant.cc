@@ -24,8 +24,19 @@ struct Variant : public std::variant<TTypes...>
         using std::variant<TTypes...>::variant;
         ALIAS_RECLASS_CONSTRUCTOR(Variant, std::variant<TTypes...>)
     public:
-    public:
-        //__declspec(property(get = capacity)) size_t Capacity;
+        template<typename T>
+        constexpr T& Get() {
+            return std::get<T>(*this);
+        }
+        template<typename T>
+        constexpr T& GetOr(T&& other) {
+            if (Has<T>()) return Get<T>();
+            else return other;
+        }
+        template<typename T>
+        constexpr bool Has() {
+            return std::holds_alternative<T>(*this);
+        }
     public:
         ALIAS_RECLASS_FUNCTION_CONST(void, Swap, swap)
     };

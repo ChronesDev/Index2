@@ -2,6 +2,15 @@
 
 #include "notification.cc"
 
+// Bundled Notification
+namespace Index::UI::Notifications
+{
+    struct BundledNotification : UINotification
+    {
+
+    };
+}
+
 // Keyboard Notifications
 namespace Index::UI::Notifications
 {

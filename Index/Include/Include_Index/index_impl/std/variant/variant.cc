@@ -29,12 +29,12 @@ struct Variant : public std::variant<TTypes...>
             return std::get<T>(*this);
         }
         template<typename T>
-        constexpr T& GetOr(T&& other) {
+        constexpr T& GetOr(T&& other) const {
             if (Has<T>()) return Get<T>();
             else return other;
         }
         template<typename T>
-        constexpr bool Has() {
+        constexpr bool Has() const {
             return std::holds_alternative<T>(*this);
         }
     public:

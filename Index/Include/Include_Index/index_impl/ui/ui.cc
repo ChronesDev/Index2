@@ -62,29 +62,401 @@ namespace Index::UI
 namespace Index::UI
 {
     // DynamicSizeCache
-    struct DynamicSizeCache : Size
+    template<typename T>
+    struct DynamicVec1Cache : Vec1<T> { using Vec1<T>::Vec1; };
+
+    // DynamicSizeCache
+    template<typename T>
+    struct DynamicVec2Cache : Vec2<T> { using Vec2<T>::Vec2; };
+
+    // DynamicSizeCache
+    template<typename T>
+    struct DynamicVec3Cache : Vec3<T> { using Vec3<T>::Vec3; };
+
+    // DynamicSizeCache
+    template<typename T>
+    struct DynamicVec4Cache : Vec4<T> { using Vec4<T>::Vec4; };
+
+    // DynamicSizeCache
+    struct DynamicSizeCache : Size { using Size::Size; };
+
+    // DynamicSizeCache
+    struct DynamicRectCache : Rect { using Rect::Rect; };
+
+    // DynamicVec1
+    template<typename T>
+    struct DynamicVec1
     {
-        using Size::Size;
+        using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicVec1& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        DynamicVec1Cache<T> Cache { };
+        DynamicVar X;
+        DynamicVec1() = default;
+        DynamicVec1(DynamicVar x) : X(x) { }
+        DynamicVec1(Vec1F vec) : X(vec.X) { }
+        DynamicVec1Cache<T> GetCache() {
+            DynamicVec1Cache<T> cache;
+            if (X.template Has<float>()) {
+                cache.X = X.template Get<float>();
+            }
+            else if (X.Has<DynamicFunc>()) {
+                auto& func = X.template Get<DynamicFunc>();
+                if (func) cache.X = func();
+                else cache.X = DefaultOf<float>();
+            }
+            else if (X.template Has<DynamicFuncThis>()) {
+                auto& func = X.template Get<DynamicFuncThis>();
+                if (func) cache.X = func(*this);
+                else cache.X = DefaultOf<float>();
+            }
+            return cache;
+        }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicVec1<T>& rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicVec1<T>& rhs) { return rhs != *this; }
     };
+
+    // DynamicVec2
+    template<typename T>
+    struct DynamicVec2
+    {
+        using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicVec2& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        DynamicVec2Cache<T> Cache { };
+        DynamicVar X, Y;
+        DynamicVec2() = default;
+        DynamicVec2(DynamicVar x, DynamicVar y) : X(x), Y(y) { }
+        DynamicVec2(Vec2F vec) : X(vec.X), Y(vec.Y) { }
+        DynamicVec2Cache<T> GetCache() {
+            DynamicVec2Cache<T> cache;
+            if (X.template Has<float>()) {
+                cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<DynamicFunc>()) {
+                auto& func = X.template Get<DynamicFunc>();
+                if (func) cache.X = func();
+                else cache.X = DefaultOf<float>();
+            }
+            else if (X.template Has<DynamicFuncThis>()) {
+                auto& func = X.template Get<DynamicFuncThis>();
+                if (func) cache.X = func(*this);
+                else cache.X = DefaultOf<float>();
+            }
+            if (Y.template Has<float>()) {
+                cache.Y = Y.template Get<float>();
+            }
+            else if (Y.template Has<DynamicFunc>()) {
+                auto& func = Y.template Get<DynamicFunc>();
+                if (func) cache.Y = func();
+                else cache.Y = DefaultOf<float>();
+            }
+            else if (Y.template Has<DynamicFuncThis>()) {
+                auto& func = Y.template Get<DynamicFuncThis>();
+                if (func) cache.Y = func(*this);
+                else cache.Y = DefaultOf<float>();
+            }
+            return cache;
+        }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicVec2<T>& rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicVec2<T>& rhs) { return rhs != *this; }
+    };
+
+    // DynamicVec3
+    template<typename T>
+    struct DynamicVec3
+    {
+        using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicVec3& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        DynamicVec3Cache<T> Cache { };
+        DynamicVar X, Y, Z;
+        DynamicVec3() = default;
+        DynamicVec3(DynamicVar x, DynamicVar y, DynamicVar z) : X(x), Y(y), Z(z) { }
+        DynamicVec3(Vec3F vec) : X(vec.X), Y(vec.Y), Z(vec.Z) { }
+        DynamicVec3Cache<T> GetCache() {
+            DynamicVec3Cache<T> cache;
+            if (X.template Has<float>()) {
+                cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<DynamicFunc>()) {
+                auto& func = X.template Get<DynamicFunc>();
+                if (func) cache.X = func();
+                else cache.X = DefaultOf<float>();
+            }
+            else if (X.template Has<DynamicFuncThis>()) {
+                auto& func = X.template Get<DynamicFuncThis>();
+                if (func) cache.X = func(*this);
+                else cache.X = DefaultOf<float>();
+            }
+            if (Y.template Has<float>()) {
+                cache.Y = Y.template Get<float>();
+            }
+            else if (Y.template Has<DynamicFunc>()) {
+                auto& func = Y.template Get<DynamicFunc>();
+                if (func) cache.Y = func();
+                else cache.Y = DefaultOf<float>();
+            }
+            else if (Y.template Has<DynamicFuncThis>()) {
+                auto& func = Y.template Get<DynamicFuncThis>();
+                if (func) cache.Y = func(*this);
+                else cache.Y = DefaultOf<float>();
+            }
+            if (Z.template Has<float>()) {
+                cache.Z = Z.template Get<float>();
+            }
+            else if (Z.template Has<DynamicFunc>()) {
+                auto& func = Z.template Get<DynamicFunc>();
+                if (func) cache.Z = func();
+                else cache.Z = DefaultOf<float>();
+            }
+            else if (Z.template Has<DynamicFuncThis>()) {
+                auto& func = Z.template Get<DynamicFuncThis>();
+                if (func) cache.Z = func(*this);
+                else cache.Z = DefaultOf<float>();
+            }
+            return cache;
+        }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicVec3<T>& rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicVec3<T>& rhs) { return rhs != *this; }
+    };
+
+    // DynamicVec4
+    template<typename T>
+    struct DynamicVec4
+    {
+        using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicVec4& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        DynamicVec4Cache<T> Cache { };
+        DynamicVar X, Y, Z, W;
+        DynamicVec4() = default;
+        DynamicVec4(DynamicVar x, DynamicVar y, DynamicVar z, DynamicVar w) : X(x), Y(y), Z(z), W(w) { }
+        DynamicVec4(Vec4F vec) : X(vec.X), Y(vec.Y), Z(vec.Z), W(vec.W) { }
+        DynamicVec4Cache<T> GetCache() {
+            DynamicVec4Cache<T> cache;
+            if (X.template Has<float>()) {
+                cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<DynamicFunc>()) {
+                auto& func = X.template Get<DynamicFunc>();
+                if (func) cache.X = func();
+                else cache.X = DefaultOf<float>();
+            }
+            else if (X.template Has<DynamicFuncThis>()) {
+                auto& func = X.template Get<DynamicFuncThis>();
+                if (func) cache.X = func(*this);
+                else cache.X = DefaultOf<float>();
+            }
+            if (Y.template Has<float>()) {
+                cache.Y = Y.template Get<float>();
+            }
+            else if (Y.template Has<DynamicFunc>()) {
+                auto& func = Y.template Get<DynamicFunc>();
+                if (func) cache.Y = func();
+                else cache.Y = DefaultOf<float>();
+            }
+            else if (Y.template Has<DynamicFuncThis>()) {
+                auto& func = Y.template Get<DynamicFuncThis>();
+                if (func) cache.Y = func(*this);
+                else cache.Y = DefaultOf<float>();
+            }
+            if (Z.template Has<float>()) {
+                cache.Z = Z.template Get<float>();
+            }
+            else if (Z.template Has<DynamicFunc>()) {
+                auto& func = Z.template Get<DynamicFunc>();
+                if (func) cache.Z = func();
+                else cache.Z = DefaultOf<float>();
+            }
+            else if (Z.template Has<DynamicFuncThis>()) {
+                auto& func = Z.template Get<DynamicFuncThis>();
+                if (func) cache.Z = func(*this);
+                else cache.Z = DefaultOf<float>();
+            }
+            if (W.template Has<float>()) {
+                cache.W = W.template Get<float>();
+            }
+            else if (W.template Has<DynamicFunc>()) {
+                auto& func = W.template Get<DynamicFunc>();
+                if (func) cache.W = func();
+                else cache.W = DefaultOf<float>();
+            }
+            else if (W.template Has<DynamicFuncThis>()) {
+                auto& func = W.template Get<DynamicFuncThis>();
+                if (func) cache.W = func(*this);
+                else cache.W = DefaultOf<float>();
+            }
+            return cache;
+        }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicVec4<T>& rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicVec4<T>& rhs) { return rhs != *this; }
+    };
+
+    using DynamicVec1F = DynamicVec1<float>;
+    using DynamicVec2F = DynamicVec2<float>;
+    using DynamicVec3F = DynamicVec3<float>;
+    using DynamicVec4F = DynamicVec4<float>;
+
+    using DynamicVec1D = DynamicVec1<double>;
+    using DynamicVec2D = DynamicVec2<double>;
+    using DynamicVec3D = DynamicVec3<double>;
+    using DynamicVec4D = DynamicVec4<double>;
+
+    using DynamicVec1B = DynamicVec1<__int8>;
+    using DynamicVec2B = DynamicVec2<__int8>;
+    using DynamicVec3B = DynamicVec3<__int8>;
+    using DynamicVec4B = DynamicVec4<__int8>;
+
+    using DynamicVec1S = DynamicVec1<short>;
+    using DynamicVec2S = DynamicVec2<short>;
+    using DynamicVec3S = DynamicVec3<short>;
+    using DynamicVec4S = DynamicVec4<short>;
+
+    using DynamicVec1I = DynamicVec1<int>;
+    using DynamicVec2I = DynamicVec2<int>;
+    using DynamicVec3I = DynamicVec3<int>;
+    using DynamicVec4I = DynamicVec4<int>;
+
+    using DynamicVec1L = DynamicVec1<long long>;
+    using DynamicVec2L = DynamicVec2<long long>;
+    using DynamicVec3L = DynamicVec3<long long>;
+    using DynamicVec4L = DynamicVec4<long long>;
 
     // DynamicSize
     struct DynamicSize
     {
         using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicSize& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
         DynamicSizeCache Cache { };
-        Variant<float, DynamicFunc> Width, Height;
+        DynamicVar Width, Height;
         DynamicSize() = default;
-        DynamicSize(float width, float height) : Width(width), Height(height) { }
+        DynamicSize(DynamicVar width, DynamicVar height) : Width(width), Height(height) { }
         DynamicSize(Vec2F vec) : Width(vec.X), Height(vec.Y) { }
-        void CacheContent() {
+        DynamicSizeCache GetCache() {
+            DynamicSizeCache cache;
             if (Width.Has<float>()) {
-                Cache.Width = Width.Get<float>();
+                cache.Width = Width.Get<float>();
             }
             else if (Width.Has<DynamicFunc>()) {
                 auto& func = Width.Get<DynamicFunc>();
-                if (func) Cache.Width = func();
+                if (func) cache.Width = func();
+                else cache.Width = DefaultOf<float>();
             }
+            else if (Width.Has<DynamicFuncThis>()) {
+                auto& func = Width.Get<DynamicFuncThis>();
+                if (func) cache.Width = func(*this);
+                else cache.Width = DefaultOf<float>();
+            }
+            if (Height.Has<float>()) {
+                cache.Height = Height.Get<float>();
+            }
+            else if (Height.Has<DynamicFunc>()) {
+                auto& func = Height.Get<DynamicFunc>();
+                if (func) cache.Height = func();
+                else cache.Height = DefaultOf<float>();
+            }
+            else if (Height.Has<DynamicFuncThis>()) {
+                auto& func = Height.Get<DynamicFuncThis>();
+                if (func) cache.Height = func(*this);
+                else cache.Height = DefaultOf<float>();
+            }
+            return cache;
         }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicSize &rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicSize &rhs) { return !(rhs == *this); }
+    };
+
+    // DynamicRect
+    struct DynamicRect
+    {
+        using DynamicFunc = Func<float()>;
+        using DynamicFuncThis = Func<float(DynamicRect& self)>;
+        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        DynamicRectCache Cache { };
+        DynamicVar X, Y;
+        DynamicVar Width, Height;
+        DynamicRect() = default;
+        DynamicRect(DynamicVar x, DynamicVar y, DynamicVar width, DynamicVar height) : X(x), Y(y), Width(width), Height(height) { }
+        DynamicRect(Vec4F vec) : X(vec.X), Y(vec.Y), Width(vec.Z), Height(vec.W) { }
+        DynamicRect(Rect rect) : X(rect.X), Y(rect.Y), Width(rect.Width), Height(rect.Height) { }
+        DynamicRectCache GetCache() {
+            DynamicRectCache cache;
+            if (X.template Has<float>()) {
+                cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<DynamicFunc>()) {
+                auto& func = X.template Get<DynamicFunc>();
+                if (func) cache.X = func();
+                else cache.X = DefaultOf<float>();
+            }
+            else if (X.template Has<DynamicFuncThis>()) {
+                auto& func = X.template Get<DynamicFuncThis>();
+                if (func) cache.X = func(*this);
+                else cache.X = DefaultOf<float>();
+            }
+            if (Y.template Has<float>()) {
+                cache.Y = Y.template Get<float>();
+            }
+            else if (Y.template Has<DynamicFunc>()) {
+                auto& func = Y.template Get<DynamicFunc>();
+                if (func) cache.Y = func();
+                else cache.Y = DefaultOf<float>();
+            }
+            else if (Y.template Has<DynamicFuncThis>()) {
+                auto& func = Y.template Get<DynamicFuncThis>();
+                if (func) cache.Y = func(*this);
+                else cache.Y = DefaultOf<float>();
+            }
+            if (Width.Has<float>()) {
+                cache.Width = Width.Get<float>();
+            }
+            else if (Width.Has<DynamicFunc>()) {
+                auto& func = Width.Get<DynamicFunc>();
+                if (func) cache.Width = func();
+                else cache.Width = DefaultOf<float>();
+            }
+            else if (Width.Has<DynamicFuncThis>()) {
+                auto& func = Width.Get<DynamicFuncThis>();
+                if (func) cache.Width = func(*this);
+                else cache.Width = DefaultOf<float>();
+            }
+            if (Height.Has<float>()) {
+                cache.Height = Height.Get<float>();
+            }
+            else if (Height.Has<DynamicFunc>()) {
+                auto& func = Height.Get<DynamicFunc>();
+                if (func) cache.Height = func();
+                else cache.Height = DefaultOf<float>();
+            }
+            else if (Height.Has<DynamicFuncThis>()) {
+                auto& func = Height.Get<DynamicFuncThis>();
+                if (func) cache.Height = func(*this);
+                else cache.Height = DefaultOf<float>();
+            }
+            return cache;
+        }
+        void CacheContent() {
+            Cache = GetCache();
+        }
+        bool operator==(DynamicRect &rhs) { return GetCache() == rhs.GetCache(); }
+        bool operator!=(DynamicRect &rhs) { return !(rhs == *this); }
     };
 }
 

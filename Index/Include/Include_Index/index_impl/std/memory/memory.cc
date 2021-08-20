@@ -21,7 +21,6 @@ namespace Index
         return static_cast<std::remove_reference_t<T>&&>(_Arg);
     }
 
-    // FUNCTION TEMPLATE forward
     template <class T>
     [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>& e) noexcept { // forward an lvalue as either an lvalue or an rvalue
         return static_cast<T&&>(e);
@@ -31,6 +30,11 @@ namespace Index
     [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>&& e) noexcept { // forward an rvalue as an rvalue
         static_assert(!std::is_lvalue_reference_v<T>, "bad forward call");
         return static_cast<T&&>(e);
+    }
+
+    template<typename T>
+    [[nodiscard]] constexpr T DefaultOf() noexcept {
+        return T {};
     }
 }
 

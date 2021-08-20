@@ -49,15 +49,18 @@ namespace Index::UI
 
 
 
-namespace Index::UI
+namespace Index
 {
-    // NullF: The Float value that represents Null
-    constexpr float NullF = Limits::FloatMax;
-
     __forceinline Vec2F Min(Vec2F v1, Vec2F v2);
     __forceinline Vec2F Max(Vec2F v1, Vec2F v2);
     __forceinline Size Min(Size v1, Size v2);
     __forceinline Size Max(Size v1, Size v2);
+}
+
+namespace Index::UI
+{
+    // NullF: The Float value that represents Null
+    constexpr float NullF = Limits::FloatMax;
 
     __forceinline float Validate(float v1, float $else);
     __forceinline float Validate2(float v1, float v2, float $else);
@@ -269,28 +272,28 @@ namespace Index::UI
 
 
     #pragma region Important
-Index::Vec2F Index::UI::Min(Vec2F v1, Vec2F v2) {
+Index::Vec2F Index::Min(Vec2F v1, Vec2F v2) {
     return {
         Index::Min(v1.X, v2.X),
         Index::Min(v1.Y, v2.Y)
     };
 }
 
-Index::Vec2F Index::UI::Max(Vec2F v1, Vec2F v2) {
+Index::Vec2F Index::Max(Vec2F v1, Vec2F v2) {
     return {
         Index::Max(v1.X, v2.X),
         Index::Max(v1.Y, v2.Y)
     };
 }
 
-Index::Size Index::UI::Min(Size v1, Size v2) {
+Index::Size Index::Min(Size v1, Size v2) {
     return {
         Index::Min(v1.Width, v2.Width),
         Index::Min(v1.Height, v2.Height)
     };
 }
 
-Index::Size Index::UI::Max(Size v1, Size v2) {
+Index::Size Index::Max(Size v1, Size v2) {
     return {
         Index::Max(v1.Width, v2.Width),
         Index::Max(v1.Height, v2.Height)

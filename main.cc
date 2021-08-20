@@ -10,6 +10,9 @@
 #define n ::New
 #define u .UIRef
 #define null NullF
+#define size .Size = Size
+#define minsize .MinSize = Size
+#define maxsize .MaxSize = Size
 
 using namespace Index;
 using namespace Index::UI;
@@ -19,11 +22,14 @@ int main()
     UPtr<ImUI::ImUIContext> context = UNew<ImUI::ImUIContext>();
 
     IPtr<UIElement> ui = UI::Stack n ({
+        ImUI::FillRect n ({
+            .Fill = Colors::Red
+        }),
         StackV n ({
             alignment Center,
             content {
                 Container n ({
-                    .MinSize { 400, 400 },
+                    minsize(400, 400),
                     content {
                         Dock n ({
                             .FillLast = true,
@@ -61,14 +67,14 @@ int main()
 
     context->SetRoot(ui);
 
-    ui.Value.Size = { };
-
     OnRender = [&]() {
 
         ImDrawList& db = *ImGui::GetBackgroundDrawList();
         db.AddRectFilled({0, 0}, ToImVec2(WindowSize),ToImColor(Colors::Black));
 
         context->Render(WindowSize, &db);
+
+        std::cout << "DeltaTime: " << context->Delta << std::endl;
 
     };
 

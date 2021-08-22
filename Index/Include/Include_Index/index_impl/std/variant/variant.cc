@@ -37,6 +37,7 @@ struct Variant : public std::variant<TTypes...>
         constexpr bool Has() const {
             return std::holds_alternative<T>(*this);
         }
+        __declspec(property(get = index)) size_t Index;
     public:
         ALIAS_RECLASS_FUNCTION_CONST(void, Swap, swap)
     };

@@ -13,10 +13,10 @@ Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF }; \
 Index::Size Size { Index::UI::NullF, Index::UI::NullF };    \
 Index::Align Alignment = Index::Align::Stretch;
 
-#define INDEX_UI_DefaultDynamicMembers                                    \
-Index::UI::DynamicSize DynMinSize { 0.0f, 0.0f };                         \
-Index::UI::DynamicSize DynMaxSize { Index::UI::NullF, Index::UI::NullF }; \
-Index::UI::DynamicSize DynSize { Index::UI::NullF, Index::UI::NullF };    \
+#define INDEX_UI_DefaultDynamicMembers                                \
+Index::UI::DynSize DynMinSize { 0.0f, 0.0f };                         \
+Index::UI::DynSize DynMaxSize { Index::UI::NullF, Index::UI::NullF }; \
+Index::UI::DynSize DynSize { Index::UI::NullF, Index::UI::NullF };    \
 Index::Align Alignment = Index::Align::Stretch;
 
 #define INDEX_UI_SetDefaultMembers       \
@@ -273,7 +273,7 @@ namespace Index::UI
             INDEX_UI_SetHolderMembers
         }
         void Render(UIContext* u, Layout i) override {
-            CacheDynamics();
+            DynCache(u);
             Rect r = GetSubrect(this, i);
             for (auto& c : Content) {
                 if (c.IsNull) continue;

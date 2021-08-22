@@ -21,6 +21,8 @@ namespace Index::UI
     struct UIElementLayoutCache;
     struct UIElement;
     struct UIElementHolder;
+    struct UIAnimation;
+    struct UIDynamic;
     struct UIContext;
 }
 
@@ -54,6 +56,7 @@ namespace Index::UI
 
     __forceinline Rect AlignRect(Rect box, Size content, Align align);
     __forceinline Rect AlignRectNoStretch(Rect box, Size content, Align align);
+    __forceinline Rect AlignRectWithMaxSize(Rect box, Size content, Size maxSize, Align align);
     __forceinline Rect GetSubrect(UIElement* e, Layout i);
     __forceinline Size GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content);
 }
@@ -508,6 +511,139 @@ namespace Index::UI
     };
 }
 
+// Dyn
+namespace Index::UI
+{
+#define INDEX_UI_DynSize_Constructor_All_FirstType_SecondType(t1, t2)   \
+DynSize(t1 width, t1 height) : _Width(width), _Height(height) { }       \
+DynSize(t2 width, t2 height) : _Width(width), _Height(height) { }       \
+DynSize(t1 width, t2 height) : _Width(width), _Height(height) { }       \
+DynSize(t2 width, t1 height) : _Width(width), _Height(height) { }
+
+#define INDEX_UI_DynSize_Constructor_All_Cast_FirstType_SecondType(t1, t2, t1Cast, t2Cast) \
+DynSize(t1 width, t1 height) : _Width((t1Cast)width), _Height((t1Cast)height) { }          \
+DynSize(t2 width, t2 height) : _Width((t2Cast)width), _Height((t2Cast)height) { }          \
+DynSize(t1 width, t2 height) : _Width((t1Cast)width), _Height((t2Cast)height) { }          \
+DynSize(t2 width, t1 height) : _Width((t2Cast)width), _Height((t1Cast)height) { }
+
+#define INDEX_UI_DynSize_Constructor_FirstType_SecondType(t1, t2)   \
+DynSize(t1 width, t2 height) : _Width(width), _Height(height) { }   \
+DynSize(t2 width, t1 height) : _Width(width), _Height(height) { }
+
+#define INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(t1, t2, t1Cast, t2Cast) \
+DynSize(t1 width, t2 height) : _Width((t1Cast)width), _Height((t2Cast)height) { }      \
+DynSize(t2 width, t1 height) : _Width((t2Cast)width), _Height((t1Cast)height) { }
+
+    struct DynSize
+    {
+        using DynFloat = float;
+        using DynFunc = Func<float()>;
+        using DynThatFunc = Func<float(UIDynamic* that, UIContext* u)>;
+        using DynSizeFunc = Func<Size()>;
+        using DynSizeThatFunc = Func<Size(UIDynamic* that, UIContext* u)>;
+        static constexpr size_t Index_DynFloat = 0;
+        static constexpr size_t Index_DynFunc = 1;
+        static constexpr size_t Index_DynThatFunc = 2;
+        static constexpr size_t Index_Size_DynSizeFunc = 0;
+        static constexpr size_t Index_Size_DynSizeThatFunc = 1;
+    private:
+        Nullable<Variant<DynSizeFunc, DynSizeThatFunc>> _Size;
+        Nullable<Variant<DynFloat, DynFunc, DynThatFunc>> _Width;
+        Nullable<Variant<DynFloat, DynFunc, DynThatFunc>> _Height;
+    public:
+        Size CachedSize;
+    public:
+        __forceinline float GetWidthCache(UIDynamic* that, UIContext* u) {
+            if (!_Width.HasValue) return 0;
+            auto& v = _Width.Value;
+            switch (v.Index)
+            {
+                case Index_DynFloat:
+                {
+                    return v.Get<DynFloat>();
+                    break;
+                }
+                case Index_DynFunc:
+                {
+                    auto& val = v.Get<DynFunc>();
+                    return val();
+                    break;
+                }
+                case Index_DynThatFunc:
+                {
+                    auto& val = v.Get<DynThatFunc>();
+                    return val(that, u);
+                    break;
+                }
+                default: return 0;
+            }
+        }
+        __forceinline float GetHeightCache(UIDynamic* that, UIContext* u) {
+            if (!_Height.HasValue) return 0;
+            auto& v = _Height.Value;
+            switch (v.Index)
+            {
+                case Index_DynFloat:
+                {
+                    return v.Get<DynFloat>();
+                    break;
+                }
+                case Index_DynFunc:
+                {
+                    auto& val = v.Get<DynFunc>();
+                    return val();
+                    break;
+                }
+                case Index_DynThatFunc:
+                {
+                    auto& val = v.Get<DynThatFunc>();
+                    return val(that, u);
+                    break;
+                }
+                default: return 0;
+            }
+        }
+        __forceinline Size GetSizeCache(UIDynamic* that, UIContext* u) {
+            if (!_Size.HasValue) return { };
+            auto& v = _Size.Value;
+            switch (v.Index)
+            {
+                case Index_Size_DynSizeFunc:
+                {
+                    auto& val = v.Get<DynSizeFunc>();
+                    return val();
+                    break;
+                }
+                case Index_Size_DynSizeThatFunc:
+                {
+                    auto& val = v.Get<DynSizeThatFunc>();
+                    return val(that, u);
+                    break;
+                }
+                default: return { };
+            }
+        }
+        __forceinline Size GetCache(UIDynamic* that, UIContext* u) {
+            if (_Size.HasValue) {
+                return GetSizeCache(that, u);
+            }
+            return {
+                GetWidthCache(that, u),
+                GetHeightCache(that, u)
+            };
+        }
+        __forceinline void CacheContent(UIDynamic* that, UIContext* u) {
+            CachedSize = GetCache(that, u);
+        }
+    public:
+        INDEX_UI_DynSize_Constructor_All_Cast_FirstType_SecondType(float, int, float, float)
+        INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynFunc)
+        INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynThatFunc)
+        INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynFunc, float, DynFunc)
+        INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynThatFunc, float, DynThatFunc)
+    };
+}
+
 // UI Stuff
 namespace Index::UI
 {
@@ -571,16 +707,16 @@ namespace Index::UI
     // UIDynamic
     struct UIDynamic : virtual UIElement
     {
-        DynamicSize DynMinSize { 0.0f, 0.0f };
-        DynamicSize DynMaxSize { NullF, NullF };
-        DynamicSize DynSize { NullF, NullF };
-        void CacheDynamics() {
-            DynMinSize.CacheContent();
-            DynMaxSize.CacheContent();
-            DynSize.CacheContent();
-            UIElement::MinSize = DynMinSize.Cache;
-            UIElement::MaxSize = DynMaxSize.Cache;
-            UIElement::Size = DynSize.Cache;
+        DynSize DynMinSize { 0.0f, 0.0f };
+        DynSize DynMaxSize { NullF, NullF };
+        DynSize DynSize { NullF, NullF };
+        __forceinline void DynCache(UIContext* u) {
+            DynMinSize.CacheContent(this, u);
+            DynMaxSize.CacheContent(this, u);
+            DynSize.CacheContent(this, u);
+            UIElement::MinSize = DynMinSize.CachedSize;
+            UIElement::MaxSize = DynMaxSize.CachedSize;
+            UIElement::Size = DynSize.CachedSize;
         }
     };
 
@@ -703,13 +839,18 @@ Index::Size Index::UI::GetMinSize(UIElement *e) {
     auto minSize = e->MinSize;
     auto maxSize = e->MaxSize;
     return {
-        size.Width != NullF ? size.Width : Min(Validate(minSize), Validate(maxSize)).Width,
-        size.Height != NullF ? size.Height : Min(Validate(minSize), Validate(maxSize)).Height
+        size.Width != NullF ? size.Width : Index::Min(Validate(minSize.Width), maxSize.Width),
+        size.Height != NullF ? size.Height : Index::Min(Validate(minSize.Height), maxSize.Height)
     };
 }
 
 Index::Size Index::UI::GetMaxSize(UIElement *e) {
-    return e->MaxSize;
+    auto size = e->Size;
+    auto maxSize = e->MaxSize;
+    return {
+        size.Width != NullF ? size.Width : maxSize.Width,
+        size.Height != NullF ? size.Height : maxSize.Height
+    };
 }
 
 Index::Rect Index::UI::AlignRect(Rect box, Size content, Align align) {
@@ -787,11 +928,107 @@ Index::Rect Index::UI::AlignRectNoStretch(Rect box, Size content, Align align)
     return r;
 }
 
+Index::Rect Index::UI::AlignRectWithMaxSize(Rect box, Size content, Size maxSize, Align align)
+{
+    Rect r { };
+    #pragma region Horizontal
+    if (align.IsHStretched) {
+        r.Width = Index::Max(box.Width, content.Width);
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHCentered) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHLeft) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.First.X;
+    }
+    if (align.IsHRight) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Second.X - r.Width;
+    }
+    #pragma endregion
+    #pragma region Vertical
+    if (align.IsVStretched) {
+        r.Height = Index::Max(box.Height, content.Height);
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVCentered) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVTop) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.First.Y;
+    }
+    if (align.IsVBottom) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Second.Y - r.Height;
+    }
+    #pragma endregion
+    return r;
+}
+
 Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
-    Size size = e->MeasureIntentSize(i);
-    Rect r = AlignRect(i.Area, size, e->Alignment);
-    Size nsize = Min(GetMaxSize(e), r.Size);
-    return AlignRectNoStretch(i.Area, nsize, e->Alignment);
+    Align align = e->Alignment;
+    Rect box = i.Area;
+    Size content = Max(GetMinSize(e), e->MeasureIntentSize(i));
+    Size maxSize = GetMaxSize(e);
+    Rect r { };
+    #pragma region Horizontal
+    if (align.IsHStretched) {
+        r.Width = Index::Max(box.Width, content.Width);
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHCentered) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHLeft) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.First.X;
+    }
+    if (align.IsHRight) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Second.X - r.Width;
+    }
+    #pragma endregion
+    #pragma region Vertical
+    if (align.IsVStretched) {
+        r.Height = Index::Max(box.Height, content.Height);
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVCentered) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVTop) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.First.Y;
+    }
+    if (align.IsVBottom) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Second.Y - r.Height;
+    }
+    #pragma endregion
+    return r;
 }
 
 Index::Size Index::UI::GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content) {

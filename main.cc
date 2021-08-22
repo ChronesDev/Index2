@@ -8,12 +8,12 @@
 #include <index_ui_macros>
 
 #define n ::New
-#define u .UIRef
 #define null NullF
 #define size .Size = Size
 #define minsize .MinSize = Size
 #define maxsize .MaxSize = Size
-#define dyn []() -> float
+#define dyn [&]() -> float
+#define selfdyn [](UIDynamic* that, UIContext* u) -> float
 
 using namespace Index;
 using namespace Index::UI;
@@ -26,15 +26,24 @@ int main()
         ImUI::FillRect n ({
             .Fill = Colors::Transparent
         }),
-        Container n ({
-            minsize(100, 100),
+        DynContainer n ({
+            .DynSize = {
+                200, selfdyn {
+                    static float i = 30;
+                    i += 40 * u->Delta;
+                    if (i >= 500) {
+                        i = 30;
+                    }
+                    return i;
+                }
+            },
             alignment Center,
             content {
                 ImUI::FillRect n ({
-                    .Fill = Colors::Red
+                    .Fill = Colors::Red,
                 })
             }
-        })
+        }),
     });
 
     context->SetRoot(ui);
@@ -44,10 +53,24 @@ int main()
         ImDrawList& db = *ImGui::GetBackgroundDrawList();
         db.AddRectFilled({0, 0}, ToImVec2(WindowSize),ToImColor(Colors::Black));
 
+        std::chrono::high_resolution_clock clock;
+        auto start = clock.now();
         context->Render(WindowSize, &db);
+        auto now = clock.now();
 
-        std::cout << "DeltaTime: " << context->Delta << std::endl;
-
+        static List<std::chrono::nanoseconds> Average;
+        auto dur = duration_cast<std::chrono::nanoseconds>((now - start));
+        Average.Add(dur);
+        if (Average.Length >= 10) {
+            auto length = Average.Length;
+            long long all = 0;
+            for (auto a : Average) {
+                all += a.count();
+            }
+            all /= length;
+            std::cout << "Avg: " << all << "ns" << std::endl;
+            Average.Clear();
+        }
     };
 
     Entry();

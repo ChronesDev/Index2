@@ -89,7 +89,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicVec1& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicVec1Cache<T> Cache { };
         DynamicVar X;
         DynamicVec1() = default;
@@ -99,6 +99,9 @@ namespace Index::UI
             DynamicVec1Cache<T> cache;
             if (X.template Has<float>()) {
                 cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<int>()) {
+                cache.X = X.template Get<int>();
             }
             else if (X.Has<DynamicFunc>()) {
                 auto& func = X.template Get<DynamicFunc>();
@@ -125,7 +128,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicVec2& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicVec2Cache<T> Cache { };
         DynamicVar X, Y;
         DynamicVec2() = default;
@@ -135,6 +138,9 @@ namespace Index::UI
             DynamicVec2Cache<T> cache;
             if (X.template Has<float>()) {
                 cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<int>()) {
+                cache.X = X.template Get<int>();
             }
             else if (X.template Has<DynamicFunc>()) {
                 auto& func = X.template Get<DynamicFunc>();
@@ -148,6 +154,9 @@ namespace Index::UI
             }
             if (Y.template Has<float>()) {
                 cache.Y = Y.template Get<float>();
+            }
+            else if (Y.template Has<int>()) {
+                cache.Y = Y.template Get<int>();
             }
             else if (Y.template Has<DynamicFunc>()) {
                 auto& func = Y.template Get<DynamicFunc>();
@@ -174,7 +183,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicVec3& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicVec3Cache<T> Cache { };
         DynamicVar X, Y, Z;
         DynamicVec3() = default;
@@ -184,6 +193,9 @@ namespace Index::UI
             DynamicVec3Cache<T> cache;
             if (X.template Has<float>()) {
                 cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<int>()) {
+                cache.X = X.template Get<int>();
             }
             else if (X.template Has<DynamicFunc>()) {
                 auto& func = X.template Get<DynamicFunc>();
@@ -198,6 +210,9 @@ namespace Index::UI
             if (Y.template Has<float>()) {
                 cache.Y = Y.template Get<float>();
             }
+            else if (Y.template Has<int>()) {
+                cache.Y = Y.template Get<int>();
+            }
             else if (Y.template Has<DynamicFunc>()) {
                 auto& func = Y.template Get<DynamicFunc>();
                 if (func) cache.Y = func();
@@ -210,6 +225,9 @@ namespace Index::UI
             }
             if (Z.template Has<float>()) {
                 cache.Z = Z.template Get<float>();
+            }
+            else if (Z.template Has<int>()) {
+                cache.Z = Z.template Get<int>();
             }
             else if (Z.template Has<DynamicFunc>()) {
                 auto& func = Z.template Get<DynamicFunc>();
@@ -236,7 +254,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicVec4& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicVec4Cache<T> Cache { };
         DynamicVar X, Y, Z, W;
         DynamicVec4() = default;
@@ -246,6 +264,9 @@ namespace Index::UI
             DynamicVec4Cache<T> cache;
             if (X.template Has<float>()) {
                 cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<int>()) {
+                cache.X = X.template Get<int>();
             }
             else if (X.template Has<DynamicFunc>()) {
                 auto& func = X.template Get<DynamicFunc>();
@@ -260,6 +281,9 @@ namespace Index::UI
             if (Y.template Has<float>()) {
                 cache.Y = Y.template Get<float>();
             }
+            else if (Y.template Has<int>()) {
+                cache.Y = Y.template Get<int>();
+            }
             else if (Y.template Has<DynamicFunc>()) {
                 auto& func = Y.template Get<DynamicFunc>();
                 if (func) cache.Y = func();
@@ -273,6 +297,9 @@ namespace Index::UI
             if (Z.template Has<float>()) {
                 cache.Z = Z.template Get<float>();
             }
+            else if (Z.template Has<int>()) {
+                cache.Z = Z.template Get<int>();
+            }
             else if (Z.template Has<DynamicFunc>()) {
                 auto& func = Z.template Get<DynamicFunc>();
                 if (func) cache.Z = func();
@@ -285,6 +312,9 @@ namespace Index::UI
             }
             if (W.template Has<float>()) {
                 cache.W = W.template Get<float>();
+            }
+            else if (W.template Has<int>()) {
+                cache.W = W.template Get<int>();
             }
             else if (W.template Has<DynamicFunc>()) {
                 auto& func = W.template Get<DynamicFunc>();
@@ -340,7 +370,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicSize& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicSizeCache Cache { };
         DynamicVar Width, Height;
         DynamicSize() = default;
@@ -350,6 +380,9 @@ namespace Index::UI
             DynamicSizeCache cache;
             if (Width.Has<float>()) {
                 cache.Width = Width.Get<float>();
+            }
+            if (Width.Has<int>()) {
+                cache.Width = Width.Get<int>();
             }
             else if (Width.Has<DynamicFunc>()) {
                 auto& func = Width.Get<DynamicFunc>();
@@ -363,6 +396,9 @@ namespace Index::UI
             }
             if (Height.Has<float>()) {
                 cache.Height = Height.Get<float>();
+            }
+            if (Height.Has<int>()) {
+                cache.Height = Height.Get<int>();
             }
             else if (Height.Has<DynamicFunc>()) {
                 auto& func = Height.Get<DynamicFunc>();
@@ -388,7 +424,7 @@ namespace Index::UI
     {
         using DynamicFunc = Func<float()>;
         using DynamicFuncThis = Func<float(DynamicRect& self)>;
-        using DynamicVar = Variant<float, DynamicFunc, DynamicFuncThis>;
+        using DynamicVar = Variant<float, int, DynamicFunc, DynamicFuncThis>;
         DynamicRectCache Cache { };
         DynamicVar X, Y;
         DynamicVar Width, Height;
@@ -400,6 +436,9 @@ namespace Index::UI
             DynamicRectCache cache;
             if (X.template Has<float>()) {
                 cache.X = X.template Get<float>();
+            }
+            else if (X.template Has<int>()) {
+                cache.X = X.template Get<int>();
             }
             else if (X.template Has<DynamicFunc>()) {
                 auto& func = X.template Get<DynamicFunc>();
@@ -414,6 +453,9 @@ namespace Index::UI
             if (Y.template Has<float>()) {
                 cache.Y = Y.template Get<float>();
             }
+            else if (Y.template Has<int>()) {
+                cache.Y = Y.template Get<int>();
+            }
             else if (Y.template Has<DynamicFunc>()) {
                 auto& func = Y.template Get<DynamicFunc>();
                 if (func) cache.Y = func();
@@ -427,6 +469,9 @@ namespace Index::UI
             if (Width.Has<float>()) {
                 cache.Width = Width.Get<float>();
             }
+            if (Width.Has<int>()) {
+                cache.Width = Width.Get<int>();
+            }
             else if (Width.Has<DynamicFunc>()) {
                 auto& func = Width.Get<DynamicFunc>();
                 if (func) cache.Width = func();
@@ -439,6 +484,9 @@ namespace Index::UI
             }
             if (Height.Has<float>()) {
                 cache.Height = Height.Get<float>();
+            }
+            if (Height.Has<int>()) {
+                cache.Height = Height.Get<int>();
             }
             else if (Height.Has<DynamicFunc>()) {
                 auto& func = Height.Get<DynamicFunc>();
@@ -523,9 +571,17 @@ namespace Index::UI
     // UIDynamic
     struct UIDynamic : virtual UIElement
     {
-        struct Size MinSize { 0, 0 };
-        struct Size MaxSize { NullF, NullF };
-        struct Size Size { NullF, NullF };
+        DynamicSize DynMinSize { 0.0f, 0.0f };
+        DynamicSize DynMaxSize { NullF, NullF };
+        DynamicSize DynSize { NullF, NullF };
+        void CacheDynamics() {
+            DynMinSize.CacheContent();
+            DynMaxSize.CacheContent();
+            DynSize.CacheContent();
+            UIElement::MinSize = DynMinSize.Cache;
+            UIElement::MaxSize = DynMaxSize.Cache;
+            UIElement::Size = DynSize.Cache;
+        }
     };
 
     // UIContext

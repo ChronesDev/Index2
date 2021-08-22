@@ -13,6 +13,7 @@
 #define size .Size = Size
 #define minsize .MinSize = Size
 #define maxsize .MaxSize = Size
+#define dyn []() -> float
 
 using namespace Index;
 using namespace Index::UI;
@@ -23,43 +24,14 @@ int main()
 
     IPtr<UIElement> ui = UI::Stack n ({
         ImUI::FillRect n ({
-            .Fill = Colors::Red
+            .Fill = Colors::Transparent
         }),
-        StackV n ({
+        Container n ({
+            minsize(100, 100),
             alignment Center,
             content {
-                Container n ({
-                    minsize(400, 400),
-                    content {
-                        Dock n ({
-                            .FillLast = true,
-                            content {
-                                Dock::Left({
-                                    ImUI::FillRect n ({
-                                        .MinSize { 50, null },
-                                        .Fill = Colors::Red
-                                    })
-                                }),
-                                Dock::Top({
-                                    ImUI::FillRect n ({
-                                        .MinSize { null, 50 },
-                                        .Fill = Colors::Blue
-                                    })
-                                }),
-                                Dock::Right({
-                                    ImUI::FillRect n ({
-                                        .MinSize { 50, null },
-                                        .Fill = Colors::Pink
-                                    })
-                                }),
-                                Dock::Fill({
-                                    ImUI::FillRect n ({
-                                        .Fill = Colors::Aqua
-                                    })
-                                })
-                            }
-                        })
-                    }
+                ImUI::FillRect n ({
+                    .Fill = Colors::Red
                 })
             }
         })

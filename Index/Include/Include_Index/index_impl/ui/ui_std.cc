@@ -13,10 +13,22 @@ Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF }; \
 Index::Size Size { Index::UI::NullF, Index::UI::NullF };    \
 Index::Align Alignment = Index::Align::Stretch;
 
+#define INDEX_UI_DefaultDynamicMembers                                    \
+Index::UI::DynamicSize DynMinSize { 0.0f, 0.0f };                         \
+Index::UI::DynamicSize DynMaxSize { Index::UI::NullF, Index::UI::NullF }; \
+Index::UI::DynamicSize DynSize { Index::UI::NullF, Index::UI::NullF };    \
+Index::Align Alignment = Index::Align::Stretch;
+
 #define INDEX_UI_SetDefaultMembers       \
 this->MinSize = e.MinSize;               \
 this->MaxSize = e.MaxSize;               \
 this->Size = e.Size;                     \
+this->Alignment = e.Alignment;
+
+#define INDEX_UI_SetDefaultDynamicMembers       \
+this->DynMinSize = e.DynMinSize;                \
+this->DynMaxSize = e.DynMaxSize;                \
+this->DynSize = e.DynSize;                      \
 this->Alignment = e.Alignment;
 
 #define INDEX_UI_HolderMembers                             \
@@ -229,6 +241,39 @@ namespace Index::UI
             INDEX_UI_SetHolderMembers
         }
         void Render(UIContext* u, Layout i) override {
+            Rect r = GetSubrect(this, i);
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, {
+                    .Area = r
+                });
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
+        }
+    };
+
+    struct DynContainer : virtual UIDynamic, virtual UIElementHolder
+    {
+        INDEX_UI_Args {
+            INDEX_UI_DefaultDynamicMembers
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(DynContainer)
+        INDEX_UI_Constructor(DynContainer) {
+            INDEX_UI_SetDefaultDynamicMembers
+            INDEX_UI_SetHolderMembers
+        }
+        void Render(UIContext* u, Layout i) override {
+            CacheDynamics();
             Rect r = GetSubrect(this, i);
             for (auto& c : Content) {
                 if (c.IsNull) continue;

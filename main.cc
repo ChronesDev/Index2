@@ -12,8 +12,9 @@
 #define size .Size = Size
 #define minsize .MinSize = Size
 #define maxsize .MaxSize = Size
-#define dyn [&]() -> float
+#define dyn []() -> float
 #define selfdyn [](UIDynamic* that, UIContext* u) -> float
+#define color .Color =
 
 using namespace Index;
 using namespace Index::UI;
@@ -24,26 +25,12 @@ int main()
 
     IPtr<UIElement> ui = UI::Stack n ({
         ImUI::FillRect n ({
-            .Fill = Colors::Transparent
+            color Colors::Transparent
         }),
-        DynContainer n ({
-            .DynSize = {
-                200, selfdyn {
-                    static float i = 30;
-                    i += 40 * u->Delta;
-                    if (i >= 500) {
-                        i = 30;
-                    }
-                    return i;
-                }
-            },
-            alignment Center,
-            content {
-                ImUI::FillRect n ({
-                    .Fill = Colors::Red,
-                })
-            }
-        }),
+        ImUI::OutRect n ({
+            color Colors::Lime,
+            .Thickness = 10
+        })
     });
 
     context->SetRoot(ui);

@@ -67,19 +67,45 @@ namespace Index::UI::ImUI
 {
     struct FillRect : UIElement
     {
-        Color Fill;
+        Index::Color Color;
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
-            Color Fill;
+            Index::Color Color;
         };
         INDEX_UI_New(FillRect)
         INDEX_UI_Constructor(FillRect) {
             INDEX_UI_SetDefaultMembers
-            Fill = e.Fill;
+            Color = e.Color;
         }
         void Render(UIContext* u, Layout i) override {
             auto r = GetSubrect(this, i);
-            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Fill));
+            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color));
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            auto s = UIElement::MeasureIntentSize(i);
+            return s;
+        }
+    };
+
+    struct OutRect : UIElement
+    {
+        Index::Color Color;
+        float Thickness = 1;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            Index::Color Color;
+            float Thickness = 1;
+        };
+        INDEX_UI_New(OutRect)
+        INDEX_UI_Constructor(OutRect) {
+            INDEX_UI_SetDefaultMembers
+            Color = e.Color;
+            Thickness = e.Thickness;
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, 0, Thickness);
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {

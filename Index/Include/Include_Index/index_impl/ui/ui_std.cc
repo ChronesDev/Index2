@@ -575,6 +575,46 @@ namespace Index::UI
             return GetMinSize(this);
         }
     };
+
+    struct Padding : virtual UIElementHolder
+    {
+        Vec4F Edges;
+        INDEX_UI_Args {
+            Vec4F Edges;
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(Padding)
+        INDEX_UI_Constructor(Padding) {
+            Edges = e.Edges;
+            Content = std::move(e.Content);
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto& r = i.Area;
+            r.X += Edges.X;
+            r.Width -= Edges.X;
+            r.Y += Edges.Y;
+            r.Height -= Edges.Y;
+            r.Width -= Edges.Z;
+            r.Height -= Edges.W;
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, i);
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            auto size = GetIntentSizeFrom(i, Content);
+            size.Width += Edges.X + Edges.Z;
+            size.Height += Edges.Y + Edges.W;
+            return size;
+        }
+    };
 }
 
 // ##################################### //

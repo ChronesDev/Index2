@@ -89,6 +89,7 @@ namespace Index
         T W = 0;
         Vec4() = default;
         Vec4(T x, T y, T z, T w) : Vec3<T>(x, y, z), W(w) { }
+        Vec4(T h, T v) : Vec3<T>(h, v, h), W(v) { }
         bool operator==(const Vec4& other) const = default;
         bool operator!=(const Vec4& other) const = default;
         Vec4<T> operator+(Vec4<T>& other) const { return Vec4(this->X + other.X, this->Y + other.Y, this->Z + other.Z, this->W + other.W); }

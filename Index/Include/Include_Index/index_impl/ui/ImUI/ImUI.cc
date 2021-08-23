@@ -68,18 +68,21 @@ namespace Index::UI::ImUI
     struct FillRect : UIElement
     {
         Index::Color Color;
+        ImDrawFlags Flags = ImDrawFlags_None;
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
             Index::Color Color;
+            ImDrawFlags Flags = ImDrawFlags_None;
         };
         INDEX_UI_New(FillRect)
         INDEX_UI_Constructor(FillRect) {
             INDEX_UI_SetDefaultMembers
             Color = e.Color;
+            Flags = e.Flags;
         }
         void Render(UIContext* u, Layout i) override {
             auto r = GetSubrect(this, i);
-            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color));
+            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, Flags);
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
@@ -92,20 +95,84 @@ namespace Index::UI::ImUI
     {
         Index::Color Color;
         float Thickness = 1;
+        ImDrawFlags Flags = ImDrawFlags_None;
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
             Index::Color Color;
             float Thickness = 1;
+            ImDrawFlags Flags = ImDrawFlags_None;
         };
         INDEX_UI_New(OutRect)
         INDEX_UI_Constructor(OutRect) {
             INDEX_UI_SetDefaultMembers
             Color = e.Color;
             Thickness = e.Thickness;
+            Flags = e.Flags;
         }
         void Render(UIContext* u, Layout i) override {
             auto r = GetSubrect(this, i);
-            ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, 0, Thickness);
+            ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, Flags, Thickness);
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            auto s = UIElement::MeasureIntentSize(i);
+            return s;
+        }
+    };
+
+    struct FillRRect : UIElement
+    {
+        Index::Color Color;
+        float Rounding = 0.0f;
+        ImDrawFlags Flags = ImDrawFlags_None;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            Index::Color Color;
+            float Rounding = 0.0f;
+            ImDrawFlags Flags = ImDrawFlags_None;
+        };
+        INDEX_UI_New(FillRRect)
+        INDEX_UI_Constructor(FillRRect) {
+            INDEX_UI_SetDefaultMembers
+            Color = e.Color;
+            Rounding = e.Rounding;
+            Flags = e.Flags;
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Rounding, Flags);
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            auto s = UIElement::MeasureIntentSize(i);
+            return s;
+        }
+    };
+
+    struct OutRRect : UIElement
+    {
+        Index::Color Color;
+        float Thickness = 1;
+        float Rounding = 0.0f;
+        ImDrawFlags Flags = ImDrawFlags_None;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            Index::Color Color;
+            float Thickness = 1;
+            float Rounding = 0.0f;
+            ImDrawFlags Flags = ImDrawFlags_None;
+        };
+        INDEX_UI_New(OutRRect)
+        INDEX_UI_Constructor(OutRRect) {
+            INDEX_UI_SetDefaultMembers
+            Color = e.Color;
+            Thickness = e.Thickness;
+            Rounding = e.Rounding;
+            Flags = e.Flags;
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Rounding, Flags, Thickness);
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {

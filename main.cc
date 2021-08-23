@@ -8,13 +8,15 @@
 #include <index_ui_macros>
 
 #define n ::New
-#define null NullF
-#define size .Size = Size
-#define minsize .MinSize = Size
-#define maxsize .MaxSize = Size
+#define null Index::UI::NullF
+#define size .Size = Index::Size
+#define minsize .MinSize = Index::Size
+#define maxsize .MaxSize = Index::Size
 #define dyn []() -> float
 #define selfdyn [](UIDynamic* that, UIContext* u) -> float
 #define color .Color =
+#define flags .Flags =
+#define edges .Edges = Index::Vec4F
 
 using namespace Index;
 using namespace Index::UI;
@@ -27,9 +29,15 @@ int main()
         ImUI::FillRect n ({
             color Colors::Transparent
         }),
-        ImUI::OutRect n ({
-            color Colors::Lime,
-            .Thickness = 10
+        Padding n ({
+            edges(40, 20),
+            content {
+                ImUI::OutRRect n ({
+                    color Colors::Lime,
+                    .Thickness = 10,
+                    .Rounding = 11
+                })
+            }
         })
     });
 
@@ -40,24 +48,7 @@ int main()
         ImDrawList& db = *ImGui::GetBackgroundDrawList();
         db.AddRectFilled({0, 0}, ToImVec2(WindowSize),ToImColor(Colors::Black));
 
-        std::chrono::high_resolution_clock clock;
-        auto start = clock.now();
         context->Render(WindowSize, &db);
-        auto now = clock.now();
-
-        static List<std::chrono::nanoseconds> Average;
-        auto dur = duration_cast<std::chrono::nanoseconds>((now - start));
-        Average.Add(dur);
-        if (Average.Length >= 10) {
-            auto length = Average.Length;
-            long long all = 0;
-            for (auto a : Average) {
-                all += a.count();
-            }
-            all /= length;
-            std::cout << "Avg: " << all << "ns" << std::endl;
-            Average.Clear();
-        }
     };
 
     Entry();

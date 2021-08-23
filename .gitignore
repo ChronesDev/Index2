@@ -39,6 +39,7 @@
 
 # CMake Build
 cmake-build-debug/
+cmake-build-release/
 
 out/
 

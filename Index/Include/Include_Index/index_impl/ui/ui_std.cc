@@ -615,6 +615,61 @@ namespace Index::UI
             return size;
         }
     };
+
+    struct Builder : virtual UIElement
+    {
+        using BuildFunc = Func<IPtr<UIElement>(UIContext* u, Layout i)>;
+        IPtr<UIElement> CachedElement;
+        BuildFunc Build;
+        INDEX_UI_Args {
+            BuildFunc Build;
+        };
+        INDEX_UI_New(Builder)
+        INDEX_UI_Constructor(Builder) {
+            Build = e.Build;
+        }
+        void Render(UIContext* u, Layout i) override {
+            if (!Build) return;
+            auto c = Build(u, i);
+            if (c) c->Render(u, i);
+            CachedElement = std::move(c);
+        }
+        void Notify(UINotification *e) override {
+            if (CachedElement.IsNull) return;
+            CachedElement->Notify(e);
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            if (CachedElement.IsNull) return { 0, 0 };
+            return CachedElement->MeasureIntentSize(i);
+        }
+    };
+
+    template<class T>
+    struct Constructor : virtual UIElement
+    {
+    private:
+        IPtr<UIElement> CachedElement;
+    public:
+        void Reconstruct() { CachedElement.Reset(); }
+        virtual IPtr<UIElement> Construct() = 0;
+    private:
+        void Render(UIContext* u, Layout i) final override {
+            if (CachedElement.IsNull) CachedElement = Construct();
+            if (CachedElement.IsNull) return;
+            CachedElement->Render(u, i);
+        }
+        void Notify(UINotification *e) final override {
+            if (CachedElement.IsNull) return;
+            CachedElement->Notify(e);
+        }
+        Index::Size MeasureIntentSize(Layout i) final override {
+            if (CachedElement.IsNull) return { 0, 0 };
+            return CachedElement->MeasureIntentSize(i);
+        }
+    public:
+        template<class TRet =Index::UI::UIElement>
+        static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
+    };
 }
 
 // ##################################### //

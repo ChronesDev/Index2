@@ -281,4 +281,49 @@ namespace Index::UI::ImUI
         }
         void Notify(UINotification* e) override { }
     };
+
+    struct ImGuiWindow : UIElementHolder
+    {
+        string WindowName;
+        ImGuiWindowFlags Flags = ImGuiWindowFlags_None;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            string WindowName;
+            ImGuiWindowFlags Flags = ImGuiWindowFlags_None;
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(ImGuiWindow)
+        INDEX_UI_Constructor(ImGuiWindow) {
+            WindowName = std::move(e.WindowName);
+            Flags = e.Flags;
+            INDEX_UI_SetHolderMembers
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        void Render(UIContext* u, Layout i) override {
+            Rect r = GetSubrect(this, i);
+            ImGui::Begin(WindowName);
+            ImGui::SetNextWindowPos(ToImVec2(r.First));
+            ImGui::SetNextWindowSize(ToImVec2({ r.Width, r.Height }));
+            float x = 0;
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                auto mins = c->MeasureIntentSize(i);
+                c->Render(u, {
+                    .Area = Rect {
+                        r.X + x,
+                        r.Y,
+                        { mins.Width, r.Height }
+                    }
+                });
+                x += mins.Width;
+            }
+            ImGui::End();
+        }
+    };
 }

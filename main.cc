@@ -12,14 +12,25 @@
 #define size .Size = Index::Size
 #define minsize .MinSize = Index::Size
 #define maxsize .MaxSize = Index::Size
-#define dyn []() -> float
-#define selfdyn [](UIDynamic* that, UIContext* u) -> float
+#define dyn [&]() -> float
+#define selfdyn [&](UIDynamic* that, UIContext* u) -> float
 #define color .Color =
 #define flags .Flags =
 #define edges .Edges = Index::Vec4F
+#define build .Build = [&](UIContext* u, Layout i) -> ui_ref
 
 using namespace Index;
 using namespace Index::UI;
+
+struct MyConstructor : Constructor<MyConstructor>
+{
+    ui_ref Construct() override {
+        return ImUI::FillRect n ({
+            size(300, 300),
+            color Colors::Green
+        });
+    }
+};
 
 int main()
 {
@@ -43,7 +54,8 @@ int main()
                         ImUI::FillRect n ({
                             size(300, 300),
                             color Colors::Aqua,
-                        })
+                        }),
+                        MyConstructor n ()
                     }
                 }),
                 ImUI::ImGuiDemo n ()

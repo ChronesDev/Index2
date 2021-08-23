@@ -670,6 +670,26 @@ namespace Index::UI
         template<class TRet =Index::UI::UIElement>
         static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
     };
+
+    struct Executor : virtual UIElement
+    {
+        using ExecutorFunc = Func<void(UIContext* u, Layout i)>;
+        ExecutorFunc Execute;
+        INDEX_UI_Args {
+            ExecutorFunc Execute;
+        };
+        INDEX_UI_New(Executor)
+        INDEX_UI_Constructor(Executor) {
+            Execute = e.Execute;
+        }
+        void Render(UIContext* u, Layout i) override {
+            if (!Execute) return;
+            Execute(u, i);
+        }
+        void Notify(UINotification *e) override {
+
+        }
+    };
 }
 
 // ##################################### //

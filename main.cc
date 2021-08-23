@@ -18,6 +18,7 @@
 #define flags .Flags =
 #define edges .Edges = Index::Vec4F
 #define build .Build = [&](UIContext* u, Layout i) -> ui_ref
+#define execute .Execute = [&](UIContext* u, Layout i)
 
 using namespace Index;
 using namespace Index::UI;
@@ -47,18 +48,21 @@ int main()
                     color Colors::Black,
                     .Thickness = 30,
                 }),
-                ImUI::ClipContainer n ({
-                    size(10, 10),
-                    alignment Center,
+                ImUI::ImGuiWindow n ({
+                    size(300, 600),
+                    .WindowName = "Hello World !!!",
                     content {
-                        ImUI::FillRect n ({
-                            size(300, 300),
-                            color Colors::Aqua,
+                        Executor n ({
+                            execute {
+                                ImGui::Text("Hello World");
+                            }
                         }),
-                        MyConstructor n ()
+                        ImUI::FillRect n ({
+                            size(400, 400),
+                            color Colors::Blue
+                        })
                     }
-                }),
-                ImUI::ImGuiDemo n ()
+                })
             }
         })
     });

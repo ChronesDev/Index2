@@ -285,15 +285,16 @@ namespace Index::UI::ImUI
     struct ImGuiWindow : UIElementHolder
     {
         string WindowName;
-        ImGuiWindowFlags Flags = ImGuiWindowFlags_None;
+        ImGuiWindowFlags Flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
         INDEX_UI_Args {
             INDEX_UI_DefaultMembers
             string WindowName;
-            ImGuiWindowFlags Flags = ImGuiWindowFlags_None;
+            ImGuiWindowFlags Flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
             INDEX_UI_HolderMembers
         };
         INDEX_UI_New(ImGuiWindow)
         INDEX_UI_Constructor(ImGuiWindow) {
+            INDEX_UI_SetDefaultMembers
             WindowName = std::move(e.WindowName);
             Flags = e.Flags;
             INDEX_UI_SetHolderMembers
@@ -307,9 +308,9 @@ namespace Index::UI::ImUI
         }
         void Render(UIContext* u, Layout i) override {
             Rect r = GetSubrect(this, i);
-            ImGui::Begin(WindowName);
             ImGui::SetNextWindowPos(ToImVec2(r.First));
             ImGui::SetNextWindowSize(ToImVec2({ r.Width, r.Height }));
+            ImGui::Begin(WindowName, nullptr, Flags);
             float x = 0;
             for (auto& c : Content) {
                 if (c.IsNull) continue;

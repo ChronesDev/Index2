@@ -37,6 +37,9 @@
 # CLion
 .idea/
 
+# CMake Build
+cmake-build-debug/
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt

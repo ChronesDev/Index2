@@ -204,4 +204,81 @@ namespace Index::UI::ImUI
             return UIElement::MeasureIntentSize(i);
         }
     };
+
+#if IMGUI_HAS_SHADOWS == 1
+    struct ShadowRect : UIElement
+    {
+        Index::Color Color = Colors::Black;
+        float Thickness = 10.0f;
+        Vec2F Offset { };
+        ImDrawFlags Flags = ImDrawFlags_None;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            Index::Color Color = Colors::Black;
+            float Thickness = 10.0f;
+            Vec2F Offset { };
+            ImDrawFlags Flags = ImDrawFlags_None;
+        };
+        INDEX_UI_New(ShadowRect)
+        INDEX_UI_Constructor(ShadowRect) {
+            INDEX_UI_SetDefaultMembers
+            Color = e.Color;
+            Thickness = e.Thickness;
+            Offset = e.Offset;
+            Flags = e.Flags;
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->AddShadowRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Thickness, ToImVec2(Offset), Flags);
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return UIElement::MeasureIntentSize(i);
+        }
+    };
+
+    struct ShadowRRect : UIElement
+    {
+        Index::Color Color = Colors::Black;
+        float Thickness = 10.0f;
+        Vec2F Offset { };
+        float Rounding = 0.0f;
+        ImDrawFlags Flags = ImDrawFlags_None;
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            Index::Color Color = Colors::Black;
+            float Thickness = 10.0f;
+            Vec2F Offset { };
+            float Rounding = 0.0f;
+            ImDrawFlags Flags = ImDrawFlags_None;
+        };
+        INDEX_UI_New(ShadowRRect)
+        INDEX_UI_Constructor(ShadowRRect) {
+            INDEX_UI_SetDefaultMembers
+            Color = e.Color;
+            Thickness = e.Thickness;
+            Offset = e.Offset;
+            Rounding = e.Rounding;
+            Flags = e.Flags;
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->AddShadowRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Thickness, ToImVec2(Offset), Flags, Rounding);
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return UIElement::MeasureIntentSize(i);
+        }
+    };
+#endif
+
+    struct ImGuiDemo : UIElement
+    {
+        INDEX_UI_NewEmpty(ImGuiDemo)
+        INDEX_UI_ConstructorEmpty(ImGuiDemo) { }
+        void Render(UIContext* u, Layout i) override {
+            ImGui::ShowDemoWindow();
+        }
+        void Notify(UINotification* e) override { }
+    };
 }

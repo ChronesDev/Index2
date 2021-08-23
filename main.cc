@@ -27,15 +27,14 @@ int main()
 
     IPtr<UIElement> ui = UI::Stack n ({
         ImUI::FillRect n ({
-            color Colors::Transparent
+            color Colors::White
         }),
         Padding n ({
             edges(40, 20),
             content {
-                ImUI::OutRRect n ({
-                    color Colors::Lime,
-                    .Thickness = 10,
-                    .Rounding = 11
+                ImUI::ShadowRRect n ({
+                    color Colors::Black,
+                    .Thickness = 30,
                 }),
                 ImUI::ClipContainer n ({
                     size(10, 10),
@@ -46,7 +45,8 @@ int main()
                             color Colors::Aqua,
                         })
                     }
-                })
+                }),
+                ImUI::ImGuiDemo n ()
             }
         })
     });
@@ -56,7 +56,7 @@ int main()
     OnRender = [&]() {
 
         ImDrawList& db = *ImGui::GetBackgroundDrawList();
-        db.AddRectFilled({0, 0}, ToImVec2(WindowSize),ToImColor(Colors::Black));
+        db.AddRectFilled({0, 0}, ToImVec2(WindowSize),ToImColor(Colors::White));
 
         context->Render(WindowSize, &db);
     };

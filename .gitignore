@@ -40,6 +40,8 @@
 # CMake Build
 cmake-build-debug/
 
+out/
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt

@@ -65,6 +65,34 @@ namespace Index::UI::ImUI
 
 namespace Index::UI::ImUI
 {
+    struct ClipContainer : UIElementHolder
+    {
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(ClipContainer)
+        INDEX_UI_Constructor(ClipContainer) {
+            INDEX_UI_SetDefaultMembers
+            INDEX_UI_SetHolderMembers
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto r = GetSubrect(this, i);
+            ImUIContext::DrawList->PushClipRect(ToImVec2(r.First), ToImVec2(r.Second));
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, {
+                    .Area = r
+                });
+            }
+            ImUIContext::DrawList->PopClipRect();
+        }
+        void Notify(UINotification* e) override { }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
+        }
+    };
+
     struct FillRect : UIElement
     {
         Index::Color Color;
@@ -86,8 +114,7 @@ namespace Index::UI::ImUI
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
-            auto s = UIElement::MeasureIntentSize(i);
-            return s;
+            return UIElement::MeasureIntentSize(i);
         }
     };
 
@@ -115,8 +142,7 @@ namespace Index::UI::ImUI
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
-            auto s = UIElement::MeasureIntentSize(i);
-            return s;
+            return UIElement::MeasureIntentSize(i);
         }
     };
 
@@ -144,8 +170,7 @@ namespace Index::UI::ImUI
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
-            auto s = UIElement::MeasureIntentSize(i);
-            return s;
+            return UIElement::MeasureIntentSize(i);
         }
     };
 
@@ -176,8 +201,7 @@ namespace Index::UI::ImUI
         }
         void Notify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
-            auto s = UIElement::MeasureIntentSize(i);
-            return s;
+            return UIElement::MeasureIntentSize(i);
         }
     };
 }

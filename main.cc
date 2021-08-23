@@ -36,6 +36,16 @@ int main()
                     color Colors::Lime,
                     .Thickness = 10,
                     .Rounding = 11
+                }),
+                ImUI::ClipContainer n ({
+                    size(10, 10),
+                    alignment Center,
+                    content {
+                        ImUI::FillRect n ({
+                            size(300, 300),
+                            color Colors::Aqua,
+                        })
+                    }
                 })
             }
         })

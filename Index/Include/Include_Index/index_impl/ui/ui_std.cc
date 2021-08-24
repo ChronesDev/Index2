@@ -58,6 +58,9 @@ return Index::INew<class_name>();                                               
 #define INDEX_UI_NewC \
 template<class T = Index::UI::UIElement> static Index::IPtr<T> New
 
+#define INDEX_UI_DefaultConstructor(class_name) \
+class_name() = default;
+
 #define INDEX_UI_Constructor(class_name) \
 explicit class_name(Args e)
 
@@ -109,6 +112,7 @@ namespace Index::UI
         INDEX_UI_ConstructorEmpty(Empty) { }
     };
 
+    // TODO: Add Default Constructor
     struct Stack : virtual UIElementHolder
     {
         INDEX_UI_NewArgs(Stack, INDEX_UI_List)
@@ -133,6 +137,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct StackH : virtual UIElementHolder
     {
         INDEX_UI_Args {
@@ -181,6 +186,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct StackV : virtual UIElementHolder
     {
         INDEX_UI_Args {
@@ -229,6 +235,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct Container : virtual UIElementHolder
     {
         INDEX_UI_Args {
@@ -261,6 +268,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct DynContainer : virtual UIDynamic, virtual UIElementHolder
     {
         INDEX_UI_Args {
@@ -294,6 +302,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct SpacingH : virtual UIElement
     {
         INDEX_UI_NewArgs(SpacingH, float)
@@ -304,6 +313,7 @@ namespace Index::UI
         void Notify(UINotification* e) override { }
     };
 
+    // TODO: Add Default Constructor
     struct SpacingV : virtual UIElement
     {
         INDEX_UI_NewArgs(SpacingV, float)
@@ -314,6 +324,7 @@ namespace Index::UI
         void Notify(UINotification* e) override { }
     };
 
+    // TODO: Add Default Constructor
     struct Wrap : virtual UIElement
     {
         IPtr<UIElement> Content;
@@ -334,6 +345,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct FixedGridElement
     {
         int Column = 0, Row = 0;
@@ -371,6 +383,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct FixedGrid : virtual UIElement
     {
         int Columns = 0, Rows = 0;
@@ -424,6 +437,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct Dock : virtual UIElement
     {
         enum class DockSide
@@ -576,6 +590,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     struct Padding : virtual UIElementHolder
     {
         Vec4F Edges;
@@ -616,6 +631,167 @@ namespace Index::UI
         }
     };
 
+    struct Expanded : virtual UIElementHolder
+    {
+        int Flex = 1;
+        INDEX_UI_Args {
+            int Flex = 1;
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(Expanded)
+        INDEX_UI_DefaultConstructor(Expanded)
+        INDEX_UI_Constructor(Expanded) {
+            Flex = e.Flex;
+            INDEX_UI_SetHolderMembers
+        }
+        void Render(UIContext* u, Layout i) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, i);
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return GetIntentSizeFrom(i, Content);
+        }
+    };
+
+    // TODO: Add Default Constructor
+    template<int TFlex = 1>
+    struct Expand : Expanded
+    {
+        INDEX_UI_NewArgs(Expand, INDEX_UI_List)
+        INDEX_UI_ConstructorArgs(Expand, INDEX_UI_List) {
+            Flex = TFlex;
+            Content = std::move(e);
+        }
+    };
+
+    // TODO: Add Default Constructor
+    struct SplitH : virtual UIElementHolder
+    {
+        struct ExpandedContentInfoResult { int All = 0; int AllFlex = 0; float UnitWidth = 0; };
+        __forceinline ExpandedContentInfoResult GetExpandedContentInfoH(Layout i) {
+            ExpandedContentInfoResult ret { };
+            for (auto& c : Content) {
+                Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
+                if (!ptr) continue;
+                auto flex = ptr->Flex; ret.All += 1; ret.AllFlex += flex;
+                if (flex > 0) ret.UnitWidth = Max(ret.UnitWidth, ptr->MeasureIntentSize(std::forward<Layout>(i)).Width / (float)flex);
+            }
+            return ret;
+        }
+        INDEX_UI_Args {
+            INDEX_UI_DefaultMembers
+            INDEX_UI_HolderMembers
+        };
+        INDEX_UI_New(SplitH)
+        INDEX_UI_Constructor(SplitH) {
+            INDEX_UI_SetDefaultMembers
+            INDEX_UI_SetHolderMembers
+        }
+        void Render(UIContext* u, Layout i) override {
+            auto result = MeasureIntentSizeCustom(i);
+            auto intentSize = result.OtherSize;
+            intentSize.Width += result.AllExpandedWidth;
+            auto& expandedInfo = result.ExpandedInfo;
+            Rect r = GetSubrectWithCustomIntentSize(this, i, intentSize);
+            float x = 0;
+            float unitwidth = (r.Width - result.OtherSize.Width) / (float)expandedInfo.AllFlex;
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
+                if (!ptr) {
+                    auto mins = c->MeasureIntentSize(i);
+                    c->Render(u, {
+                        .Area = Rect {
+                            r.X + x,
+                            r.Y,
+                            { mins.Width, r.Height }
+                        }
+                    });
+                    x += mins.Width;
+                }
+                else {
+                    auto flex = ptr->Flex;
+                    float width = unitwidth * flex;
+                    ptr->Render(u, {
+                        .Area = Rect {
+                            r.X + x,
+                            r.Y,
+                            { width, r.Height }
+                        }
+                    });
+                    x += width;
+                }
+            }
+        }
+        void Notify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            Index::Size minSize = GetMinSize(this);
+            auto expandedInfo = GetExpandedContentInfoH(i);
+            float width = 0;
+            for (auto& c : Content) {
+                auto size = c->MeasureIntentSize(i);
+                Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
+                minSize.Height = Index::Max(size.Height, minSize.Height);
+                if (!ptr) {
+                    width += Validate(size.Width);
+                }
+                else {
+                    auto flex = ptr->Flex;
+                    width += expandedInfo.UnitWidth * (float)flex;
+                }
+            }
+            return {
+                Index::Max(minSize.Width, width), minSize.Height
+            };
+        }
+        struct MeasureIntentSizeCustomResult {
+            Index::Size OtherSize { };
+            ExpandedContentInfoResult ExpandedInfo;
+            float AllExpandedWidth = 0;
+        };
+        MeasureIntentSizeCustomResult MeasureIntentSizeCustom(Layout i) {
+            Index::Size minSize = GetMinSize(this);
+            auto expandedInfo = GetExpandedContentInfoH(i);
+            float width = 0;
+            float allExpandedWidth = 0;
+            for (auto& c : Content) {
+                auto size = c->MeasureIntentSize(i);
+                Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
+                minSize.Height = Index::Max(size.Height, minSize.Height);
+                if (!ptr) {
+                    width += Validate(size.Width);
+                }
+                else {
+                    auto flex = ptr->Flex;
+                    allExpandedWidth += expandedInfo.UnitWidth * (float)flex;
+                }
+            }
+            return {
+                .OtherSize{
+                    Index::Max(minSize.Width, width), minSize.Height
+                },
+                .ExpandedInfo = expandedInfo,
+                .AllExpandedWidth = allExpandedWidth
+            };
+        }
+    };
+
+    // TODO: Add Default Constructor
     struct Builder : virtual UIElement
     {
         using BuildFunc = Func<IPtr<UIElement>(UIContext* u, Layout i)>;
@@ -644,6 +820,7 @@ namespace Index::UI
         }
     };
 
+    // TODO: Add Default Constructor
     template<class T>
     struct Constructor : virtual UIElement
     {
@@ -671,6 +848,7 @@ namespace Index::UI
         static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
     };
 
+    // TODO: Add Default Constructor
     struct Executor : virtual UIElement
     {
         using ExecutorFunc = Func<void(UIContext* u, Layout i)>;
@@ -686,9 +864,7 @@ namespace Index::UI
             if (!Execute) return;
             Execute(u, i);
         }
-        void Notify(UINotification *e) override {
-
-        }
+        void Notify(UINotification *e) override { }
     };
 }
 

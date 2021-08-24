@@ -15,6 +15,7 @@
 #define dyn [&]() -> float
 #define selfdyn [&](UIDynamic* that, UIContext* u) -> float
 #define color .Color =
+#define colors .Color = Colors::
 #define flags .Flags =
 #define edges .Edges = Index::Vec4F
 #define build .Build = [&](UIContext* u, Layout i) -> ui_ref
@@ -41,27 +42,16 @@ int main()
         ImUI::FillRect n ({
             color Colors::White
         }),
-        Padding n ({
-            edges(40, 20),
+        SplitH n ({
             content {
-                ImUI::ShadowRRect n ({
-                    color Colors::Black,
-                    .Thickness = 30,
+                ImUI::FillRect n ({
+                    size(300, null),
+                    colors RawGreen
                 }),
-                ImUI::ImGuiWindow n ({
-                    size(300, 600),
-                    .WindowName = "Hello World !!!",
-                    content {
-                        Executor n ({
-                            execute {
-                                ImGui::Text("Hello World");
-                            }
-                        }),
-                        ImUI::FillRect n ({
-                            size(400, 400),
-                            color Colors::Blue
-                        })
-                    }
+                Expand<10> n ({
+                    ImUI::FillRect n ({
+                        colors RawRed
+                    }),
                 })
             }
         })

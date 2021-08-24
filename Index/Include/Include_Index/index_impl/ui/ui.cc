@@ -58,6 +58,7 @@ namespace Index::UI
     __forceinline Rect AlignRectNoStretch(Rect box, Size content, Align align);
     __forceinline Rect AlignRectWithMaxSize(Rect box, Size content, Size maxSize, Align align);
     __forceinline Rect GetSubrect(UIElement* e, Layout i);
+    __forceinline Rect GetSubrectWithCustomIntentSize(UIElement* e, Layout i, Size intentSize);
     __forceinline Size GetIntentSizeFrom(Layout i, List<IPtr<UIElement>>& content);
 }
 
@@ -982,6 +983,60 @@ Index::Rect Index::UI::GetSubrect(UIElement* e, Layout i) {
     Align align = e->Alignment;
     Rect box = i.Area;
     Size content = Max(GetMinSize(e), e->MeasureIntentSize(i));
+    Size maxSize = GetMaxSize(e);
+    Rect r { };
+    #pragma region Horizontal
+    if (align.IsHStretched) {
+        r.Width = Index::Max(box.Width, content.Width);
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHCentered) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Center.X - (r.Width / 2);
+    }
+    if (align.IsHLeft) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.First.X;
+    }
+    if (align.IsHRight) {
+        r.Width = content.Width;
+        r.Width = Index::Min(r.Width, maxSize.Width);
+        r.X = box.Second.X - r.Width;
+    }
+    #pragma endregion
+    #pragma region Vertical
+    if (align.IsVStretched) {
+        r.Height = Index::Max(box.Height, content.Height);
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVCentered) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Center.Y - (r.Height / 2);
+    }
+    if (align.IsVTop) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.First.Y;
+    }
+    if (align.IsVBottom) {
+        r.Height = content.Height;
+        r.Height = Index::Min(r.Height, maxSize.Height);
+        r.Y = box.Second.Y - r.Height;
+    }
+    #pragma endregion
+    return r;
+}
+
+Index::Rect Index::UI::GetSubrectWithCustomIntentSize(UIElement *e, Layout i, Size intentSize)
+{
+    Align align = e->Alignment;
+    Rect box = i.Area;
+    Size content = Max(GetMinSize(e), intentSize);
     Size maxSize = GetMaxSize(e);
     Rect r { };
     #pragma region Horizontal

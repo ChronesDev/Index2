@@ -698,16 +698,48 @@ namespace Index::UI
         }
         void Render(UIContext* u, Layout i) override {
             auto result = MeasureIntentSizeCustom(i);
-            auto intentSize = result.OtherSize;
-            intentSize.Width += result.AllExpandedWidth;
-            auto& expandedInfo = result.ExpandedInfo;
-            Rect r = GetSubrectWithCustomIntentSize(this, i, intentSize);
-            float x = 0;
-            float unitwidth = (r.Width - result.OtherSize.Width) / (float)expandedInfo.AllFlex;
-            for (auto& c : Content) {
-                if (c.IsNull) continue;
-                Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
-                if (!ptr) {
+            if (result.ExpandedInfo.All > 0) {
+                auto intentSize = result.OtherSize;
+                intentSize.Width += result.AllExpandedWidth;
+                auto& expandedInfo = result.ExpandedInfo;
+                Rect r = GetSubrectWithCustomIntentSize(this, i, intentSize);
+                float x = 0;
+                float unitwidth = (r.Width - result.OtherSize.Width) / (float)expandedInfo.AllFlex;
+                for (auto& c : Content) {
+                    if (c.IsNull) continue;
+                    Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
+                    if (!ptr) {
+                        auto mins = c->MeasureIntentSize(i);
+                        c->Render(u, {
+                            .Area = Rect {
+                                r.X + x,
+                                r.Y,
+                                { mins.Width, r.Height }
+                            }
+                        });
+                        x += mins.Width;
+                    }
+                    else {
+                        auto flex = ptr->Flex;
+                        float width = unitwidth * flex;
+                        ptr->Render(u, {
+                            .Area = Rect {
+                                r.X + x,
+                                r.Y,
+                                { width, r.Height }
+                            }
+                        });
+                        x += width;
+                    }
+                }
+            }
+            else {
+                Rect r = GetSubrectWithCustomIntentSize(this, i, result.OtherSize);
+                float widthBetween = (r.Width - result.OtherSize.Width) / (result.OtherCount + 1);
+                float x = 0;
+                for (auto& c : Content) {
+                    if (c.IsNull) continue;
+                    x += widthBetween;
                     auto mins = c->MeasureIntentSize(i);
                     c->Render(u, {
                         .Area = Rect {
@@ -717,18 +749,6 @@ namespace Index::UI
                         }
                     });
                     x += mins.Width;
-                }
-                else {
-                    auto flex = ptr->Flex;
-                    float width = unitwidth * flex;
-                    ptr->Render(u, {
-                        .Area = Rect {
-                            r.X + x,
-                            r.Y,
-                            { width, r.Height }
-                        }
-                    });
-                    x += width;
                 }
             }
         }
@@ -761,6 +781,7 @@ namespace Index::UI
         }
         struct MeasureIntentSizeCustomResult {
             Index::Size OtherSize { };
+            int OtherCount = 0;
             ExpandedContentInfoResult ExpandedInfo;
             float AllExpandedWidth = 0;
         };
@@ -769,11 +790,13 @@ namespace Index::UI
             auto expandedInfo = GetExpandedContentInfoH(i);
             float width = 0;
             float allExpandedWidth = 0;
+            int otherCount = 0;
             for (auto& c : Content) {
                 auto size = c->MeasureIntentSize(i);
                 Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
                 minSize.Height = Index::Max(size.Height, minSize.Height);
                 if (!ptr) {
+                    otherCount += 1;
                     width += Validate(size.Width);
                 }
                 else {
@@ -785,6 +808,7 @@ namespace Index::UI
                 .OtherSize{
                     Index::Max(minSize.Width, width), minSize.Height
                 },
+                .OtherCount = otherCount,
                 .ExpandedInfo = expandedInfo,
                 .AllExpandedWidth = allExpandedWidth
             };

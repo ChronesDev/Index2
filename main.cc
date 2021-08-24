@@ -40,19 +40,19 @@ int main()
 
     IPtr<UIElement> ui = UI::Stack n ({
         ImUI::FillRect n ({
-            color Colors::White
+            color Colors::Black
         }),
         SplitH n ({
+            size(null, 40),
             content {
                 ImUI::FillRect n ({
-                    size(300, null),
+                    size(40, null),
+                    colors Blue
+                }),
+                ImUI::FillRect n ({
+                    size(40, null),
                     colors RawGreen
                 }),
-                Expand<10> n ({
-                    ImUI::FillRect n ({
-                        colors RawRed
-                    }),
-                })
             }
         })
     });

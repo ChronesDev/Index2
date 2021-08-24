@@ -70,6 +70,8 @@ namespace Index
         bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
     public:
+        static __forceinline IPtr<T> Null() { return { }; }
+    public:
         __declspec(property(get = GetIsNull)) bool IsNull;
         __declspec(property(get = get)) T* Get;
         __declspec(property(get = get)) T* Ptr;

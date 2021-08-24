@@ -16,6 +16,7 @@
 #define selfdyn [&](UIDynamic* that, UIContext* u) -> float
 #define color .Color =
 #define colors .Color = Colors::
+#define flex .Flex =
 #define flags .Flags =
 #define edges .Edges = Index::Vec4F
 #define build .Build = [&](UIContext* u, Layout i) -> ui_ref
@@ -42,17 +43,91 @@ int main()
         ImUI::FillRect n ({
             color Colors::Black
         }),
-        SplitH n ({
-            size(null, 40),
+        Padding n ({
+            edges(400, 0, 30, 0),
             content {
-                ImUI::FillRect n ({
-                    size(40, null),
-                    colors Blue
-                }),
-                ImUI::FillRect n ({
-                    size(40, null),
-                    colors RawGreen
-                }),
+                Container n ({
+                    minsize(null, 40),
+                    alignment StretchCenter,
+                    content {
+                        ImUI::OutRect n ({
+                            colors White,
+                            .Thickness = 2
+                        }),
+                        Padding n ({
+                            edges(2),
+                            content {
+                                Builder n ({
+                                    build {
+                                        static bool leftExpanded = false;
+                                        static int leftFlex = 1;
+                                        static bool middleExpanded = false;
+                                        static int middleFlex = 1;
+                                        static bool rightExpanded = false;
+                                        static int rightFlex = 1;
+
+                                        using namespace ImGui;
+                                        Begin("Tools");
+                                        Text("This is a Demo.");
+                                        // Left
+                                        Separator();
+                                        Text("Left");
+                                        Checkbox("Left: Enable Expanded", &leftExpanded);
+                                        SliderInt("Left: Flex", &leftFlex, 1, 5);
+                                        // Middle
+                                        Separator();
+                                        Text("Middle");
+                                        Checkbox("Middle: Enable Expanded", &middleExpanded);
+                                        SliderInt("Middle: Flex", &middleFlex, 1, 5);
+                                        // Right
+                                        Separator();
+                                        Text("Right");
+                                        Checkbox("Right: Enable Expanded", &rightExpanded);
+                                        SliderInt("Right: Flex", &rightFlex, 1, 5);
+                                        End();
+
+                                        return SplitH n ({
+                                            content {
+                                                leftExpanded ? Expanded n ({
+                                                    flex leftFlex,
+                                                    content {
+                                                        ImUI::FillRect n ({
+                                                            colors Yellow
+                                                        })
+                                                    }
+                                                }) : IPtr<UIElement>::Null(),
+                                                ImUI::FillRect n ({
+                                                    size(40, null),
+                                                    colors Blue
+                                                }),
+                                                middleExpanded ? Expanded n ({
+                                                    flex middleFlex,
+                                                    content {
+                                                        ImUI::FillRect n ({
+                                                            colors Green
+                                                        })
+                                                    }
+                                                }) : IPtr<UIElement>::Null(),
+                                                ImUI::FillRect n ({
+                                                    size(40, null),
+                                                    colors Aqua
+                                                }),
+                                                rightExpanded ? Expanded n ({
+                                                    flex rightFlex,
+                                                    content {
+                                                        ImUI::FillRect n ({
+                                                            colors Red
+                                                        })
+                                                    }
+                                                }) : IPtr<UIElement>::Null(),
+                                                }
+                                        });
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
         })
     });

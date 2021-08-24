@@ -109,7 +109,11 @@ namespace Index::UI
 {
     struct Empty : virtual UIElement
     {
+        INDEX_UI_NewEmpty(Empty)
         INDEX_UI_ConstructorEmpty(Empty) { }
+        void Render(UIContext *u, Layout i) override { }
+        void Notify(UINotification *e) override { }
+        Index::Size MeasureIntentSize(Layout i) override { return { }; }
     };
 
     // TODO: Add Default Constructor
@@ -764,6 +768,7 @@ namespace Index::UI
             auto expandedInfo = GetExpandedContentInfoH(i);
             float width = 0;
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 auto size = c->MeasureIntentSize(i);
                 Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
                 minSize.Height = Index::Max(size.Height, minSize.Height);
@@ -792,6 +797,7 @@ namespace Index::UI
             float allExpandedWidth = 0;
             int otherCount = 0;
             for (auto& c : Content) {
+                if (c.IsNull) continue;
                 auto size = c->MeasureIntentSize(i);
                 Expanded* ptr = dynamic_cast<Expanded*>(c.Get);
                 minSize.Height = Index::Max(size.Height, minSize.Height);

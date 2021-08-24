@@ -35,6 +35,7 @@ namespace Index
         T Y = 0;
         Vec2() = default;
         Vec2(T x, T y) : Vec1<T>(x), Y(y) { }
+        Vec2(T v) : Vec1<T>(v), Y(v) { }
         bool operator==(const Vec2& other) const = default;
         bool operator!=(const Vec2& other) const = default;
         Vec2<T> operator+(Vec2<T>& other) const { return Vec2<T>(this->X + other.X, this->Y + other.Y); }
@@ -62,6 +63,7 @@ namespace Index
         T Z = 0;
         Vec3() = default;
         Vec3(T x, T y, T z) : Vec2<T>(x, y), Z(z) { }
+        Vec3(T v) : Vec2<T>(v, v), Z(v) { }
         bool operator==(const Vec3& other) const = default;
         bool operator!=(const Vec3& other) const = default;
         Vec3<T> operator+(Vec3<T>& other) const { return Vec3<T>(this->X + other.X, this->Y + other.Y, this->Z + other.Z); }
@@ -89,6 +91,7 @@ namespace Index
         T W = 0;
         Vec4() = default;
         Vec4(T x, T y, T z, T w) : Vec3<T>(x, y, z), W(w) { }
+        Vec4(T v) : Vec3<T>(v, v, v), W(v) { }
         Vec4(T h, T v) : Vec3<T>(h, v, h), W(v) { }
         bool operator==(const Vec4& other) const = default;
         bool operator!=(const Vec4& other) const = default;

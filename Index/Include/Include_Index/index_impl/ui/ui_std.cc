@@ -132,7 +132,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -172,7 +172,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -221,7 +221,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -263,7 +263,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -297,7 +297,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -345,7 +345,7 @@ namespace Index::UI
         }
         void OnNotify(UINotification* e) override {
             if (Content.IsNull) return;
-            Content->OnNotify(e);
+            Content->Notify(e);
         }
     };
 
@@ -469,7 +469,7 @@ namespace Index::UI
             __forceinline void Notify(UINotification* e) {
                 for (auto& c : Content) {
                     if (c.IsNull) continue;
-                    c->OnNotify(e);
+                    c->Notify(e);
                     if (e->Handled) return;
                 }
             }
@@ -623,7 +623,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -657,7 +657,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -759,7 +759,7 @@ namespace Index::UI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }
@@ -842,7 +842,7 @@ namespace Index::UI
         }
         void OnNotify(UINotification *e) override {
             if (CachedElement.IsNull) return;
-            CachedElement->OnNotify(e);
+            CachedElement->Notify(e);
         }
         Index::Size MeasureIntentSize(Layout i) override {
             if (CachedElement.IsNull) return { 0, 0 };
@@ -867,7 +867,7 @@ namespace Index::UI
         }
         void OnNotify(UINotification *e) final override {
             if (CachedElement.IsNull) return;
-            CachedElement->OnNotify(e);
+            CachedElement->Notify(e);
         }
         Index::Size MeasureIntentSize(Layout i) final override {
             if (CachedElement.IsNull) return { 0, 0 };

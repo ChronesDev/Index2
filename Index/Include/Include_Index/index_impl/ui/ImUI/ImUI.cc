@@ -58,7 +58,7 @@ namespace Index::UI::ImUI
         inline void Notify(UINotification* e) override {
             if (e == nullptr) throw "e was nullptr.";
             if (Root.IsNull) throw "Root was null.";
-            Root->OnNotify(e);
+            Root->Notify(e);
         }
     };
 }
@@ -302,7 +302,7 @@ namespace Index::UI::ImUI
         void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->OnNotify(e);
+                c->Notify(e);
                 if (e->Handled) return;
             }
         }

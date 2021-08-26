@@ -667,6 +667,14 @@ namespace Index::UI
             if (Path.Length <= 1) throw "Cannot go deeper.";
             Path.Erase(Path.begin());
         }
+        string GetElementName() {
+            return Path.Last;
+        }
+        __declspec(property(get = GetElementName)) string ElementName;
+        bool GetIsNavigating() {
+            return Path.Length != 1;
+        }
+        __declspec(property(get = GetIsNavigating)) bool IsNavigating;
     };
 
     namespace NotificationId
@@ -691,9 +699,19 @@ namespace Index::UI
     {
         FindElementN(UIContext* context, UIPath path) : UINotification(NotificationId::FindElement, context) {
             Path = path;
+            ElementName = path.ElementName;
         }
         UIPath Path;
         string ElementName;
+        bool GetIsNavigating() {
+            return Path.IsNavigating;
+        }
+        __declspec(property(get = GetIsNavigating)) bool IsNavigating;
+        WPtr<UIElement> Result;
+        void Close(WPtr<UIElement> e) {
+            Result = e;
+            Handled = true;
+        }
     };
 
     // Layout
@@ -720,7 +738,7 @@ namespace Index::UI
     };
 
     // UIElement
-    struct UIElement
+    struct UIElement : IObj<UIElement>
     {
         UIElementLayoutCache Cache { };
         string Name;
@@ -743,7 +761,21 @@ namespace Index::UI
     // UIScope
     struct UIScope : virtual UIElement
     {
+    private:
+        UIScope* ParentScope;
+        UIContext* CurrentContext;
+    protected:
+        void EnterScope(UIContext* u);
+        void LeaveScope();
+    public:
+        void Notify(UINotification* e) override {
+            if (e->Id == NotificationId::FindElement) {
+                auto findElementN = dynamic_cast<FindElementN*>(e);
+                if (!findElementN) throw "Invalid id.";
 
+            }
+            else UIElement::Notify(e);
+        }
     };
 
     // UIAnimation
@@ -777,6 +809,8 @@ namespace Index::UI
         using TimeSpan = typename std::chrono::duration<double>;
 
         IPtr<UIElement> Root;
+        UIScope* Scope;
+
         TimeSpan _DeltaTime;
         TimeSpan GetDeltaTime();
         void SetDeltaTime(TimeSpan deltaTime);
@@ -1159,6 +1193,15 @@ inline void Index::UI::UIElementLayoutCache::CacheLayout(Layout i) {
 
 // UIElement
 inline void Index::UI::UIElement::Notify(UINotification* e) {
+    if (e->Id == NotificationId::FindElement && !Name.IsEmpty) {
+        auto findElementN = dynamic_cast<FindElementN*>(e);
+        if (!findElementN) throw "Invalid id.";
+        if (!findElementN->IsNavigating) {
+            if (Name == findElementN->ElementName) {
+                findElementN->Close(WSelf());
+            }
+        }
+    }
     OnNotify(e);
 }
 
@@ -1172,6 +1215,19 @@ inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
     Cache.LastLayout = i;
     Cache.LastIntentSize = ret;
     return ret;
+}
+
+// UIScope
+inline void Index::UI::UIScope::EnterScope(UIContext* u) {
+    CurrentContext = u;
+    ParentScope = u->Scope;
+    u->Scope = this;
+}
+
+inline void Index::UI::UIScope::LeaveScope() {
+    CurrentContext->Scope = ParentScope;
+    CurrentContext = nullptr;
+    ParentScope = nullptr;
 }
 
 // UIContext

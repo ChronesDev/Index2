@@ -83,11 +83,11 @@ namespace Index
     };
 
     template<class T>
-    struct RPtr : public std::weak_ptr<T>
+    struct WPtr : public std::weak_ptr<T>
     {
     public:
         using std::weak_ptr<T>::weak_ptr;
-        ALIAS_RECLASS_CONSTRUCTOR(RPtr, std::weak_ptr<T>)
+        ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
     public:
         bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
@@ -97,7 +97,7 @@ namespace Index
         __declspec(property(get = get)) T* Get;
         __declspec(property(get = get)) T* Ptr;
         __declspec(property(get = GetValue)) T& Value;
-        __declspec(property(get = expired)) T& Expired;
+        __declspec(property(get = expired)) bool Expired;
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
@@ -146,6 +146,23 @@ namespace Index
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
         ALIAS_RECLASS_FUNCTION(void, Release, release)
+    };
+
+    template<class T>
+    struct IObj : public std::enable_shared_from_this<T>
+    {
+        [[nodiscard]] __forceinline IPtr<T> ISelf() {
+            return this->shared_from_this();
+        }
+        [[nodiscard]] __forceinline IPtr<T> ISelf() const {
+            return this->shared_from_this();
+        }
+        [[nodiscard]] __forceinline WPtr<T> WSelf() {
+            return this->weak_from_this();
+        }
+        [[nodiscard]] __forceinline WPtr<T> WSelf() const {
+            return this->weak_from_this();
+        }
     };
 
     template<class T, class... TArgs>

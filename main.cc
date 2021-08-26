@@ -120,7 +120,7 @@ int main()
                                                         })
                                                     }
                                                 }) : IPtr<UIElement>::Null(),
-                                                }
+                                            }
                                         });
                                     }
                                 })

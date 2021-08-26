@@ -23,6 +23,8 @@ namespace Index
         using std::vector<T>::vector;
         ALIAS_RECLASS_CONSTRUCTOR(List, std::vector<T>)
     public:
+        using Iterator = typename std::vector<T>::iterator;
+    public:
         constexpr void Remove(T&& value) {
             auto result = std::find(this->begin(), this->end(), value);
             if (result != this->end())
@@ -53,7 +55,7 @@ namespace Index
         ALIAS_RECLASS_FUNCTION(void, Clear, clear)
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Assign, assign)
-        ALIAS_RECLASS_FUNCTION(void, Erase, erase)
+        ALIAS_RECLASS_FUNCTION(Iterator, Erase, erase)
         ALIAS_RECLASS_FUNCTION(void, Reserve, reserve)
         ALIAS_RECLASS_FUNCTION(void, Resize, resize)
     };

@@ -58,7 +58,7 @@ namespace Index::UI::ImUI
         inline void Notify(UINotification* e) override {
             if (e == nullptr) throw "e was nullptr.";
             if (Root.IsNull) throw "Root was null.";
-            Root->Notify(e);
+            Root->OnNotify(e);
         }
     };
 }
@@ -87,7 +87,7 @@ namespace Index::UI::ImUI
             }
             ImUIContext::DrawList->PopClipRect();
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
         }
@@ -112,7 +112,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, Flags);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -140,7 +140,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), 0, Flags, Thickness);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -168,7 +168,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddRectFilled(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Rounding, Flags);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -199,7 +199,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Rounding, Flags, Thickness);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -231,7 +231,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddShadowRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Thickness, ToImVec2(Offset), Flags);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -265,7 +265,7 @@ namespace Index::UI::ImUI
             auto r = GetSubrect(this, i);
             ImUIContext::DrawList->AddShadowRect(ToImVec2(r.First), ToImVec2(r.Second), ToImColor(Color), Thickness, ToImVec2(Offset), Flags, Rounding);
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
         Index::Size MeasureIntentSize(Layout i) override {
             return UIElement::MeasureIntentSize(i);
         }
@@ -279,7 +279,7 @@ namespace Index::UI::ImUI
         void Render(UIContext* u, Layout i) override {
             ImGui::ShowDemoWindow();
         }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
     };
 
     struct ImGuiWindow : UIElementHolder
@@ -299,10 +299,10 @@ namespace Index::UI::ImUI
             Flags = e.Flags;
             INDEX_UI_SetHolderMembers
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }

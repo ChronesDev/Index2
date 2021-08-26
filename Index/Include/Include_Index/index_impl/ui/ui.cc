@@ -648,12 +648,52 @@ DynSize(t2 width, t1 height) : _Width((t2Cast)width), _Height((t1Cast)height) { 
 // UI Stuff
 namespace Index::UI
 {
+    // UIPath
+    struct UIPath
+    {
+        template <class T, class... TArgs>
+        static UIPath From(const T& s1, const TArgs&... sArgs) {
+            auto ret = UIPath();
+            ret.Path = { { s1, sArgs... } };
+            if (ret.Path.Length == 0) throw "Invalid path.";
+            return ret;
+        }
+        List<string> Path;
+        string GetCurrent() {
+            return Path.First;
+        }
+        __declspec(property(get = GetCurrent)) string Current;
+        void Next() {
+            if (Path.Length <= 1) throw "Cannot go deeper.";
+            Path.Erase(Path.begin());
+        }
+    };
+
+    namespace NotificationId
+    {
+        constexpr Int64 None = -1;
+        constexpr Int64 Unknown = 0;
+        constexpr Int64 FindElement = 0;
+    }
+
     // UINotification
     struct UINotification
     {
+        UINotification(Int64 id, UIContext* context) : Id(id), Context(context) { }
+        virtual ~UINotification() = 0;
         UIContext* Context;
         bool Handled = false;
-        Int64 Id = -1;
+        const Int64 Id = -1;
+    };
+
+    // FindElementN
+    struct FindElementN : virtual UINotification
+    {
+        FindElementN(UIContext* context, UIPath path) : UINotification(NotificationId::FindElement, context) {
+            Path = path;
+        }
+        UIPath Path;
+        string ElementName;
     };
 
     // Layout
@@ -689,7 +729,8 @@ namespace Index::UI
         Size Size { NullF, NullF };
         Align Alignment = Align::Stretch;
         virtual void Render(UIContext* u, Layout i) = 0;
-        virtual void Notify(UINotification* e) = 0;
+        virtual void Notify(UINotification* e);
+        virtual void OnNotify(UINotification* e) = 0;
         virtual Index::Size MeasureIntentSize(Layout i);
     };
 
@@ -697,6 +738,12 @@ namespace Index::UI
     struct UIElementHolder : virtual UIElement
     {
         List<IPtr<UIElement>> Content;
+    };
+
+    // UIScope
+    struct UIScope : virtual UIElement
+    {
+
     };
 
     // UIAnimation
@@ -1111,6 +1158,10 @@ inline void Index::UI::UIElementLayoutCache::CacheLayout(Layout i) {
 }
 
 // UIElement
+inline void Index::UI::UIElement::Notify(UINotification* e) {
+    OnNotify(e);
+}
+
 inline Index::Size Index::UI::UIElement::MeasureIntentSize(Layout i) {
     if (Cache.LastLayout.HasValue && Cache.LastIntentSize.HasValue) {
         if (Cache.LastLayout.Value == i) {

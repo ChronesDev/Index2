@@ -112,7 +112,7 @@ namespace Index::UI
         INDEX_UI_NewEmpty(Empty)
         INDEX_UI_ConstructorEmpty(Empty) { }
         void Render(UIContext *u, Layout i) override { }
-        void Notify(UINotification *e) override { }
+        void OnNotify(UINotification *e) override { }
         Index::Size MeasureIntentSize(Layout i) override { return { }; }
     };
 
@@ -129,10 +129,10 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -169,10 +169,10 @@ namespace Index::UI
                 x += mins.Width;
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -218,10 +218,10 @@ namespace Index::UI
                 y += mins.Height;
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -260,10 +260,10 @@ namespace Index::UI
                 });
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -294,10 +294,10 @@ namespace Index::UI
                 });
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -314,7 +314,7 @@ namespace Index::UI
             Size.Width = e;
         }
         void Render(UIContext* u, Layout i) override { }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
     };
 
     // TODO: Add Default Constructor
@@ -325,7 +325,7 @@ namespace Index::UI
             Size.Height = e;
         }
         void Render(UIContext* u, Layout i) override { }
-        void Notify(UINotification* e) override { }
+        void OnNotify(UINotification* e) override { }
     };
 
     // TODO: Add Default Constructor
@@ -343,9 +343,9 @@ namespace Index::UI
             if (Content.IsNull) return;
             Content->Render(u, i);
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             if (Content.IsNull) return;
-            Content->Notify(e);
+            Content->OnNotify(e);
         }
     };
 
@@ -378,7 +378,7 @@ namespace Index::UI
         __forceinline void Notify(UINotification* e) {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -429,7 +429,7 @@ namespace Index::UI
                 });
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
                 c->Notify(e);
@@ -469,7 +469,7 @@ namespace Index::UI
             __forceinline void Notify(UINotification* e) {
                 for (auto& c : Content) {
                     if (c.IsNull) continue;
-                    c->Notify(e);
+                    c->OnNotify(e);
                     if (e->Handled) return;
                 }
             }
@@ -582,7 +582,7 @@ namespace Index::UI
                 });
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
                 c->Notify(e);
@@ -620,10 +620,10 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -654,10 +654,10 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -756,10 +756,10 @@ namespace Index::UI
                 }
             }
         }
-        void Notify(UINotification* e) override {
+        void OnNotify(UINotification* e) override {
             for (auto& c : Content) {
                 if (c.IsNull) continue;
-                c->Notify(e);
+                c->OnNotify(e);
                 if (e->Handled) return;
             }
         }
@@ -840,9 +840,9 @@ namespace Index::UI
             if (c) c->Render(u, i);
             CachedElement = std::move(c);
         }
-        void Notify(UINotification *e) override {
+        void OnNotify(UINotification *e) override {
             if (CachedElement.IsNull) return;
-            CachedElement->Notify(e);
+            CachedElement->OnNotify(e);
         }
         Index::Size MeasureIntentSize(Layout i) override {
             if (CachedElement.IsNull) return { 0, 0 };
@@ -865,9 +865,9 @@ namespace Index::UI
             if (CachedElement.IsNull) return;
             CachedElement->Render(u, i);
         }
-        void Notify(UINotification *e) final override {
+        void OnNotify(UINotification *e) final override {
             if (CachedElement.IsNull) return;
-            CachedElement->Notify(e);
+            CachedElement->OnNotify(e);
         }
         Index::Size MeasureIntentSize(Layout i) final override {
             if (CachedElement.IsNull) return { 0, 0 };
@@ -894,7 +894,7 @@ namespace Index::UI
             if (!Execute) return;
             Execute(u, i);
         }
-        void Notify(UINotification *e) override { }
+        void OnNotify(UINotification *e) override { }
     };
 }
 

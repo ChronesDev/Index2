@@ -48,7 +48,7 @@ namespace Index
         ALIAS_RECLASS_FUNCTION(void, Clear, clear)
         ALIAS_RECLASS_FUNCTION(void, Reserve, reserve)
         ALIAS_RECLASS_FUNCTION(void, Resize, resize)
-        ALIAS_RECLASS_FUNCTION(void, Erase, erase)
+        ALIAS_RECLASS_FUNCTION(Iterator, Erase, erase)
         ALIAS_RECLASS_FUNCTION(String, Assign, assign)
         ALIAS_RECLASS_FUNCTION(void, Push, push_back)
         ALIAS_RECLASS_FUNCTION(void, Pop, pop_back)

@@ -89,10 +89,31 @@ namespace Index
         using std::weak_ptr<T>::weak_ptr;
         ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
     public:
+        template<class TTo>
+        IPtr<TTo> As() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> StaticAs() {
+            return std::static_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> DynamicAs() {
+            return std::dynamic_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ConstAs() {
+            return std::const_pointer_cast<TTo>(*this);
+        }
+        template<class TTo>
+        IPtr<TTo> ReinterpretAs() {
+            return std::reinterpret_pointer_cast<TTo>(*this);
+        }
         bool GetIsNull() { return !(this->operator bool()); }
         T& GetValue() { return *this->get(); }
         IPtr<T> Lock() { return this->lock(); }
     public:
+        static __forceinline IPtr<T> Null() { return { }; }
         __declspec(property(get = GetIsNull)) bool IsNull;
         __declspec(property(get = get)) T* Get;
         __declspec(property(get = get)) T* Ptr;

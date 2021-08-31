@@ -778,12 +778,6 @@ namespace Index::UI
         }
     };
 
-    // UIAnimation
-    struct UIAnimation
-    {
-
-    };
-
     // UIDynamic
     struct UIDynamic : virtual UIElement
     {
@@ -821,6 +815,7 @@ namespace Index::UI
 
         virtual void Notify(UINotification* e) = 0;
 
+        virtual WPtr<UIElement> FindElement(UIPath path);
         inline void SetRoot(IPtr<UIElement> root);
     };
 }
@@ -1253,6 +1248,14 @@ inline void Index::UI::UIContext::SetDeltaTime(Index::UI::UIContext::TimeSpan de
 inline double Index::UI::UIContext::GetDelta()
 {
     return _Delta;
+}
+
+inline Index::WPtr<Index::UI::UIElement> Index::UI::UIContext::FindElement(UIPath path)
+{
+    auto e = FindElementN(this, path);
+    this->Scope->Notify(&e);
+    // if (!e.Handled) return WPtr<UIElement>::Null();
+    return e.Result;
 }
 
 inline void Index::UI::UIContext::SetRoot(IPtr<UIElement> root)

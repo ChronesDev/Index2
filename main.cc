@@ -25,9 +25,10 @@
 using namespace Index;
 using namespace Index::UI;
 
-struct MyConstructor : Constructor<MyConstructor>
+struct MyConstructor : Element<MyConstructor>
 {
-    ui_ref Construct() override {
+    ui_ref Construct() override
+    {
         return ImUI::FillRect n ({
             size(300, 300),
             color Colors::Green
@@ -44,7 +45,7 @@ int main()
             color Colors::Black
         }),
         Padding n ({
-            edges(400, 0, 30, 0),
+            edges(270, 0, 30, 0),
             content {
                 Container n ({
                     minsize(null, 40),
@@ -73,20 +74,20 @@ int main()
                                         Separator();
                                         Text("Left");
                                         Checkbox("Left: Enable Expanded", &leftExpanded);
-                                        SliderInt("Left: Flex", &leftFlex, 1, 5);
+                                        SliderInt("Left: Flex", &leftFlex, 1, 50);
                                         // Middle
                                         Separator();
                                         Text("Middle");
                                         Checkbox("Middle: Enable Expanded", &middleExpanded);
-                                        SliderInt("Middle: Flex", &middleFlex, 1, 5);
+                                        SliderInt("Middle: Flex", &middleFlex, 1, 50);
                                         // Right
                                         Separator();
                                         Text("Right");
                                         Checkbox("Right: Enable Expanded", &rightExpanded);
-                                        SliderInt("Right: Flex", &rightFlex, 1, 5);
+                                        SliderInt("Right: Flex", &rightFlex, 1, 50);
                                         End();
 
-                                        return SplitH n ({
+                                        return ColumnC n ({
                                             content {
                                                 leftExpanded ? Expanded n ({
                                                     flex leftFlex,

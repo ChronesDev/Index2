@@ -678,7 +678,7 @@ namespace Index::UI
     };
 
     // TODO: Add Default Constructor
-    struct SplitH : virtual UIElementHolder
+    struct ColumnC : virtual UIElementHolder
     {
         struct ExpandedContentInfoResult { int All = 0; int AllFlex = 0; float UnitWidth = 0; };
         __forceinline ExpandedContentInfoResult GetExpandedContentInfoH(Layout i) {
@@ -695,8 +695,8 @@ namespace Index::UI
             INDEX_UI_DefaultMembers
             INDEX_UI_HolderMembers
         };
-        INDEX_UI_New(SplitH)
-        INDEX_UI_Constructor(SplitH) {
+        INDEX_UI_New(ColumnC)
+        INDEX_UI_Constructor(ColumnC) {
             INDEX_UI_SetDefaultMembers
             INDEX_UI_SetHolderMembers
         }
@@ -852,7 +852,7 @@ namespace Index::UI
 
     // TODO: Add Default Constructor
     template<class T>
-    struct Constructor : virtual UIElement
+    struct Element : virtual UIElement
     {
     private:
         IPtr<UIElement> CachedElement;

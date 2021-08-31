@@ -688,7 +688,7 @@ namespace Index::UI
     struct UINotification
     {
         UINotification(Int64 id, UIContext* context) : Id(id), Context(context) { }
-        virtual ~UINotification() = 0;
+        virtual ~UINotification() { }
         UIContext* Context;
         bool Handled = false;
         const Int64 Id = -1;
@@ -707,6 +707,14 @@ namespace Index::UI
             return Path.IsNavigating;
         }
         __declspec(property(get = GetIsNavigating)) bool IsNavigating;
+        bool GetMoveOut() {
+            return Path.Path.Length > 1 && Path.ElementName == "^";
+        }
+        __declspec(property(get = GetMoveOut)) bool MoveOut;
+        bool GetMoveIn() {
+            return Path.Path.Length > 1 && Path.ElementName != "^";
+        }
+        __declspec(property(get = GetMoveIn)) bool MoveIn;
         WPtr<UIElement> Result;
         void Close(WPtr<UIElement> e) {
             Result = e;
@@ -768,14 +776,7 @@ namespace Index::UI
         void EnterScope(UIContext* u);
         void LeaveScope();
     public:
-        void Notify(UINotification* e) override {
-            if (e->Id == NotificationId::FindElement) {
-                auto findElementN = dynamic_cast<FindElementN*>(e);
-                if (!findElementN) throw "Invalid id.";
-
-            }
-            else UIElement::Notify(e);
-        }
+        void Notify(UINotification* e) override;
     };
 
     // UIDynamic
@@ -815,7 +816,13 @@ namespace Index::UI
 
         virtual void Notify(UINotification* e) = 0;
 
+        template<class TType = UIElement, class... TArgs>
+        __forceinline WPtr<TType> Find(TArgs&&... args);
+        template<class TType = UIElement, class... TArgs>
+        __forceinline WPtr<TType> TryFind(TArgs&&... args);
         virtual WPtr<UIElement> FindElement(UIPath path);
+        virtual WPtr<UIElement> TryFindElement(UIPath path);
+
         inline void SetRoot(IPtr<UIElement> root);
     };
 }
@@ -1225,6 +1232,42 @@ inline void Index::UI::UIScope::LeaveScope() {
     ParentScope = nullptr;
 }
 
+inline void Index::UI::UIScope::Notify(Index::UI::UINotification *e)
+{
+    if (e->Id == NotificationId::FindElement) {
+        auto findElementN = dynamic_cast<FindElementN*>(e);
+        if (!findElementN) throw "Invalid id.";
+        if (!findElementN->IsNavigating) {
+            if (Name == findElementN->ElementName) {
+                findElementN->Close(WSelf());
+            }
+            else {
+                // TODO: WTF
+            }
+        }
+        else {
+            if (findElementN->MoveOut) {
+                findElementN->Path.Next();
+                ParentScope->Notify(e);
+            }
+            else if (findElementN->MoveIn) {
+                if (Name == findElementN->Path.Current) {
+                    findElementN->Path.Next();
+                    if (e->Context->Scope != this) {
+                        EnterScope(e->Context);
+                        // TODO: WTF
+                        LeaveScope();
+                    }
+                    else {
+                        // TODO: WTF
+                    }
+                }
+            }
+        }
+    }
+    else UIElement::Notify(e);
+}
+
 // UIContext
 Index::UI::UIContext::UIContext() {
     //Created();
@@ -1250,11 +1293,40 @@ inline double Index::UI::UIContext::GetDelta()
     return _Delta;
 }
 
+template<class TType, class... TArgs>
+inline Index::WPtr<TType> Index::UI::UIContext::Find(TArgs&&... args)
+{
+    if constexpr (std::is_same_v<UIElement, TType>) {
+        return FindElement(UIPath::From(std::forward<TArgs>(args)...));
+    }
+    else {
+        return FindElement(UIPath::From(std::forward<TArgs>(args)...)).template AsDynamic<TType>();
+    }
+}
+
+template<class TType, class... TArgs>
+inline Index::WPtr<TType> Index::UI::UIContext::TryFind(TArgs&&... args)
+{
+    if constexpr (std::is_same_v<UIElement, TType>) {
+        return TryFindElement(UIPath::From(std::forward<TArgs>(args)...));
+    }
+    else {
+        return TryFindElement(UIPath::From(std::forward<TArgs>(args)...)).template AsDynamic<TType>();
+    }
+}
+
 inline Index::WPtr<Index::UI::UIElement> Index::UI::UIContext::FindElement(UIPath path)
 {
     auto e = FindElementN(this, path);
     this->Scope->Notify(&e);
-    // if (!e.Handled) return WPtr<UIElement>::Null();
+    if (e.Result.IsNull) throw "Result was Null.";
+    return e.Result;
+}
+
+inline Index::WPtr<Index::UI::UIElement> Index::UI::UIContext::TryFindElement(UIPath path)
+{
+    auto e = FindElementN(this, path);
+    this->Scope->Notify(&e);
     return e.Result;
 }
 

@@ -8,24 +8,28 @@
 Index::List<Index::IPtr<Index::UI::UIElement>>
 
 #define INDEX_UI_DefaultMembers                             \
+Index::String Name;                                         \
 Index::Size MinSize { 0, 0 };                               \
 Index::Size MaxSize { Index::UI::NullF, Index::UI::NullF }; \
 Index::Size Size { Index::UI::NullF, Index::UI::NullF };    \
 Index::Align Alignment = Index::Align::Stretch;
 
 #define INDEX_UI_DefaultDynamicMembers                                \
+Index::String Name;                                                   \
 Index::UI::DynSize DynMinSize { 0.0f, 0.0f };                         \
 Index::UI::DynSize DynMaxSize { Index::UI::NullF, Index::UI::NullF }; \
 Index::UI::DynSize DynSize { Index::UI::NullF, Index::UI::NullF };    \
 Index::Align Alignment = Index::Align::Stretch;
 
 #define INDEX_UI_SetDefaultMembers       \
+this->Name = e.Name;                     \
 this->MinSize = e.MinSize;               \
 this->MaxSize = e.MaxSize;               \
 this->Size = e.Size;                     \
 this->Alignment = e.Alignment;
 
 #define INDEX_UI_SetDefaultDynamicMembers       \
+this->Name = e.Name;                            \
 this->DynMinSize = e.DynMinSize;                \
 this->DynMaxSize = e.DynMaxSize;                \
 this->DynSize = e.DynSize;                      \
@@ -851,34 +855,6 @@ namespace Index::UI
     };
 
     // TODO: Add Default Constructor
-    template<class T>
-    struct Element : virtual UIElement
-    {
-    private:
-        IPtr<UIElement> CachedElement;
-    public:
-        void Reconstruct() { CachedElement.Reset(); }
-        virtual IPtr<UIElement> Construct() = 0;
-    private:
-        void Render(UIContext* u, Layout i) final override {
-            if (CachedElement.IsNull) CachedElement = Construct();
-            if (CachedElement.IsNull) return;
-            CachedElement->Render(u, i);
-        }
-        void OnNotify(UINotification *e) final override {
-            if (CachedElement.IsNull) return;
-            CachedElement->Notify(e);
-        }
-        Index::Size MeasureIntentSize(Layout i) final override {
-            if (CachedElement.IsNull) return { 0, 0 };
-            return CachedElement->MeasureIntentSize(i);
-        }
-    public:
-        template<class TRet =Index::UI::UIElement>
-        static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
-    };
-
-    // TODO: Add Default Constructor
     struct Executor : virtual UIElement
     {
         using ExecutorFunc = Func<void(UIContext* u, Layout i)>;
@@ -895,6 +871,78 @@ namespace Index::UI
             Execute(u, i);
         }
         void OnNotify(UINotification *e) override { }
+    };
+
+    // TODO: Add Default Constructor
+    template<class T>
+    struct Element : virtual UIElement
+    {
+    private:
+        IPtr<UIElement> CachedElement;
+    protected:
+        UIContext* Context;
+    public:
+        void Reconstruct() { CachedElement.Reset(); }
+        virtual IPtr<UIElement> Construct() = 0;
+    private:
+        void Render(UIContext* u, Layout i) final override {
+            if (CachedElement.IsNull) {
+                Context = u;
+                CachedElement = Construct();
+            }
+            if (CachedElement.IsNull) return;
+            CachedElement->Render(u, i);
+        }
+        void OnNotify(UINotification* e) final override {
+            if (CachedElement.IsNull) return;
+            CachedElement->Notify(e);
+        }
+        Index::Size MeasureIntentSize(Layout i) final override {
+            if (CachedElement.IsNull) return { 0, 0 };
+            return CachedElement->MeasureIntentSize(i);
+        }
+    public:
+        template<class TRet =Index::UI::UIElement>
+        static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
+    };
+
+    // TODO: Add Default Constructor
+    template<class T>
+    struct ScopedElement : virtual UIScope
+    {
+    private:
+        IPtr<UIElement> CachedElement;
+    protected:
+        UIContext* Context;
+    public:
+        void Reconstruct() { CachedElement.Reset(); }
+        virtual IPtr<UIElement> Construct() = 0;
+    private:
+        void Render(UIContext* u, Layout i) final override {
+            EnterScope(u);
+            if (CachedElement.IsNull) {
+                Context = u;
+                CachedElement = Construct();
+            }
+            if (CachedElement.IsNull) return;
+            CachedElement->Render(u, i);
+            LeaveScope();
+        }
+        void OnNotify(UINotification* e) final override {
+            if (CachedElement.IsNull) return;
+            CachedElement->Notify(e);
+        }
+        Index::Size MeasureIntentSize(Layout i) final override {
+            if (CachedElement.IsNull) return { 0, 0 };
+            return CachedElement->MeasureIntentSize(i);
+        }
+        void FindElementEnter(UINotification* e) override {
+            if (CachedElement.IsNull) return;
+            CachedElement->Notify(e);
+        }
+    public:
+        template<class TRet =Index::UI::UIElement>
+        static Index::IPtr<TRet> New() { return Index::INew<T>().template As<TRet>(); }
     };
 }
 

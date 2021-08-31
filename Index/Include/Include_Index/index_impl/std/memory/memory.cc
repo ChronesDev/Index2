@@ -109,9 +109,8 @@ namespace Index
         IPtr<TTo> ReinterpretAs() {
             return std::reinterpret_pointer_cast<TTo>(*this);
         }
-        bool GetIsNull() { return !(this->operator bool()); }
+        bool GetIsNull() { return this->get() == nullptr; }
         T& GetValue() { return *this->get(); }
-        IPtr<T> Lock() { return this->lock(); }
     public:
         static __forceinline IPtr<T> Null() { return { }; }
         __declspec(property(get = GetIsNull)) bool IsNull;
@@ -119,6 +118,7 @@ namespace Index
         __declspec(property(get = get)) T* Ptr;
         __declspec(property(get = GetValue)) T& Value;
         __declspec(property(get = expired)) bool Expired;
+        __declspec(property(get = lock)) IPtr<T> Lock;
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)

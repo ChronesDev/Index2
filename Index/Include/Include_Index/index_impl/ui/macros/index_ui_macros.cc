@@ -22,4 +22,6 @@ return _ret.Ptr;
 
 #define ui_ref Index::IPtr<Index::UI::UIElement>
 
+#define ui_wref Index::WPtr<Index::UI::UIElement>
+
 #define ui_state (+Index::UI::UIContext::CurrentStates)

@@ -28,6 +28,44 @@ using namespace Index::UI;
 
 struct MyConstructor : ScopedElement<MyConstructor>
 {
+    Color Color;
+    INDEX_UI_Args {
+        INDEX_UI_DefaultMembers
+        Index::Color Color;
+    };
+    INDEX_UI_New(MyConstructor)
+    INDEX_UI_Constructor(MyConstructor) {
+        INDEX_UI_SetDefaultMembers
+        Color = e.Color;
+    }
+
+    ui_wref fillRect;
+    int I = 0;
+
+    ui_ref Construct() override
+    {
+        return UI::Stack n ({
+            ImUI::FillRect n ({
+                name "MyRect",
+                color Color
+            })
+        });
+    }
+};
+
+struct MyConstructor2 : ScopedElement<MyConstructor>
+{
+    Color Color;
+    INDEX_UI_Args {
+        INDEX_UI_DefaultMembers
+        Index::Color Color;
+    };
+    INDEX_UI_New(MyConstructor2)
+    INDEX_UI_Constructor(MyConstructor2) {
+        INDEX_UI_SetDefaultMembers
+        Color = e.Color;
+    }
+
     ui_wref fillRect;
     int I = 0;
 
@@ -36,7 +74,7 @@ struct MyConstructor : ScopedElement<MyConstructor>
         return UI::Stack n ({
             Executor n ({
                 execute {
-                    if (fillRect.IsNull) fillRect = u->Find("MyRect");
+                    if (fillRect.IsNull) fillRect = u->Find("^", "HelloWorld", "MyRect");
                     if (var s = fillRect.Lock)
                     {
                         I++;
@@ -44,10 +82,6 @@ struct MyConstructor : ScopedElement<MyConstructor>
                         if (I >= 400) I = 0;
                     }
                 }
-            }),
-            ImUI::FillRect n ({
-                name "MyRect",
-                colors White
             })
         });
     }
@@ -57,8 +91,12 @@ int main()
 {
     UPtr<ImUI::ImUIContext> context = UNew<ImUI::ImUIContext>();
 
-    IPtr<UIElement> ui = UI::Stack n ({
-        MyConstructor n ()
+    IPtr<UIElement> ui = UI::ScopedStack n ({
+        MyConstructor n ({
+            name "HelloWorld",
+            colors Green
+        }),
+        MyConstructor2 n ({ })
     });
 
     context->SetRoot(ui);

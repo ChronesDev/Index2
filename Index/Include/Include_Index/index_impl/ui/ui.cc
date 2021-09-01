@@ -1242,7 +1242,7 @@ inline void Index::UI::UIScope::Notify(Index::UI::UINotification *e)
                 findElementN->Close(WSelf());
             }
             else {
-                // TODO: WTF
+                OnNotify(e);
             }
         }
         else {
@@ -1255,11 +1255,11 @@ inline void Index::UI::UIScope::Notify(Index::UI::UINotification *e)
                     findElementN->Path.Next();
                     if (e->Context->Scope != this) {
                         EnterScope(e->Context);
-                        // TODO: WTF
+                        OnNotify(e);
                         LeaveScope();
                     }
                     else {
-                        // TODO: WTF
+                        OnNotify(e);
                     }
                 }
             }

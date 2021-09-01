@@ -146,6 +146,33 @@ namespace Index::UI
     };
 
     // TODO: Add Default Constructor
+    struct ScopedStack : virtual UIElementHolder, virtual UIScope
+    {
+        INDEX_UI_NewArgs(ScopedStack, INDEX_UI_List)
+        INDEX_UI_ConstructorArgs(ScopedStack, INDEX_UI_List) {
+            Content = std::move(e);
+        }
+        void Render(UIContext* u, Layout i) override {
+            EnterScope(u);
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Render(u, i);
+            }
+            LeaveScope();
+        }
+        void OnNotify(UINotification* e) override {
+            for (auto& c : Content) {
+                if (c.IsNull) continue;
+                c->Notify(e);
+                if (e->Handled) return;
+            }
+        }
+        Index::Size MeasureIntentSize(Layout i) override {
+            return GetIntentSizeFrom(i, Content);
+        }
+    };
+
+    // TODO: Add Default Constructor
     struct StackH : virtual UIElementHolder
     {
         INDEX_UI_Args {
@@ -935,10 +962,6 @@ namespace Index::UI
         Index::Size MeasureIntentSize(Layout i) final override {
             if (CachedElement.IsNull) return { 0, 0 };
             return CachedElement->MeasureIntentSize(i);
-        }
-        void FindElementEnter(UINotification* e) override {
-            if (CachedElement.IsNull) return;
-            CachedElement->Notify(e);
         }
     public:
         template<class TRet =Index::UI::UIElement>

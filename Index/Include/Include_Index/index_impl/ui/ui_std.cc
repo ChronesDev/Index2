@@ -515,7 +515,7 @@ namespace Index::UI
                 case DockSide::Right: return Align::Right;
                 case DockSide::Bottom: return Align::Bottom;
                 default: return Align::Stretch;
-            };
+            }
         }
         static IPtr<DockHolder> Left(INDEX_UI_List content) {
             return INew<DockHolder>(DockHolder::Args{

@@ -12,6 +12,3 @@ add_subdirectory(index_impl)
 
 # Include ImGui
 target_link_libraries(IndexInclude PUBLIC ImGui)
-
-target_link_libraries(Index PUBLIC IndexInclude)
-target_include_directories(Index PUBLIC ./)

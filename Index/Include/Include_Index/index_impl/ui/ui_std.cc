@@ -1320,7 +1320,6 @@ namespace Index::UI
     	}
     };
 
-
     struct Builder : virtual UIElement
     {
         using BuildFunc = Func<IPtr<UIElement>(UIContext* u, Layout i)>;

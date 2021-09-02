@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -24,6 +25,28 @@ namespace Index
     public:
         using Iterator = iterator;
     public:
+    	std::vector<String> Split(String delimiter) {
+    		size_t pos = 0;
+    		std::vector<String> matches { };
+    		do {
+    			pos = this->find(delimiter);
+    			int change_end;
+    			if (pos == String::npos) {
+    				pos = this->length() - 1;
+    				change_end = 1;
+    			}
+    			else {
+    				change_end = 0;
+    			}
+    			matches.push_back(this->substr(0, pos+change_end));
+
+    			this->erase(0, pos+1);
+
+    		}
+    		while (!this->empty());
+    		return matches;
+    	}
+
         constexpr void SetFirst(char value) {
             char& first = this->front();
             first = value;

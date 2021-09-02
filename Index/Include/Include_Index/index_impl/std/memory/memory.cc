@@ -89,28 +89,26 @@ namespace Index
         using std::weak_ptr<T>::weak_ptr;
         ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
     public:
-        template<class TTo>
-        IPtr<TTo> As() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> StaticAs() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> DynamicAs() {
-            return std::dynamic_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ConstAs() {
-            return std::const_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ReinterpretAs() {
-            return std::reinterpret_pointer_cast<TTo>(*this);
-        }
+        template<class TTo> WPtr<TTo> As() { return std::static_pointer_cast<TTo>(this->lock()); }
+        template<class TTo> WPtr<TTo> StaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
+        template<class TTo> WPtr<TTo> DynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
+        template<class TTo> WPtr<TTo> ConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
+        template<class TTo> WPtr<TTo> ReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
+
         bool GetIsNull() { return this->get() == nullptr; }
         T& GetValue() { return *this->get(); }
+        IPtr<T> GetLock() { return this->lock(); }
+
+        template<class TTo>
+        IPtr<TTo> LockAs() { return std::static_pointer_cast<TTo>(this->lock()); }
+        template<class TTo>
+        IPtr<TTo> LockStaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
+        template<class TTo>
+        IPtr<TTo> LockDynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
+        template<class TTo>
+        IPtr<TTo> LockConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
+        template<class TTo>
+        IPtr<TTo> LockReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
     public:
         static __forceinline IPtr<T> Null() { return { }; }
         __declspec(property(get = GetIsNull)) bool IsNull;
@@ -118,7 +116,7 @@ namespace Index
         __declspec(property(get = get)) T* Ptr;
         __declspec(property(get = GetValue)) T& Value;
         __declspec(property(get = expired)) bool Expired;
-        __declspec(property(get = lock)) IPtr<T> Lock;
+        __declspec(property(get = GetLock)) IPtr<T> Lock;
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)

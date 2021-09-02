@@ -39,34 +39,8 @@ struct MyConstructor : ScopedElement<MyConstructor>
         Color = e.Color;
     }
 
-    ui_wref fillRect;
-    int I = 0;
-
-    ui_ref Construct() override
-    {
-        return UI::Stack n ({
-            ImUI::FillRect n ({
-                name "MyRect",
-                color Color
-            })
-        });
-    }
-};
-
-struct MyConstructor2 : ScopedElement<MyConstructor>
-{
-    Color Color;
-    INDEX_UI_Args {
-        INDEX_UI_DefaultMembers
-        Index::Color Color;
-    };
-    INDEX_UI_New(MyConstructor2)
-    INDEX_UI_Constructor(MyConstructor2) {
-        INDEX_UI_SetDefaultMembers
-        Color = e.Color;
-    }
-
-    ui_wref fillRect;
+    WPtr<ImUI::FillRect> fillRect1;
+    WPtr<ImUI::FillRect> fillRect2;
     int I = 0;
 
     ui_ref Construct() override
@@ -74,14 +48,62 @@ struct MyConstructor2 : ScopedElement<MyConstructor>
         return UI::Stack n ({
             Executor n ({
                 execute {
-                    if (fillRect.IsNull) fillRect = u->Find("^", "HelloWorld", "MyRect");
-                    if (var s = fillRect.Lock)
+                    if (fillRect1.IsNull) fillRect1 = u->Find<ImUI::FillRect>("-1 MyRect");
+                    if (fillRect2.IsNull) fillRect2 = u->Find<ImUI::FillRect>("-2 MyRect");
+
+                    if (auto r = fillRect1.Lock)
                     {
-                        I++;
-                        s->Size = { 300 + (float)I, 300 + (float)I };
-                        if (I >= 400) I = 0;
+                        r->Color = Colors::Blue;
+                    }
+
+                    if (auto r = fillRect2.Lock)
+                    {
+                        r->Color = Colors::Orange;
                     }
                 }
+            }),
+            ScopedContainer n ({
+                name "-1",
+                content {
+                    ImUI::FillRect n ({
+                        name "MyRect",
+                        size(50, 50),
+                        alignment LeftTop,
+                        colors Green
+                    })
+                }
+            }),
+            ScopedContainer n ({
+                name "-2",
+                content {
+                    ImUI::FillRect n ({
+                        name "MyRect",
+                        size(50, 50),
+                        alignment LeftBottom,
+                        colors Red
+                    })
+                }
+            }),
+            Container n ({
+            	size(null, 40),
+            	content {
+            		Column n ({
+            			content {
+            				ImUI::FillRect n ({
+            					minsize(100, 0),
+            					colors Green
+            				}),
+            				ImUI::FillRect n ({
+            					minsize(0, 0),
+            					colors Red
+            				}),
+            				ImUI::FillRect n ({
+            					minsize(10, 0),
+            					colors Blue
+            				})
+            			}
+            		})
+            	}
             })
         });
     }
@@ -95,8 +117,7 @@ int main()
         MyConstructor n ({
             name "HelloWorld",
             colors Green
-        }),
-        MyConstructor2 n ({ })
+        })
     });
 
     context->SetRoot(ui);

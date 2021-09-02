@@ -651,12 +651,22 @@ namespace Index::UI
     // UIPath
     struct UIPath
     {
-        template <class T, class... TArgs>
-        static UIPath From(const T& s1, const TArgs&... sArgs) {
+        template <class... TArgs>
+        static UIPath From(TArgs&&... args) {
             auto ret = UIPath();
-            ret.Path = { { s1, sArgs... } };
+            ret.Path = { "?" };
+            (ret.Path.Push(args), ...);
             if (ret.Path.Length == 0) throw "Invalid path.";
             return ret;
+        }
+        static UIPath Parse(String path) {
+        	auto ret = UIPath();
+        	ret.Path = { "?" };
+        	for (auto& c : path.Split(" ")) {
+        		ret.Path.Push(c);
+        	}
+        	if (ret.Path.Length == 0) throw "Invalid path.";
+        	return ret;
         }
         List<string> Path;
         string GetCurrent() {
@@ -817,9 +827,11 @@ namespace Index::UI
         virtual void Notify(UINotification* e) = 0;
 
         template<class TType = UIElement, class... TArgs>
-        __forceinline WPtr<TType> Find(TArgs&&... args);
+        __forceinline WPtr<TType> FindA(TArgs&&... args);
         template<class TType = UIElement, class... TArgs>
-        __forceinline WPtr<TType> TryFind(TArgs&&... args);
+        __forceinline WPtr<TType> TryFindA(TArgs&&... args);
+        template<class TType = UIElement> __forceinline WPtr<TType> Find(String path);
+        template<class TType = UIElement> __forceinline WPtr<TType> TryFind(String path);
         virtual WPtr<UIElement> FindElement(UIPath path);
         virtual WPtr<UIElement> TryFindElement(UIPath path);
 
@@ -1199,7 +1211,7 @@ inline void Index::UI::UIElement::Notify(UINotification* e) {
         auto findElementN = dynamic_cast<FindElementN*>(e);
         if (!findElementN) throw "Invalid id.";
         if (!findElementN->IsNavigating) {
-            if (Name == findElementN->ElementName) {
+        	if (Name == findElementN->ElementName || findElementN->ElementName == "?") {
                 findElementN->Close(WSelf());
             }
         }
@@ -1237,21 +1249,13 @@ inline void Index::UI::UIScope::Notify(Index::UI::UINotification *e)
     if (e->Id == NotificationId::FindElement) {
         auto findElementN = dynamic_cast<FindElementN*>(e);
         if (!findElementN) throw "Invalid id.";
-        if (!findElementN->IsNavigating) {
-            if (Name == findElementN->ElementName) {
-                findElementN->Close(WSelf());
-            }
-            else {
-                OnNotify(e);
-            }
-        }
-        else {
+        if (findElementN->IsNavigating) {
             if (findElementN->MoveOut) {
                 findElementN->Path.Next();
                 ParentScope->Notify(e);
             }
             else if (findElementN->MoveIn) {
-                if (Name == findElementN->Path.Current) {
+            	if (Name == findElementN->Path.Current || findElementN->Path.Current == "?") {
                     findElementN->Path.Next();
                     if (e->Context->Scope != this) {
                         EnterScope(e->Context);
@@ -1262,6 +1266,14 @@ inline void Index::UI::UIScope::Notify(Index::UI::UINotification *e)
                         OnNotify(e);
                     }
                 }
+            }
+        }
+        else {
+            if (Name == findElementN->ElementName) {
+                findElementN->Close(WSelf());
+            }
+            else {
+                OnNotify(e);
             }
         }
     }
@@ -1294,25 +1306,47 @@ inline double Index::UI::UIContext::GetDelta()
 }
 
 template<class TType, class... TArgs>
-inline Index::WPtr<TType> Index::UI::UIContext::Find(TArgs&&... args)
+inline Index::WPtr<TType> Index::UI::UIContext::FindA(TArgs&&... args)
 {
     if constexpr (std::is_same_v<UIElement, TType>) {
         return FindElement(UIPath::From(std::forward<TArgs>(args)...));
     }
     else {
-        return FindElement(UIPath::From(std::forward<TArgs>(args)...)).template AsDynamic<TType>();
+    	return FindElement(UIPath::From(std::forward<TArgs>(args)...)).template DynamicAs<TType>();
     }
 }
 
 template<class TType, class... TArgs>
-inline Index::WPtr<TType> Index::UI::UIContext::TryFind(TArgs&&... args)
+inline Index::WPtr<TType> Index::UI::UIContext::TryFindA(TArgs&&... args)
 {
     if constexpr (std::is_same_v<UIElement, TType>) {
         return TryFindElement(UIPath::From(std::forward<TArgs>(args)...));
     }
     else {
-        return TryFindElement(UIPath::From(std::forward<TArgs>(args)...)).template AsDynamic<TType>();
+    	return TryFindElement(UIPath::From(std::forward<TArgs>(args)...)).template DynamicAs<TType>();
     }
+}
+
+template<class TType>
+inline Index::WPtr<TType> Index::UI::UIContext::Find(String s)
+{
+	if constexpr (std::is_same_v<UIElement, TType>) {
+		return FindElement(UIPath::Parse(std::forward<String>(s)));
+	}
+	else {
+		return FindElement(UIPath::Parse(std::forward<String>(s))).template DynamicAs<TType>();
+	}
+}
+
+template<class TType>
+inline Index::WPtr<TType> Index::UI::UIContext::TryFind(String s)
+{
+	if constexpr (std::is_same_v<UIElement, TType>) {
+		return FindElement(UIPath::Parse(std::forward<String>(s)));
+	}
+	else {
+		return FindElement(UIPath::Parse(std::forward<String>(s))).template DynamicAs<TType>();
+	}
 }
 
 inline Index::WPtr<Index::UI::UIElement> Index::UI::UIContext::FindElement(UIPath path)

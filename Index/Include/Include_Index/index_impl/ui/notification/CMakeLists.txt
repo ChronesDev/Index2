@@ -1,4 +1,4 @@
-target_sources(Index PRIVATE
+target_sources(IndexInclude PRIVATE
         include.cc
         notification.cc
         notifications.cc)

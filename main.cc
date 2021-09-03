@@ -100,7 +100,7 @@ struct MyConstructor : ScopedElement<MyConstructor>
             				ImUI::FillRect n ({
             					minsize(10, 0),
             					colors Blue
-            				})
+            				}),
             			}
             		})
             	}

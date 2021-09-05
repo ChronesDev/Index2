@@ -4,3 +4,4 @@
 #undef stackalloc
 #undef cat // inline struct
 #undef elif // else if
+#undef fun // auto

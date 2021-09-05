@@ -9,3 +9,5 @@
 #define cat inline struct
 
 #define elif else if
+
+#define fun auto

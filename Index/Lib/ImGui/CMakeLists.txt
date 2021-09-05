@@ -1,4 +1,4 @@
-add_library(ImGui STATIC
+add_library(ImGui OBJECT
         Impl/imconfig.h
         Impl/imgui.h
         Impl/imgui.cpp

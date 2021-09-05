@@ -9,6 +9,3 @@ add_library(IndexInclude STATIC
 add_subdirectory(index_impl)
 
 # Include Boost
-
-# Include ImGui
-target_link_libraries(IndexInclude PUBLIC ImGui)

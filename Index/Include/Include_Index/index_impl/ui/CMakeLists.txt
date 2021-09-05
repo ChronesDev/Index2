@@ -1,4 +1,3 @@
-add_subdirectory(ImUI)
 add_subdirectory(notification)
 
 target_sources(IndexInclude PRIVATE

@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.19)
 project(Index)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-set(Index_IncludeDir PUBLIC "Index/Include/Include_Index/")
+set(Index_IncludeDir "Index/Include/Include_Index/")
 
 add_library(Index STATIC index.cc)
 

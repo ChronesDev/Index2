@@ -10,3 +10,5 @@ add_library(Index OBJECT index.cc)
 
 target_include_directories(Index PUBLIC ${Index_IncludeDir})
 target_link_libraries(Index PUBLIC IndexInclude)
+
+add_subdirectory(tests)

@@ -3,5 +3,9 @@ project(Index)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Index main.cc src/Window.h)
-add_subdirectory(Index)
+set(Index_IncludeDir "Index/Include/Include_Index/")
+
+add_library(Index STATIC index.cc)
+
+target_include_directories(Index PUBLIC ${Index_IncludeDir})
+target_link_libraries(Index PUBLIC IndexInclude)

@@ -3,14 +3,20 @@
  *  RGB
  */
 
-#undef _MSC_EXTENSIONS
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
-#define NOSERVICE
-#define NOMCX
-#define NOIME
+#endif
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include "Windows.h"
 
+#ifdef RGB
 #undef RGB
+#endif
+#ifdef min
 #undef min
+#endif
+#ifdef max
 #undef max
+#endif

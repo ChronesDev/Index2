@@ -1,7 +1,4 @@
-/*
- * Windows.h FIX:
- *  RGB
- */
+#ifndef INDEX_NO_WINDOWS_H
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -10,7 +7,7 @@
 #define NOMINMAX
 #endif
 
-#include "Windows.h"
+#include <Windows.h>
 
 #ifdef RGB
 #undef RGB
@@ -20,4 +17,6 @@
 #endif
 #ifdef max
 #undef max
+#endif
+
 #endif

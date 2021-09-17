@@ -1,5 +1,7 @@
 # Made By CXCubeHD
 
+Language: Cpp
+
 BasedOnStyle: WebKit
 AllowShortBlocksOnASingleLine: Always
 AllowShortFunctionsOnASingleLine: All
@@ -19,3 +21,5 @@ ContinuationIndentWidth: 4
 IndentWidth: 4
 TabWidth: 8
 UseTab: Never
+
+PointerAlignment: Left

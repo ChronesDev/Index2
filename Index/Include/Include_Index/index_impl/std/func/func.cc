@@ -16,17 +16,19 @@
 
 namespace Index
 {
-    template<class T>
-    struct Func : public std::function<T>
-    {
-    public:
-        using std::function<T>::function;
-        ALIAS_RECLASS_CONSTRUCTOR(Func, std::function<T>)
-    public:
-        __declspec(property(get = target_type)) type_info& Type;
-    public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-    };
+	template<class T>
+	struct Func : public std::function<T>
+	{
+	public:
+		using std::function<T>::function;
+
+		ALIAS_RECLASS_CONSTRUCTOR(Func, std::function < T >)
+
+	public:
+		__declspec(property(get = target_type)) type_info &Type;
+	public:
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+	};
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

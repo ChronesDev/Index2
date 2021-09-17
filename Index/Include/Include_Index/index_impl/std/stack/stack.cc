@@ -16,39 +16,52 @@
 
 namespace Index
 {
-    template<class T>
-    struct Stack : public std::stack<T>
-    {
-    public:
-        using std::stack<T>::stack;
-        ALIAS_RECLASS_CONSTRUCTOR(Stack, std::stack<T>)
-    public:
-        Stack& operator+=(T& other) {
-            this->push(other);
-            return *this;
-        }
-        Stack& operator+=(T&& other) {
-            this->push(other);
-            return *this;
-        }
-        Stack& operator-() {
-            this->pop();
-            return *this;
-        }
-        T& operator+() {
-            return this->top();
-        }
-    public:
-        __declspec(property(get = target_type)) type_info& Type;
-        __declspec(property(get = capacity)) size_t Capacity;
-        __declspec(property(get = size)) size_t Length;
-        __declspec(property(get = top)) T& Top;
-    public:
-        ALIAS_RECLASS_FUNCTION_CONST(T&, At, at)
-        ALIAS_RECLASS_FUNCTION(void, Push, push)
-        ALIAS_RECLASS_FUNCTION(void, Pop, pop)
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-    };
+	template<class T>
+	struct Stack : public std::stack<T>
+	{
+	public:
+		using std::stack<T>::stack;
+
+		ALIAS_RECLASS_CONSTRUCTOR(Stack, std::stack<T>)
+
+	public:
+		Stack &operator+=(T &other)
+		{
+			this->push(other);
+			return *this;
+		}
+
+		Stack &operator+=(T &&other)
+		{
+			this->push(other);
+			return *this;
+		}
+
+		Stack &operator-()
+		{
+			this->pop();
+			return *this;
+		}
+
+		T &operator+()
+		{
+			return this->top();
+		}
+
+	public:
+		__declspec(property(get = target_type)) type_info &Type;
+		__declspec(property(get = capacity)) size_t Capacity;
+		__declspec(property(get = size)) size_t Length;
+		__declspec(property(get = top)) T &Top;
+	public:
+		ALIAS_RECLASS_FUNCTION_CONST(T &, At, at)
+
+		ALIAS_RECLASS_FUNCTION(void, Push, push)
+
+		ALIAS_RECLASS_FUNCTION(void, Pop, pop)
+
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+	};
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

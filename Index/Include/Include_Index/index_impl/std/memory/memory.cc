@@ -16,179 +16,269 @@
 
 namespace Index
 {
-    template<class T>
-    [[nodiscard]] constexpr std::remove_reference_t<T&&> Move(T&& _Arg) noexcept { // forward _Arg as movable
-        return static_cast<std::remove_reference_t<T>&&>(_Arg);
-    }
+	template<class T>
+	[[nodiscard]] constexpr std::remove_reference_t<T &&> Move(T &&_Arg) noexcept
+	{ // forward _Arg as movable
+		return static_cast<std::remove_reference_t<T> &&>(_Arg);
+	}
 
-    template <class T>
-    [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>& e) noexcept { // forward an lvalue as either an lvalue or an rvalue
-        return static_cast<T&&>(e);
-    }
+	template<class T>
+	[[nodiscard]] constexpr T &&Forward(std::remove_reference_t<T> &e) noexcept
+	{ // forward an lvalue as either an lvalue or an rvalue
+		return static_cast<T &&>(e);
+	}
 
-    template <class T>
-    [[nodiscard]] constexpr T&& Forward(std::remove_reference_t<T>&& e) noexcept { // forward an rvalue as an rvalue
-        static_assert(!std::is_lvalue_reference_v<T>, "bad forward call");
-        return static_cast<T&&>(e);
-    }
+	template<class T>
+	[[nodiscard]] constexpr T &&Forward(std::remove_reference_t<T> &&e) noexcept
+	{ // forward an rvalue as an rvalue
+		static_assert(!std::is_lvalue_reference_v<T>, "bad forward call");
+		return static_cast<T &&>(e);
+	}
 
-    template<typename T>
-    [[nodiscard]] constexpr T DefaultOf() noexcept {
-        return T {};
-    }
+	template<typename T>
+	[[nodiscard]] constexpr T DefaultOf() noexcept
+	{
+		return T { };
+	}
 }
 
 namespace Index
 {
-    template<class T>
-    struct IPtr : public std::shared_ptr<T>
-    {
-    public:
-        using std::shared_ptr<T>::shared_ptr;
-        ALIAS_RECLASS_CONSTRUCTOR(IPtr, std::shared_ptr<T>)
-    public:
-        template<class TTo>
-        IPtr<TTo> As() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> StaticAs() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> DynamicAs() {
-            return std::dynamic_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ConstAs() {
-            return std::const_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ReinterpretAs() {
-            return std::reinterpret_pointer_cast<TTo>(*this);
-        }
-        bool GetIsNull() { return !(this->operator bool()); }
-        T& GetValue() { return *this->get(); }
-    public:
-        static __forceinline IPtr<T> Null() { return { }; }
-    public:
-        __declspec(property(get = GetIsNull)) bool IsNull;
-        __declspec(property(get = get)) T* Get;
-        __declspec(property(get = get)) T* Ptr;
-        __declspec(property(get = GetValue)) T& Value;
-    public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-        ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
-    };
+	template<class T>
+	struct IPtr : public std::shared_ptr<T>
+	{
+	public:
+		using std::shared_ptr<T>::shared_ptr;
 
-    template<class T>
-    struct WPtr : public std::weak_ptr<T>
-    {
-    public:
-        using std::weak_ptr<T>::weak_ptr;
-        ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
-    public:
-        template<class TTo> WPtr<TTo> As() { return std::static_pointer_cast<TTo>(this->lock()); }
-        template<class TTo> WPtr<TTo> StaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
-        template<class TTo> WPtr<TTo> DynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
-        template<class TTo> WPtr<TTo> ConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
-        template<class TTo> WPtr<TTo> ReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
+		ALIAS_RECLASS_CONSTRUCTOR(IPtr, std::shared_ptr<T>)
 
-        bool GetIsNull() { return this->get() == nullptr; }
-        T& GetValue() { return *this->get(); }
-        IPtr<T> GetLock() { return this->lock(); }
+	public:
+		template<class TTo>
+		IPtr<TTo> As()
+		{
+			return std::static_pointer_cast<TTo>(*this);
+		}
 
-        template<class TTo>
-        IPtr<TTo> LockAs() { return std::static_pointer_cast<TTo>(this->lock()); }
-        template<class TTo>
-        IPtr<TTo> LockStaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
-        template<class TTo>
-        IPtr<TTo> LockDynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
-        template<class TTo>
-        IPtr<TTo> LockConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
-        template<class TTo>
-        IPtr<TTo> LockReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
-    public:
-        static __forceinline IPtr<T> Null() { return { }; }
-        __declspec(property(get = GetIsNull)) bool IsNull;
-        __declspec(property(get = get)) T* Get;
-        __declspec(property(get = get)) T* Ptr;
-        __declspec(property(get = GetValue)) T& Value;
-        __declspec(property(get = expired)) bool Expired;
-        __declspec(property(get = GetLock)) IPtr<T> Lock;
-    public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-        ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
-        ALIAS_RECLASS_FUNCTION_CONST(long, UseCount, use_count)
-    };
+		template<class TTo>
+		IPtr<TTo> StaticAs()
+		{
+			return std::static_pointer_cast<TTo>(*this);
+		}
 
-    template<class T>
-    struct UPtr : public std::unique_ptr<T>
-    {
-    public:
-        using std::unique_ptr<T>::unique_ptr;
-        template<class name>
-        __forceinline UPtr(std::unique_ptr<T>& other) { static_cast<std::unique_ptr<T>&>(*this) = other; }
-        __forceinline UPtr(std::unique_ptr<T>&& other) : std::unique_ptr<T>(std::forward<std::unique_ptr<T>>(other)) {
-        }
-    public:
-        template<class TTo>
-        IPtr<TTo> As() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> StaticAs() {
-            return std::static_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> DynamicAs() {
-            return std::dynamic_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ConstAs() {
-            return std::const_pointer_cast<TTo>(*this);
-        }
-        template<class TTo>
-        IPtr<TTo> ReinterpretAs() {
-            return std::reinterpret_pointer_cast<TTo>(*this);
-        }
-        bool GetIsNull() { return !(this->operator bool()); }
-        T& GetValue() { return *this->get(); }
-    public:
-        __declspec(property(get = GetIsNull)) bool IsNull;
-        __declspec(property(get = get)) T* Get;
-        __declspec(property(get = get)) T* Ptr;
-        __declspec(property(get = GetValue)) T& Value;
-    public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-        ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION(void, Release, release)
-    };
+		template<class TTo>
+		IPtr<TTo> DynamicAs()
+		{
+			return std::dynamic_pointer_cast<TTo>(*this);
+		}
 
-    template<class T>
-    struct IObj : public std::enable_shared_from_this<T>
-    {
-        [[nodiscard]] __forceinline IPtr<T> ISelf() {
-            return this->shared_from_this();
-        }
-        [[nodiscard]] __forceinline IPtr<T> ISelf() const {
-            return this->shared_from_this();
-        }
-        [[nodiscard]] __forceinline WPtr<T> WSelf() {
-            return this->weak_from_this();
-        }
-        [[nodiscard]] __forceinline WPtr<T> WSelf() const {
-            return this->weak_from_this();
-        }
-    };
+		template<class TTo>
+		IPtr<TTo> ConstAs()
+		{
+			return std::const_pointer_cast<TTo>(*this);
+		}
 
-    template<class T, class... TArgs>
-    __forceinline IPtr<T> INew(TArgs&&... args) { return std::make_shared<T>(std::forward<TArgs>(args)...); }
+		template<class TTo>
+		IPtr<TTo> ReinterpretAs()
+		{
+			return std::reinterpret_pointer_cast<TTo>(*this);
+		}
 
-    template<class T, class... TArgs>
-    __forceinline UPtr<T> UNew(TArgs&&... args) { return std::make_unique<T>(std::forward<TArgs>(args)...); }
+		bool GetIsNull()
+		{ return !(this->operator bool()); }
+
+		T &GetValue()
+		{ return *this->get(); }
+
+	public:
+		static __forceinline IPtr<T> Null()
+		{ return { }; }
+
+	public:
+		__declspec(property(get = GetIsNull)) bool IsNull;
+		__declspec(property(get = get)) T *Get;
+		__declspec(property(get = get)) T *Ptr;
+		__declspec(property(get = GetValue)) T &Value;
+	public:
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+
+		ALIAS_RECLASS_FUNCTION(void, Reset, reset)
+
+		ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
+	};
+
+	template<class T>
+	struct WPtr : public std::weak_ptr<T>
+	{
+	public:
+		using std::weak_ptr<T>::weak_ptr;
+
+		ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
+
+	public:
+		template<class TTo>
+		WPtr<TTo> As()
+		{ return std::static_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		WPtr<TTo> StaticAs()
+		{ return std::static_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		WPtr<TTo> DynamicAs()
+		{ return std::dynamic_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		WPtr<TTo> ConstAs()
+		{ return std::const_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		WPtr<TTo> ReinterpretAs()
+		{ return std::reinterpret_pointer_cast<TTo>(this->lock()); }
+
+		bool GetIsNull()
+		{ return this->get() == nullptr; }
+
+		T &GetValue()
+		{ return *this->get(); }
+
+		IPtr<T> GetLock()
+		{ return this->lock(); }
+
+		template<class TTo>
+		IPtr<TTo> LockAs()
+		{ return std::static_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		IPtr<TTo> LockStaticAs()
+		{ return std::static_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		IPtr<TTo> LockDynamicAs()
+		{ return std::dynamic_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		IPtr<TTo> LockConstAs()
+		{ return std::const_pointer_cast<TTo>(this->lock()); }
+
+		template<class TTo>
+		IPtr<TTo> LockReinterpretAs()
+		{ return std::reinterpret_pointer_cast<TTo>(this->lock()); }
+
+	public:
+		static __forceinline IPtr<T> Null()
+		{ return { }; }
+
+		__declspec(property(get = GetIsNull)) bool IsNull;
+		__declspec(property(get = get)) T *Get;
+		__declspec(property(get = get)) T *Ptr;
+		__declspec(property(get = GetValue)) T &Value;
+		__declspec(property(get = expired)) bool Expired;
+		__declspec(property(get = GetLock)) IPtr<T> Lock;
+	public:
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+
+		ALIAS_RECLASS_FUNCTION(void, Reset, reset)
+
+		ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
+
+		ALIAS_RECLASS_FUNCTION_CONST(long, UseCount, use_count)
+	};
+
+	template<class T>
+	struct UPtr : public std::unique_ptr<T>
+	{
+	public:
+		using std::unique_ptr<T>::unique_ptr;
+
+		template<class name>
+		__forceinline UPtr(std::unique_ptr<T> &other)
+		{ static_cast<std::unique_ptr<T> &>(*this) = other; }
+
+		__forceinline UPtr(std::unique_ptr<T> &&other) : std::unique_ptr<T>(std::forward<std::unique_ptr<T>>(other))
+		{
+		}
+
+	public:
+		template<class TTo>
+		IPtr<TTo> As()
+		{
+			return std::static_pointer_cast<TTo>(*this);
+		}
+
+		template<class TTo>
+		IPtr<TTo> StaticAs()
+		{
+			return std::static_pointer_cast<TTo>(*this);
+		}
+
+		template<class TTo>
+		IPtr<TTo> DynamicAs()
+		{
+			return std::dynamic_pointer_cast<TTo>(*this);
+		}
+
+		template<class TTo>
+		IPtr<TTo> ConstAs()
+		{
+			return std::const_pointer_cast<TTo>(*this);
+		}
+
+		template<class TTo>
+		IPtr<TTo> ReinterpretAs()
+		{
+			return std::reinterpret_pointer_cast<TTo>(*this);
+		}
+
+		bool GetIsNull()
+		{ return !(this->operator bool()); }
+
+		T &GetValue()
+		{ return *this->get(); }
+
+	public:
+		__declspec(property(get = GetIsNull)) bool IsNull;
+		__declspec(property(get = get)) T *Get;
+		__declspec(property(get = get)) T *Ptr;
+		__declspec(property(get = GetValue)) T &Value;
+	public:
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+
+		ALIAS_RECLASS_FUNCTION(void, Reset, reset)
+
+		ALIAS_RECLASS_FUNCTION(void, Release, release)
+	};
+
+	template<class T>
+	struct IObj : public std::enable_shared_from_this<T>
+	{
+		[[nodiscard]] __forceinline IPtr<T> ISelf()
+		{
+			return this->shared_from_this();
+		}
+
+		[[nodiscard]] __forceinline IPtr<T> ISelf() const
+		{
+			return this->shared_from_this();
+		}
+
+		[[nodiscard]] __forceinline WPtr<T> WSelf()
+		{
+			return this->weak_from_this();
+		}
+
+		[[nodiscard]] __forceinline WPtr<T> WSelf() const
+		{
+			return this->weak_from_this();
+		}
+	};
+
+	template<class T, class... TArgs>
+	__forceinline IPtr<T> INew(TArgs &&... args)
+	{ return std::make_shared<T>(std::forward<TArgs>(args)...); }
+
+	template<class T, class... TArgs>
+	__forceinline UPtr<T> UNew(TArgs &&... args)
+	{ return std::make_unique<T>(std::forward<TArgs>(args)...); }
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

@@ -37,7 +37,7 @@ namespace Index
 	typedef char32_t U32Char;
 
 	typedef unsigned long long IntPtr;
-    typedef signed long long SIntPtr;
+	typedef signed long long SIntPtr;
 
 	typedef Int8 int8;
 	typedef Int16 int16;
@@ -68,11 +68,11 @@ namespace Index
 	typedef void Void;
 
 	typedef UInt64 IntPtr;
-    typedef Int64 SIntPtr;
+	typedef Int64 SIntPtr;
 
-    typedef UInt64 HashCode;
+	typedef UInt64 HashCode;
 
-    typedef const char* CStr;
+	typedef const char *CStr;
 
-    typedef CStr cstr;
+	typedef CStr cstr;
 }

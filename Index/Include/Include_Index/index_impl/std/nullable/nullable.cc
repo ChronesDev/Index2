@@ -16,28 +16,36 @@
 
 namespace Index
 {
-    struct NullT : public std::nullopt_t
-    {
-        using std::nullopt_t::nullopt_t;
-        constexpr explicit NullT() : std::nullopt_t({ }) { }
-    };
-    inline constexpr NullT Null;
+	struct NullT : public std::nullopt_t
+	{
+		using std::nullopt_t::nullopt_t;
 
-    template<class T>
-    struct Nullable : public std::optional<T>
-    {
-    public:
-        using std::optional<T>::optional;
-        ALIAS_RECLASS_CONSTRUCTOR(Nullable, std::optional<T>)
-    public:
-        __declspec(property(get = value)) T& Value;
-        __declspec(property(get = has_value)) T& HasValue;
-    public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-        ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-        ALIAS_RECLASS_FUNCTION_CONST(std::remove_cv_t<T>, ValueOr, value_or)
-        ALIAS_RECLASS_FUNCTION(T&, Emplace, emplace)
-    };
+		constexpr explicit NullT() : std::nullopt_t({ })
+		{ }
+	};
+
+	inline constexpr NullT Null;
+
+	template<class T>
+	struct Nullable : public std::optional<T>
+	{
+	public:
+		using std::optional<T>::optional;
+
+		ALIAS_RECLASS_CONSTRUCTOR(Nullable, std::optional<T>)
+
+	public:
+		__declspec(property(get = value)) T &Value;
+		__declspec(property(get = has_value)) T &HasValue;
+	public:
+		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+
+		ALIAS_RECLASS_FUNCTION(void, Reset, reset)
+
+		ALIAS_RECLASS_FUNCTION_CONST(std::remove_cv_t<T>, ValueOr, value_or)
+
+		ALIAS_RECLASS_FUNCTION(T &, Emplace, emplace)
+	};
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

@@ -17,26 +17,35 @@
 
 namespace Index
 {
-    template<class T, size_t TExtend = std::dynamic_extent>
-    struct Span : public std::span<T, TExtend>
-    {
-    public:
-        using std::span<T, TExtend>::span;
-        __forceinline Span(std::span<T, TExtend>& other) { static_cast<std::span<T, TExtend>&>(*this) = other; }
-        __forceinline Span(std::span<T, TExtend>&& other) { static_cast<std::span<T, TExtend>&>(*this) = other; }
-    public:
-        constexpr Span<T, TExtend> SubSpan(const size_t length, const size_t count) {
-            return this->subspan(length, count);
-        }
-        operator T*() {
-            return this->data();
-        }
-    public:
-        __declspec(property(get = size)) size_t Length;
-        __declspec(property(get = front, put = SetFirst)) T& First;
-        __declspec(property(get = back, put = SetLast)) T& Last;
-        __declspec(property(get = back, put = SetLast)) T* Data;
-    };
+	template<class T, size_t TExtend = std::dynamic_extent>
+	struct Span : public std::span<T, TExtend>
+	{
+	public:
+		using std::span<T, TExtend>::span;
+
+		__forceinline Span(std::span<T, TExtend> &other)
+		{ static_cast<std::span<T, TExtend> &>(*this) = other; }
+
+		__forceinline Span(std::span<T, TExtend> &&other)
+		{ static_cast<std::span<T, TExtend> &>(*this) = other; }
+
+	public:
+		constexpr Span<T, TExtend> SubSpan(const size_t length, const size_t count)
+		{
+			return this->subspan(length, count);
+		}
+
+		operator T *()
+		{
+			return this->data();
+		}
+
+	public:
+		__declspec(property(get = size)) size_t Length;
+		__declspec(property(get = front, put = SetFirst)) T &First;
+		__declspec(property(get = back, put = SetLast)) T &Last;
+		__declspec(property(get = back, put = SetLast)) T *Data;
+	};
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

@@ -17,30 +17,38 @@ __forceinline this_return_type this_function(TArgs&&... args) const { return thi
 // TODO: Finish Variant class
 namespace Index
 {
-    template<class... TTypes>
-struct Variant : public std::variant<TTypes...>
-{
-    public:
-        using std::variant<TTypes...>::variant;
-        ALIAS_RECLASS_CONSTRUCTOR(Variant, std::variant<TTypes...>)
-    public:
-        template<typename T>
-        constexpr T& Get() {
-            return std::get<T>(*this);
-        }
-        template<typename T>
-        constexpr T& GetOr(T&& other) const {
-            if (Has<T>()) return Get<T>();
-            else return other;
-        }
-        template<typename T>
-        constexpr bool Has() const {
-            return std::holds_alternative<T>(*this);
-        }
-        __declspec(property(get = index)) size_t Index;
-    public:
-        ALIAS_RECLASS_FUNCTION_CONST(void, Swap, swap)
-    };
+	template<class... TTypes>
+	struct Variant : public std::variant<TTypes...>
+	{
+	public:
+		using std::variant<TTypes...>::variant;
+
+		ALIAS_RECLASS_CONSTRUCTOR(Variant, std::variant<TTypes...>)
+
+	public:
+		template<typename T>
+		constexpr T &Get()
+		{
+			return std::get<T>(*this);
+		}
+
+		template<typename T>
+		constexpr T &GetOr(T &&other) const
+		{
+			if (Has<T>()) return Get<T>();
+			else return other;
+		}
+
+		template<typename T>
+		constexpr bool Has() const
+		{
+			return std::holds_alternative<T>(*this);
+		}
+
+		__declspec(property(get = index)) size_t Index;
+	public:
+		ALIAS_RECLASS_FUNCTION_CONST(void, Swap, swap)
+	};
 }
 
 

@@ -1,0 +1,21 @@
+# Made By CXCubeHD
+
+BasedOnStyle: WebKit
+AllowShortBlocksOnASingleLine: Always
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: All
+BreakBeforeBraces: Allman
+CompactNamespaces: false
+Cpp11BracedListStyle: false
+FixNamespaceComments: false
+NamespaceIndentation: All
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+
+
+ColumnLimit: 119
+ContinuationIndentWidth: 4
+IndentWidth: 4
+TabWidth: 8
+UseTab: Never

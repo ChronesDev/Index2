@@ -29,10 +29,10 @@ namespace Index
 	typedef unsigned char UChar;
 	typedef wchar_t WChar;
 
-	typedef char8_t Char8;
+	typedef char Char8;
 	typedef char16_t Char16;
 	typedef char32_t Char32;
-	typedef char8_t U8Char;
+	typedef char U8Char;
 	typedef char16_t U16Char;
 	typedef char32_t U32Char;
 

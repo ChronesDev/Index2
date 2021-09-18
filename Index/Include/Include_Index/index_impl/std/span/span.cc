@@ -2,6 +2,7 @@
 
 #include <span>
 #include <memory_resource>
+#include "../../helpers/include.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -41,10 +42,10 @@ namespace Index
 		}
 
 	public:
-		__declspec(property(get = size)) size_t Length;
-		__declspec(property(get = front, put = SetFirst)) T &First;
-		__declspec(property(get = back, put = SetLast)) T &Last;
-		__declspec(property(get = back, put = SetLast)) T *Data;
+		INDEX_Property(get = size) size_t Length;
+		INDEX_Property(get = front, put = SetFirst) T &First;
+		INDEX_Property(get = back, put = SetLast) T &Last;
+		INDEX_Property(get = back, put = SetLast) T *Data;
 	};
 }
 

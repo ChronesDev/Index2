@@ -4,6 +4,7 @@
 #include <variant>
 
 #include "../core/include.cc"
+#include "../helpers/include.cc"
 #include "../std/include.cc"
 
 
@@ -876,7 +877,7 @@ namespace Index::UI
 			return Path.First;
 		}
 
-		__declspec(property(get = GetCurrent)) string Current;
+		INDEX_Property(get = GetCurrent) string Current;
 
 		void Next()
 		{
@@ -889,14 +890,14 @@ namespace Index::UI
 			return Path.Last;
 		}
 
-		__declspec(property(get = GetElementName)) string ElementName;
+		INDEX_Property(get = GetElementName) string ElementName;
 
 		bool GetIsNavigating()
 		{
 			return Path.Length != 1;
 		}
 
-		__declspec(property(get = GetIsNavigating)) bool IsNavigating;
+		INDEX_Property(get = GetIsNavigating) bool IsNavigating;
 	};
 
 	namespace NotificationId
@@ -937,21 +938,21 @@ namespace Index::UI
 			return Path.IsNavigating;
 		}
 
-		__declspec(property(get = GetIsNavigating)) bool IsNavigating;
+		INDEX_Property(get = GetIsNavigating) bool IsNavigating;
 
 		bool GetMoveOut()
 		{
 			return Path.Path.Length > 1 && Path.ElementName == "^";
 		}
 
-		__declspec(property(get = GetMoveOut)) bool MoveOut;
+		INDEX_Property(get = GetMoveOut) bool MoveOut;
 
 		bool GetMoveIn()
 		{
 			return Path.Path.Length > 1 && Path.ElementName != "^";
 		}
 
-		__declspec(property(get = GetMoveIn)) bool MoveIn;
+		INDEX_Property(get = GetMoveIn) bool MoveIn;
 		WPtr <UIElement> Result;
 
 		void Close(WPtr <UIElement> e)
@@ -976,7 +977,7 @@ namespace Index::UI
 		void SetWidth(float value)
 		{ Area.Width = value; }
 
-		__declspec(property(get = GetWidth, put = SetWidth)) float Width;
+		INDEX_Property(get = GetWidth, put = SetWidth) float Width;
 
 		[[nodiscard]] float GetHeight() const
 		{ return Area.Height; }
@@ -984,7 +985,7 @@ namespace Index::UI
 		void SetHeight(float value)
 		{ Area.Height = value; }
 
-		__declspec(property(get = GetHeight, put = SetHeight)) float Height;
+		INDEX_Property(get = GetHeight, put = SetHeight) float Height;
 	};
 
 	// UIElementCache
@@ -1073,12 +1074,12 @@ namespace Index::UI
 
 		void SetDeltaTime(TimeSpan deltaTime);
 
-		__declspec(property(get = GetDeltaTime, put = SetDeltaTime)) TimeSpan DeltaTime;
+		INDEX_Property(get = GetDeltaTime, put = SetDeltaTime) TimeSpan DeltaTime;
 		double _Delta = 0;
 
 		double GetDelta();
 
-		__declspec(property(get = GetDelta)) double Delta;
+		INDEX_Property(get = GetDelta) double Delta;
 
 		virtual void Notify(UINotification *e) = 0;
 

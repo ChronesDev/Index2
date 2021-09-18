@@ -37,7 +37,7 @@ namespace Index
 			Height = size.Height;
 		}
 
-		__declspec(property(get = GetSize, put = SetSize)) Size Size;
+		INDEX_Property(get = GetSize, put = SetSize) Size Size;
 
 		[[nodiscard]] Vec2F GetFirstPoint() const
 		{
@@ -54,9 +54,9 @@ namespace Index
 			return { X + (Width / 2), Y + (Height / 2) };
 		}
 
-		__declspec(property(get = GetFirstPoint)) Vec2F First;
-		__declspec(property(get = GetSecondPoint)) Vec2F Second;
-		__declspec(property(get = GetCenter)) Vec2F Center;
+		INDEX_Property(get = GetFirstPoint) Vec2F First;
+		INDEX_Property(get = GetSecondPoint) Vec2F Second;
+		INDEX_Property(get = GetCenter) Vec2F Center;
 
 		bool IsPointInside(Vec2F point)
 		{

@@ -1,4 +1,5 @@
 add_subdirectory(core)
+add_subdirectory(helpers)
 add_subdirectory(include)
 add_subdirectory(macros)
 add_subdirectory(memory)

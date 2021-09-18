@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "../../helpers/include.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -52,11 +53,11 @@ namespace Index
 		}
 
 	public:
-		__declspec(property(get = target_type)) type_info &Type;
-		__declspec(property(get = capacity)) size_t Capacity;
-		__declspec(property(get = size)) size_t Length;
-		__declspec(property(get = front, put = SetFirst)) T &First;
-		__declspec(property(get = back, put = SetLast)) T &Last;
+		INDEX_Property(get = target_type) type_info &Type;
+		INDEX_Property(get = capacity) size_t Capacity;
+		INDEX_Property(get = size) size_t Length;
+		INDEX_Property(get = front, put = SetFirst) T &First;
+		INDEX_Property(get = back, put = SetLast) T &Last;
 	public:
 		ALIAS_RECLASS_FUNCTION_CONST(T &, At, at)
 

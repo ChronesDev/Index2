@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "../../helpers/include.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -94,10 +95,10 @@ namespace Index
 		{ return { }; }
 
 	public:
-		__declspec(property(get = GetIsNull)) bool IsNull;
-		__declspec(property(get = get)) T *Get;
-		__declspec(property(get = get)) T *Ptr;
-		__declspec(property(get = GetValue)) T &Value;
+		INDEX_Property(get = GetIsNull) bool IsNull;
+		INDEX_Property(get = get) T *Get;
+		INDEX_Property(get = get) T *Ptr;
+		INDEX_Property(get = GetValue) T &Value;
 	public:
 		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
 
@@ -168,12 +169,12 @@ namespace Index
 		static __forceinline IPtr<T> Null()
 		{ return { }; }
 
-		__declspec(property(get = GetIsNull)) bool IsNull;
-		__declspec(property(get = get)) T *Get;
-		__declspec(property(get = get)) T *Ptr;
-		__declspec(property(get = GetValue)) T &Value;
-		__declspec(property(get = expired)) bool Expired;
-		__declspec(property(get = GetLock)) IPtr<T> Lock;
+		INDEX_Property(get = GetIsNull) bool IsNull;
+		INDEX_Property(get = get) T *Get;
+		INDEX_Property(get = get) T *Ptr;
+		INDEX_Property(get = GetValue) T &Value;
+		INDEX_Property(get = expired) bool Expired;
+		INDEX_Property(get = GetLock) IPtr<T> Lock;
 	public:
 		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
 
@@ -236,10 +237,10 @@ namespace Index
 		{ return *this->get(); }
 
 	public:
-		__declspec(property(get = GetIsNull)) bool IsNull;
-		__declspec(property(get = get)) T *Get;
-		__declspec(property(get = get)) T *Ptr;
-		__declspec(property(get = GetValue)) T &Value;
+		INDEX_Property(get = GetIsNull) bool IsNull;
+		INDEX_Property(get = get) T *Get;
+		INDEX_Property(get = get) T *Ptr;
+		INDEX_Property(get = GetValue) T &Value;
 	public:
 		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
 

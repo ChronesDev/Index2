@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../helpers/include.cc"
+
 namespace Index
 {
 	struct Align
@@ -25,8 +27,8 @@ namespace Index
 			return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
 		}
 
-		__declspec(property(get = GetIsStretched)) bool IsStretched;
-		__declspec(property(get = GetIsCentered)) bool IsCentered;
+		INDEX_Property(get = GetIsStretched) bool IsStretched;
+		INDEX_Property(get = GetIsCentered) bool IsCentered;
 
 		[[nodiscard]] constexpr bool GetIsHStretched() const
 		{
@@ -38,8 +40,8 @@ namespace Index
 			return _VerticalAlignment == _Stretch;
 		}
 
-		__declspec(property(get = GetIsHStretched)) bool IsHStretched;
-		__declspec(property(get = GetIsVStretched)) bool IsVStretched;
+		INDEX_Property(get = GetIsHStretched) bool IsHStretched;
+		INDEX_Property(get = GetIsVStretched) bool IsVStretched;
 
 		[[nodiscard]] constexpr bool GetIsHCentered() const
 		{
@@ -51,8 +53,8 @@ namespace Index
 			return _VerticalAlignment == _Center;
 		}
 
-		__declspec(property(get = GetIsHCentered)) bool IsHCentered;
-		__declspec(property(get = GetIsVCentered)) bool IsVCentered;
+		INDEX_Property(get = GetIsHCentered) bool IsHCentered;
+		INDEX_Property(get = GetIsVCentered) bool IsVCentered;
 
 		[[nodiscard]] constexpr bool GetIsHLeft() const
 		{
@@ -64,8 +66,8 @@ namespace Index
 			return _VerticalAlignment == -1;
 		}
 
-		__declspec(property(get = GetIsHLeft)) bool IsHLeft;
-		__declspec(property(get = GetIsVTop)) bool IsVTop;
+		INDEX_Property(get = GetIsHLeft) bool IsHLeft;
+		INDEX_Property(get = GetIsVTop) bool IsVTop;
 
 		[[nodiscard]] constexpr bool GetIsHRight() const
 		{
@@ -77,8 +79,8 @@ namespace Index
 			return _VerticalAlignment == 1;
 		}
 
-		__declspec(property(get = GetIsHRight)) bool IsHRight;
-		__declspec(property(get = GetIsVBottom)) bool IsVBottom;
+		INDEX_Property(get = GetIsHRight) bool IsHRight;
+		INDEX_Property(get = GetIsVBottom) bool IsVBottom;
 	public:
 		static const Align Stretch;
 		static const Align Center;

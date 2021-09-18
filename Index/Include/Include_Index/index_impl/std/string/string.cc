@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "../../helpers/include.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -70,12 +71,12 @@ namespace Index
 		}
 
 	public:
-		__declspec(property(get = capacity)) size_t Capacity;
-		__declspec(property(get = c_str)) const char *CStr;
-		__declspec(property(get = empty)) bool IsEmpty;
-		__declspec(property(get = size)) size_t Length;
-		__declspec(property(get = front, put = SetFirst)) char &First;
-		__declspec(property(get = back, put = SetLast)) char &Last;
+		INDEX_Property(get = capacity) size_t Capacity;
+		INDEX_Property(get = c_str) const char *CStr;
+		INDEX_Property(get = empty) bool IsEmpty;
+		INDEX_Property(get = size) size_t Length;
+		INDEX_Property(get = front, put = SetFirst) char &First;
+		INDEX_Property(get = back, put = SetLast) char &Last;
 	public:
 		ALIAS_RECLASS_FUNCTION_CONST(char, At, at)
 

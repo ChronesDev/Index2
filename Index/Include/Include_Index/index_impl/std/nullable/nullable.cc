@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include "../../helpers/include.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type) \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; } \
@@ -35,8 +36,8 @@ namespace Index
 		ALIAS_RECLASS_CONSTRUCTOR(Nullable, std::optional<T>)
 
 	public:
-		__declspec(property(get = value)) T &Value;
-		__declspec(property(get = has_value)) T &HasValue;
+		INDEX_Property(get = value) T &Value;
+		INDEX_Property(get = has_value) T &HasValue;
 	public:
 		ALIAS_RECLASS_FUNCTION(void, Swap, swap)
 

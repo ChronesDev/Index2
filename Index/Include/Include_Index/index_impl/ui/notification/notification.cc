@@ -6,8 +6,8 @@
 
 namespace Index::UI
 {
-	struct ICancelable
-	{
-		bool Cancel = false;
-	};
+    struct ICancelable
+    {
+        bool Cancel = false;
+    };
 }

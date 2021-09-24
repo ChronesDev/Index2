@@ -4,6 +4,7 @@ target_sources(IndexInclude PRIVATE
         alignment/alignment.cc
         color/color.cc
         colors/colors.cc
+        console/console.cc
         rect/rect.cc
         size/size.cc
         vector/vector.cc)

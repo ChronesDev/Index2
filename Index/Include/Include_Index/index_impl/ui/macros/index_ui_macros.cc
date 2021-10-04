@@ -20,5 +20,8 @@
 #define ui_wref Index::WPtr<Index::UI::UIElement>
 #define ui_state (+Index::UI::UIContext::CurrentStates)
 
-#define ui_builder(func) Builder::New(.Build = [this](UIContext * u, Layout i) -> Func<IPtr<UIElement>> func)
-#define ui_executor(func) Executor::New(.Execute = [this](UIContext * u, Layout i) -> void func)
+#define ui_builder(func)                                                                                              \
+    Index::UI::Builder::New(.Build                                                                                    \
+        = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> Index::Func<Index::IPtr<Index::UI::UIElement>>     \func)
+#define ui_executor(func)                                                                                             \
+    Index::UI::Executor::New(.Execute = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> void func)

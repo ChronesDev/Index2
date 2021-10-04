@@ -21,7 +21,8 @@
 #define ui_state (+Index::UI::UIContext::CurrentStates)
 
 #define ui_builder(func)                                                                                              \
-    Index::UI::Builder::New(.Build                                                                                    \
-        = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> Index::Func<Index::IPtr<Index::UI::UIElement>>     \func)
+    Index::UI::Builder::New({ .Build                                                                                  \
+        = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> Index::Func<Index::IPtr<Index::UI::UIElement>>     \
+                                                                    func })
 #define ui_executor(func)                                                                                             \
-    Index::UI::Executor::New(.Execute = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> void func)
+    Index::UI::Executor::New({ .Execute = [this](Index::UI::UIContext * u, Index::UI::Layout i) -> void func })

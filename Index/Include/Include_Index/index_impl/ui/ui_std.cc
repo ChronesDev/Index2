@@ -21,7 +21,7 @@
     Index::Align Alignment = Index::Align::Stretch;
 
 #define INDEX_UI_SetDefaultMembers                                                                                    \
-    this->Name = e.Name;                                                                                              \
+    this->Name = std::move(e.Name);                                                                                   \
     this->MinSize = e.MinSize;                                                                                        \
     this->MaxSize = e.MaxSize;                                                                                        \
     this->Size = e.Size;                                                                                              \
@@ -97,30 +97,18 @@ namespace Index::UI
 {
     struct Empty : virtual UIElement
     {
-        INDEX_UI_NewEmpty(Empty)
-
-            INDEX_UI_ConstructorEmpty(Empty)
-        {
-        }
-
+        INDEX_UI_NewEmpty(Empty);
+        INDEX_UI_ConstructorEmpty(Empty) { }
         void Render(UIContext* u, Layout i) override { }
-
         void OnNotify(UINotification* e) override { }
-
         Index::Size MeasureIntentSize(Layout i) override { return {}; }
     };
 
     struct Stack : virtual UIElementHolder
     {
-        INDEX_UI_NewArgs(Stack, INDEX_UI_List)
-
-            INDEX_UI_DefaultConstructor(Stack)
-
-                INDEX_UI_ConstructorArgs(Stack, INDEX_UI_List)
-        {
-            Content = std::move(e);
-        }
-
+        INDEX_UI_NewArgs(Stack, INDEX_UI_List);
+        INDEX_UI_DefaultConstructor(Stack);
+        INDEX_UI_ConstructorArgs(Stack, INDEX_UI_List) { Content = std::move(e); }
         void Render(UIContext* u, Layout i) override
         {
             for (auto& c : Content)
@@ -129,7 +117,6 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -139,21 +126,14 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override { return GetIntentSizeFrom(i, Content); }
     };
 
     struct ScopedStack : virtual UIElementHolder, virtual UIScope
     {
-        INDEX_UI_NewArgs(ScopedStack, INDEX_UI_List)
-
-            INDEX_UI_DefaultConstructor(ScopedStack)
-
-                INDEX_UI_ConstructorArgs(ScopedStack, INDEX_UI_List)
-        {
-            Content = std::move(e);
-        }
-
+        INDEX_UI_NewArgs(ScopedStack, INDEX_UI_List);
+        INDEX_UI_DefaultConstructor(ScopedStack);
+        INDEX_UI_ConstructorArgs(ScopedStack, INDEX_UI_List) { Content = std::move(e); }
         void Render(UIContext* u, Layout i) override
         {
             EnterScope(u);
@@ -164,7 +144,6 @@ namespace Index::UI
             }
             LeaveScope();
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -174,23 +153,15 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override { return GetIntentSizeFrom(i, Content); }
     };
 
     struct StackH : virtual UIElementHolder
     {
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(StackH)
-
-            INDEX_UI_DefaultConstructor(StackH)
-
-                INDEX_UI_Constructor(StackH)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(StackH);
+        INDEX_UI_DefaultConstructor(StackH);
+        INDEX_UI_Constructor(StackH) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             Rect r = GetSubrect(this, i);
@@ -203,7 +174,6 @@ namespace Index::UI
                 x += mins.Width;
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -213,7 +183,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -231,16 +200,9 @@ namespace Index::UI
     struct StackV : virtual UIElementHolder
     {
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(StackV)
-
-            INDEX_UI_DefaultConstructor(StackV)
-
-                INDEX_UI_Constructor(StackV)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(StackV);
+        INDEX_UI_DefaultConstructor(StackV);
+        INDEX_UI_Constructor(StackV) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             Rect r = GetSubrect(this, i);
@@ -253,7 +215,6 @@ namespace Index::UI
                 y += mins.Height;
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -263,7 +224,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -281,16 +241,9 @@ namespace Index::UI
     struct Container : virtual UIElementHolder
     {
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(Container)
-
-            INDEX_UI_DefaultConstructor(Container)
-
-                INDEX_UI_Constructor(Container)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(Container);
+        INDEX_UI_DefaultConstructor(Container);
+        INDEX_UI_Constructor(Container) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             Rect r = GetSubrect(this, i);
@@ -300,7 +253,6 @@ namespace Index::UI
                 c->Render(u, { .Area = r });
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -310,7 +262,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
@@ -324,16 +275,9 @@ namespace Index::UI
             INDEX_UI_DefaultMembers;
             INDEX_UI_HolderMembers;
         };
-
-        INDEX_UI_New(ScopedContainer)
-
-            INDEX_UI_DefaultConstructor(ScopedContainer)
-
-                INDEX_UI_Constructor(ScopedContainer)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(ScopedContainer);
+        INDEX_UI_DefaultConstructor(ScopedContainer);
+        INDEX_UI_Constructor(ScopedContainer) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             EnterScope(u);
@@ -345,7 +289,6 @@ namespace Index::UI
             }
             LeaveScope();
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -355,7 +298,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
@@ -365,16 +307,9 @@ namespace Index::UI
     struct DynContainer : virtual UIDynamic, virtual UIElementHolder
     {
         INDEX_UI_Args { INDEX_UI_DefaultDynamicMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(DynContainer)
-
-            INDEX_UI_DefaultConstructor(DynContainer)
-
-                INDEX_UI_Constructor(DynContainer)
-        {
-            INDEX_UI_SetDefaultDynamicMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(DynContainer);
+        INDEX_UI_DefaultConstructor(DynContainer);
+        INDEX_UI_Constructor(DynContainer) { INDEX_UI_SetDefaultDynamicMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             DynCache(u);
@@ -385,7 +320,6 @@ namespace Index::UI
                 c->Render(u, { .Area = r });
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -395,7 +329,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             return Max(GetMinSize(this), GetIntentSizeFrom(i, Content));
@@ -404,33 +337,19 @@ namespace Index::UI
 
     struct SpacingH : virtual UIElement
     {
-        INDEX_UI_NewArgs(SpacingH, float)
-
-            INDEX_UI_DefaultConstructor(SpacingH)
-
-                INDEX_UI_ConstructorArgs(SpacingH, float)
-        {
-            Size.Width = e;
-        }
-
+        INDEX_UI_NewArgs(SpacingH, float);
+        INDEX_UI_DefaultConstructor(SpacingH);
+        INDEX_UI_ConstructorArgs(SpacingH, float) { Size.Width = e; }
         void Render(UIContext* u, Layout i) override { }
-
         void OnNotify(UINotification* e) override { }
     };
 
     struct SpacingV : virtual UIElement
     {
-        INDEX_UI_NewArgs(SpacingV, float)
-
-            INDEX_UI_DefaultConstructor(SpacingV)
-
-                INDEX_UI_ConstructorArgs(SpacingV, float)
-        {
-            Size.Height = e;
-        }
-
+        INDEX_UI_NewArgs(SpacingV, float);
+        INDEX_UI_DefaultConstructor(SpacingV);
+        INDEX_UI_ConstructorArgs(SpacingV, float) { Size.Height = e; }
         void Render(UIContext* u, Layout i) override { }
-
         void OnNotify(UINotification* e) override { }
     };
 
@@ -438,22 +357,14 @@ namespace Index::UI
     {
         IPtr<UIElement> Content;
         INDEX_UI_Args { IPtr<UIElement> Content; };
-
-        INDEX_UI_New(Wrap)
-
-            INDEX_UI_DefaultConstructor(Wrap)
-
-                INDEX_UI_Constructor(Wrap)
-        {
-            Content = std::move(e.Content);
-        }
-
+        INDEX_UI_New(Wrap);
+        INDEX_UI_DefaultConstructor(Wrap);
+        INDEX_UI_Constructor(Wrap) { Content = std::move(e.Content); }
         void Render(UIContext* u, Layout i) override
         {
             if (Content.IsNull) return;
             Content->Render(u, i);
         }
-
         void OnNotify(UINotification* e) override
         {
             if (Content.IsNull) return;
@@ -472,14 +383,12 @@ namespace Index::UI
             int ColumnSpan = 1, RowSpan = 1;
             INDEX_UI_List Content;
         };
-
         template <class T = FixedGridElement> static Index::IPtr<T> New(Args&& args)
         {
             return Index::INew<FixedGridElement>(std::forward<Args>(args));
         }
-        INDEX_UI_DefaultConstructor(FixedGridElement)
-
-            INDEX_UI_Constructor(FixedGridElement)
+        INDEX_UI_DefaultConstructor(FixedGridElement);
+        INDEX_UI_Constructor(FixedGridElement)
         {
             Column = e.Column;
             Row = e.Row;
@@ -487,7 +396,6 @@ namespace Index::UI
             RowSpan = e.RowSpan;
             Content = std::move(e.Content);
         }
-
         __forceinline void Render(UIContext* u, Layout i)
         {
             for (auto& c : Content)
@@ -496,7 +404,6 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-
         __forceinline void Notify(UINotification* e)
         {
             for (auto& c : Content)
@@ -506,7 +413,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         __forceinline Index::Size MeasureIntentSize(Layout i) { return GetIntentSizeFrom(i, Content); }
     };
 
@@ -519,18 +425,14 @@ namespace Index::UI
             INDEX_UI_DefaultMembers int Columns = 0, Rows = 0;
             List<IPtr<FixedGridElement>> Content;
         };
-
-        INDEX_UI_New(FixedGrid)
-
-            INDEX_UI_DefaultConstructor(FixedGrid)
-
-                INDEX_UI_Constructor(FixedGrid)
+        INDEX_UI_New(FixedGrid);
+        INDEX_UI_DefaultConstructor(FixedGrid);
+        INDEX_UI_Constructor(FixedGrid)
         {
             INDEX_UI_SetDefaultMembers Columns = e.Columns;
             Rows = e.Rows;
             Content = std::move(e.Content);
         }
-
         void Render(UIContext* u, Layout i) override
         {
             Rect r = GetSubrect(this, i);
@@ -552,7 +454,6 @@ namespace Index::UI
                 c->Render(u, { .Area { r.X + (columnSize * (float)column), r.Y + (rowSize * (float)row), size } });
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -562,7 +463,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override { return GetMinSize(this); }
     };
 
@@ -576,7 +476,6 @@ namespace Index::UI
             Bottom,
             Fill
         };
-
         struct DockHolder
         {
             DockSide Side;
@@ -586,14 +485,12 @@ namespace Index::UI
                 DockSide Side;
                 INDEX_UI_List Content;
             };
-            INDEX_UI_DefaultConstructor(DockHolder)
-
-                INDEX_UI_Constructor(DockHolder)
+            INDEX_UI_DefaultConstructor(DockHolder);
+            INDEX_UI_Constructor(DockHolder)
             {
                 Side = e.Side;
                 Content = std::move(e.Content);
             }
-
             __forceinline void Render(UIContext* u, Layout i)
             {
                 for (auto& c : Content)
@@ -602,7 +499,6 @@ namespace Index::UI
                     c->Render(u, i);
                 }
             }
-
             __forceinline void Notify(UINotification* e)
             {
                 for (auto& c : Content)
@@ -612,10 +508,8 @@ namespace Index::UI
                     if (e->Handled) return;
                 }
             }
-
             __forceinline Index::Size MeasureIntentSize(Layout i) { return GetIntentSizeFrom(i, Content); }
         };
-
         static Align DockSideToAlign(DockSide side)
         {
             switch (side)
@@ -632,32 +526,26 @@ namespace Index::UI
                 return Align::Stretch;
             }
         }
-
         static IPtr<DockHolder> Left(INDEX_UI_List content)
         {
             return INew<DockHolder>(DockHolder::Args { DockSide::Left, std::forward<INDEX_UI_List>(content) });
         }
-
         static IPtr<DockHolder> Top(INDEX_UI_List content)
         {
             return INew<DockHolder>(DockHolder::Args { DockSide::Top, std::forward<INDEX_UI_List>(content) });
         }
-
         static IPtr<DockHolder> Right(INDEX_UI_List content)
         {
             return INew<DockHolder>(DockHolder::Args { DockSide::Right, std::forward<INDEX_UI_List>(content) });
         }
-
         static IPtr<DockHolder> Bottom(INDEX_UI_List content)
         {
             return INew<DockHolder>(DockHolder::Args { DockSide::Bottom, std::forward<INDEX_UI_List>(content) });
         }
-
         static IPtr<DockHolder> Fill(INDEX_UI_List content)
         {
             return INew<DockHolder>(DockHolder::Args { DockSide::Fill, std::forward<INDEX_UI_List>(content) });
         }
-
         bool FillLast = true;
         List<IPtr<DockHolder>> Content;
         INDEX_UI_Args
@@ -665,17 +553,13 @@ namespace Index::UI
             INDEX_UI_DefaultMembers bool FillLast = true;
             List<IPtr<DockHolder>> Content;
         };
-
-        INDEX_UI_New(Dock)
-
-            INDEX_UI_DefaultConstructor(Dock)
-
-                INDEX_UI_Constructor(Dock)
+        INDEX_UI_New(Dock);
+        INDEX_UI_DefaultConstructor(Dock);
+        INDEX_UI_Constructor(Dock)
         {
             INDEX_UI_SetDefaultMembers FillLast = e.FillLast;
             Content = std::move(e.Content);
         }
-
         void Render(UIContext* u, Layout i) override
         {
             Rect r = GetSubrect(this, i);
@@ -729,7 +613,6 @@ namespace Index::UI
                 c->Render(u, { .Area = area });
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -739,7 +622,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override { return GetMinSize(this); }
     };
 
@@ -751,17 +633,13 @@ namespace Index::UI
             Vec4F Edges;
             INDEX_UI_HolderMembers
         };
-
-        INDEX_UI_New(Padding)
-
-            INDEX_UI_DefaultConstructor(Padding)
-
-                INDEX_UI_Constructor(Padding)
+        INDEX_UI_New(Padding);
+        INDEX_UI_DefaultConstructor(Padding);
+        INDEX_UI_Constructor(Padding)
         {
             Edges = e.Edges;
             Content = std::move(e.Content);
         }
-
         void Render(UIContext* u, Layout i) override
         {
             auto& r = i.Area;
@@ -777,7 +655,6 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -787,7 +664,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             auto size = GetIntentSizeFrom(i, Content);
@@ -805,17 +681,13 @@ namespace Index::UI
             int Flex = 1;
             INDEX_UI_HolderMembers
         };
-
-        INDEX_UI_New(Expanded)
-
-            INDEX_UI_DefaultConstructor(Expanded)
-
-                INDEX_UI_Constructor(Expanded)
+        INDEX_UI_New(Expanded);
+        INDEX_UI_DefaultConstructor(Expanded);
+        INDEX_UI_Constructor(Expanded)
         {
             Flex = e.Flex;
             INDEX_UI_SetHolderMembers
         }
-
         void Render(UIContext* u, Layout i) override
         {
             for (auto& c : Content)
@@ -824,7 +696,6 @@ namespace Index::UI
                 c->Render(u, i);
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -834,20 +705,45 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override { return GetIntentSizeFrom(i, Content); }
     };
 
     template <int TFlex = 1> struct Expand : Expanded
     {
-        INDEX_UI_NewArgs(Expand, INDEX_UI_List)
-
-            INDEX_UI_DefaultConstructor(Expand)
-
-                INDEX_UI_ConstructorArgs(Expand, INDEX_UI_List)
+        INDEX_UI_NewArgs(Expand, INDEX_UI_List);
+        INDEX_UI_DefaultConstructor(Expand);
+        INDEX_UI_ConstructorArgs(Expand, INDEX_UI_List)
         {
             Flex = TFlex;
             Content = std::move(e);
+        }
+    };
+
+    struct Switch : virtual UIElementHolder
+    {
+        int Index = 0;
+        INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers int Index = 0; };
+        INDEX_UI_New(Switch);
+        INDEX_UI_DefaultConstructor(Switch);
+        INDEX_UI_Constructor(Switch) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers Index = e.Index; }
+        void Render(UIContext* u, Layout i) override
+        {
+            Index %= (int)Content.Length;
+            auto& c = Content[Index];
+            if (c) { c->Render(u, i); }
+        }
+        void OnNotify(UINotification* e) override
+        {
+            Index %= (int)Content.Length;
+            auto& c = Content[Index];
+            if (c) { c->Notify(e); }
+        }
+        Index::Size MeasureIntentSize(Layout i) override
+        {
+            Index %= (int)Content.Length;
+            auto& c = Content[Index];
+            if (c) { return Max(GetMinSize(this), c->MeasureIntentSize(i)); }
+            return GetMinSize(this);
         }
     };
 
@@ -859,7 +755,6 @@ namespace Index::UI
             int AllFlex = 0;
             float UnitWidth = 0;
         };
-
         __forceinline ExpandedContentInfoResult GetExpandedContentInfoH(Layout i)
         {
             ExpandedContentInfoResult ret {};
@@ -876,18 +771,10 @@ namespace Index::UI
             }
             return ret;
         }
-
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(Column)
-
-            INDEX_UI_DefaultConstructor(Column)
-
-                INDEX_UI_Constructor(Column)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(Column);
+        INDEX_UI_DefaultConstructor(Column);
+        INDEX_UI_Constructor(Column) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             auto result = MeasureIntentSizeCustom(i);
@@ -933,7 +820,6 @@ namespace Index::UI
                 }
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -943,7 +829,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -964,7 +849,6 @@ namespace Index::UI
             }
             return { Index::Max(minSize.Width, width), minSize.Height };
         }
-
         struct MeasureIntentSizeCustomResult
         {
             Index::Size OtherSize {};
@@ -972,7 +856,6 @@ namespace Index::UI
             ExpandedContentInfoResult ExpandedInfo;
             float AllExpandedWidth = 0;
         };
-
         MeasureIntentSizeCustomResult MeasureIntentSizeCustom(Layout i)
         {
             Index::Size minSize = GetMinSize(this);
@@ -1012,7 +895,6 @@ namespace Index::UI
             int AllFlex = 0;
             float UnitWidth = 0;
         };
-
         __forceinline ExpandedContentInfoResult GetExpandedContentInfoH(Layout i)
         {
             ExpandedContentInfoResult ret {};
@@ -1029,18 +911,10 @@ namespace Index::UI
             }
             return ret;
         }
-
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(ColumnC)
-
-            INDEX_UI_DefaultConstructor(ColumnC)
-
-                INDEX_UI_Constructor(ColumnC)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(ColumnC);
+        INDEX_UI_DefaultConstructor(ColumnC);
+        INDEX_UI_Constructor(ColumnC) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             auto result = MeasureIntentSizeCustom(i);
@@ -1086,7 +960,6 @@ namespace Index::UI
                 }
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -1096,7 +969,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -1117,7 +989,6 @@ namespace Index::UI
             }
             return { Index::Max(minSize.Width, width), minSize.Height };
         }
-
         struct MeasureIntentSizeCustomResult
         {
             Index::Size OtherSize {};
@@ -1125,7 +996,6 @@ namespace Index::UI
             ExpandedContentInfoResult ExpandedInfo;
             float AllExpandedWidth = 0;
         };
-
         MeasureIntentSizeCustomResult MeasureIntentSizeCustom(Layout i)
         {
             Index::Size minSize = GetMinSize(this);
@@ -1165,7 +1035,6 @@ namespace Index::UI
             int AllFlex = 0;
             float UnitHeight = 0;
         };
-
         __forceinline ExpandedContentInfoResult GetExpandedContentInfoV(Layout i)
         {
             ExpandedContentInfoResult ret {};
@@ -1182,18 +1051,10 @@ namespace Index::UI
             }
             return ret;
         }
-
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(Row)
-
-            INDEX_UI_DefaultConstructor(Row)
-
-                INDEX_UI_Constructor(Row)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(Row);
+        INDEX_UI_DefaultConstructor(Row);
+        INDEX_UI_Constructor(Row) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             auto result = MeasureIntentSizeCustom(i);
@@ -1239,7 +1100,6 @@ namespace Index::UI
                 }
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -1249,7 +1109,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -1270,7 +1129,6 @@ namespace Index::UI
             }
             return { minSize.Width, Index::Max(minSize.Height, height) };
         }
-
         struct MeasureIntentSizeCustomResult
         {
             Index::Size OtherSize {};
@@ -1278,7 +1136,6 @@ namespace Index::UI
             ExpandedContentInfoResult ExpandedInfo;
             float AllExpandedHeight = 0;
         };
-
         MeasureIntentSizeCustomResult MeasureIntentSizeCustom(Layout i)
         {
             Index::Size minSize = GetMinSize(this);
@@ -1318,7 +1175,6 @@ namespace Index::UI
             int AllFlex = 0;
             float UnitHeight = 0;
         };
-
         __forceinline ExpandedContentInfoResult GetExpandedContentInfoV(Layout i)
         {
             ExpandedContentInfoResult ret {};
@@ -1335,18 +1191,10 @@ namespace Index::UI
             }
             return ret;
         }
-
         INDEX_UI_Args { INDEX_UI_DefaultMembers INDEX_UI_HolderMembers };
-
-        INDEX_UI_New(RowC)
-
-            INDEX_UI_DefaultConstructor(RowC)
-
-                INDEX_UI_Constructor(RowC)
-        {
-            INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers
-        }
-
+        INDEX_UI_New(RowC);
+        INDEX_UI_DefaultConstructor(RowC);
+        INDEX_UI_Constructor(RowC) { INDEX_UI_SetDefaultMembers INDEX_UI_SetHolderMembers }
         void Render(UIContext* u, Layout i) override
         {
             auto result = MeasureIntentSizeCustom(i);
@@ -1392,7 +1240,6 @@ namespace Index::UI
                 }
             }
         }
-
         void OnNotify(UINotification* e) override
         {
             for (auto& c : Content)
@@ -1402,7 +1249,6 @@ namespace Index::UI
                 if (e->Handled) return;
             }
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             Index::Size minSize = GetMinSize(this);
@@ -1423,7 +1269,6 @@ namespace Index::UI
             }
             return { minSize.Width, Index::Max(minSize.Height, height) };
         }
-
         struct MeasureIntentSizeCustomResult
         {
             Index::Size OtherSize {};
@@ -1431,7 +1276,6 @@ namespace Index::UI
             ExpandedContentInfoResult ExpandedInfo;
             float AllExpandedHeight = 0;
         };
-
         MeasureIntentSizeCustomResult MeasureIntentSizeCustom(Layout i)
         {
             Index::Size minSize = GetMinSize(this);
@@ -1469,16 +1313,9 @@ namespace Index::UI
         IPtr<UIElement> CachedElement;
         BuildFunc Build;
         INDEX_UI_Args { BuildFunc Build; };
-
-        INDEX_UI_New(Builder)
-
-            INDEX_UI_DefaultConstructor(Builder)
-
-                INDEX_UI_Constructor(Builder)
-        {
-            Build = e.Build;
-        }
-
+        INDEX_UI_New(Builder);
+        INDEX_UI_DefaultConstructor(Builder);
+        INDEX_UI_Constructor(Builder) { Build = e.Build; }
         void Render(UIContext* u, Layout i) override
         {
             if (!Build) return;
@@ -1486,13 +1323,11 @@ namespace Index::UI
             if (c) c->Render(u, i);
             CachedElement = std::move(c);
         }
-
         void OnNotify(UINotification* e) override
         {
             if (CachedElement.IsNull) return;
             CachedElement->Notify(e);
         }
-
         Index::Size MeasureIntentSize(Layout i) override
         {
             if (CachedElement.IsNull) return { 0, 0 };
@@ -1505,22 +1340,14 @@ namespace Index::UI
         using ExecutorFunc = Func<void(UIContext* u, Layout i)>;
         ExecutorFunc Execute;
         INDEX_UI_Args { ExecutorFunc Execute; };
-
-        INDEX_UI_New(Executor)
-
-            INDEX_UI_DefaultConstructor(Executor)
-
-                INDEX_UI_Constructor(Executor)
-        {
-            Execute = e.Execute;
-        }
-
+        INDEX_UI_New(Executor);
+        INDEX_UI_DefaultConstructor(Executor);
+        INDEX_UI_Constructor(Executor) { Execute = e.Execute; }
         void Render(UIContext* u, Layout i) override
         {
             if (!Execute) return;
             Execute(u, i);
         }
-
         void OnNotify(UINotification* e) override { }
     };
 
@@ -1534,7 +1361,6 @@ namespace Index::UI
 
     public:
         void Reconstruct() { CachedElement.Reset(); }
-
         virtual IPtr<UIElement> Construct() = 0;
 
     private:
@@ -1548,13 +1374,11 @@ namespace Index::UI
             if (CachedElement.IsNull) return;
             CachedElement->Render(u, i);
         }
-
         void OnNotify(UINotification* e) final override
         {
             if (CachedElement.IsNull) return;
             CachedElement->Notify(e);
         }
-
         Index::Size MeasureIntentSize(Layout i) final override
         {
             if (CachedElement.IsNull) return { 0, 0 };
@@ -1578,7 +1402,6 @@ namespace Index::UI
 
     public:
         void Reconstruct() { CachedElement.Reset(); }
-
         virtual IPtr<UIElement> Construct() = 0;
 
     private:
@@ -1594,13 +1417,11 @@ namespace Index::UI
             CachedElement->Render(u, i);
             LeaveScope();
         }
-
         void OnNotify(UINotification* e) final override
         {
             if (CachedElement.IsNull) return;
             CachedElement->Notify(e);
         }
-
         Index::Size MeasureIntentSize(Layout i) final override
         {
             if (CachedElement.IsNull) return { 0, 0 };

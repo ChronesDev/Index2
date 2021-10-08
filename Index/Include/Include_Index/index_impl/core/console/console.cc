@@ -11,11 +11,11 @@ namespace Index
         Console() = default;
 
     public:
-        template <class... TArgs> inline static auto Log(TArgs&&... args) -> void;
+        template <class TArg, class... TArgs> inline static auto Log(TArg&& arg, TArgs&&... args) -> void;
         template <class... TArgs> inline static auto Write(TArgs&&... args) -> void;
         template <class... TArgs> inline static auto WriteLine(TArgs&&... args) -> void;
 
-        template <class... TArgs> inline static auto LogF(TArgs&&... args) -> void;
+        template <class TArg, class... TArgs> inline static auto LogF(TArg&& arg, TArgs&&... args) -> void;
         template <class... TArgs> inline static auto WriteF(TArgs&&... args) -> void;
         template <class... TArgs> inline static auto WriteLineF(TArgs&&... args) -> void;
 
@@ -23,8 +23,9 @@ namespace Index
         inline static auto ReadLine() -> string;
     };
 
-    template <class... TArgs> auto Console::Log(TArgs&&... args) -> void
+    template <class TArg, class... TArgs> auto Console::Log(TArg&& arg, TArgs&&... args) -> void
     {
+        std::cout << arg;
         (std::cout << ... << args);
         std::cout << std::endl;
     }
@@ -35,9 +36,9 @@ namespace Index
         std::cout << std::endl;
     }
 
-    template <class... TArgs> auto Console::LogF(TArgs&&... args) -> void
+    template <class TArg, class... TArgs> auto Console::LogF(TArg&& arg, TArgs&&... args) -> void
     {
-        std::cout << std::format(std::forward<TArgs>(args)...) << std::endl;
+        std::cout << std::format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;
     }
     template <class... TArgs> auto Console::WriteF(TArgs&&... args) -> void { std::cout << std::format(std::forward<TArgs>(args)...); }
     template <class... TArgs> auto Console::WriteLineF(TArgs&&... args) -> void

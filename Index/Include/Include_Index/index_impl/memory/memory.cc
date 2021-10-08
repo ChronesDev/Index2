@@ -6,6 +6,12 @@
 
 #include "../std/include.cc"
 
+#define INDEX_MEM_IsInRange(x, a, b) (x >= a && x <= b)
+#define INDEX_MEM_GetBits(x)                                                                                          \
+    (INDEX_MEM_IsInRange((x & (~0x20)), 'A', 'F') ? ((x & (~0x20)) - 'A' + 0xa)                                       \
+                                                  : (INDEX_MEM_IsInRange(x, '0', '9') ? x - '0' : 0))
+#define INDEX_MEM_GetByte(x) (INDEX_MEM_GetBits(x[0]) << 4 | INDEX_MEM_GetBits(x[1]))
+
 namespace Index
 {
     class Memory final
@@ -244,6 +250,49 @@ namespace Index
         {
             DWORD oldProtection2;
             VirtualProtect((void*)at, length, oldProtection, (PDWORD)&oldProtection2);
+        }
+
+        IntPtr FindSignature(IntPtr start, IntPtr end, string pattern)
+        {
+            const char* pat = pattern.CStr;
+            IntPtr firstMatch = 0;
+            for (IntPtr pCur = start; pCur < end; pCur++)
+            {
+                if (!*pat) return firstMatch;
+                if (*(char*)pat == '\?' || *(byte*)pCur == INDEX_MEM_GetByte(pat))
+                {
+                    if (!firstMatch) firstMatch = pCur;
+                    if (!pat[2]) { return firstMatch; };
+                    if (*(PWORD)pat == '\?\?' || *(PBYTE)pat != '\?')
+                        pat += 3;
+                    else
+                        pat += 2;
+                }
+                else
+                {
+                    pat = pattern;
+                    firstMatch = 0;
+                }
+            }
+            return 0;
+        }
+
+        IntPtr FindSignature(string pattern)
+        {
+            if (Base == 0) throw std::exception("Invalid Base.");
+            MODULEINFO moduleinfo;
+            K32GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(nullptr), &moduleinfo, sizeof(moduleinfo));
+            auto result = FindSignature(Base, Base + moduleinfo.SizeOfImage, std::forward<string>(pattern));
+            if (result == 0) throw std::exception("Could not find the Sig.");
+            return result;
+        }
+
+        IntPtr TryFindSignature(string pattern)
+        {
+            if (Base == 0) throw std::exception("Invalid Base.");
+            MODULEINFO moduleinfo;
+            K32GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(nullptr), &moduleinfo, sizeof(moduleinfo));
+            return FindSignature(Base, Base + moduleinfo.SizeOfImage, std::forward<string>(pattern));
         }
 
 #endif

@@ -295,6 +295,16 @@ namespace Index
             return FindSignature(Base, Base + moduleinfo.SizeOfImage, std::forward<string>(pattern));
         }
 
+        void* FindSignaturePtr(string pattern)
+        {
+            return (void*)FindSignature(pattern);
+        }
+
+        void* TryFindSignaturePtr(string pattern)
+        {
+            return (void*)TryFindSignature(pattern);
+        }
+
 #endif
 
     public:

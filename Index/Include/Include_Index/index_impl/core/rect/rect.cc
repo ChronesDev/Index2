@@ -66,7 +66,7 @@ namespace Index
         INDEX_Property(get = GetSecondPoint) Vec2F Second;
         INDEX_Property(get = GetCenter) Vec2F Center;
 
-        bool IsPointInside(Vec2F point)
+        bool IsPointInside(const Vec2F& point) const
         {
             return (First.X <= point.X && First.Y <= point.Y) && (Second.X >= point.X && Second.Y >= point.Y);
         }

@@ -26,13 +26,13 @@ namespace Index
     public:
         using std::function<T>::function;
 
-        ALIAS_RECLASS_CONSTRUCTOR(Func, std::function<T>)
+        ALIAS_RECLASS_CONSTRUCTOR(Func, std::function<T>);
 
     public:
         INDEX_Property(get = target_type) type_info& Type;
 
     public:
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
+        ALIAS_RECLASS_FUNCTION(void, Swap, swap);
     };
 }
 

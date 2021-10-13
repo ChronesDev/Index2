@@ -2,6 +2,7 @@
 #include "color/color.cc"
 #include "colors/colors.cc"
 #include "console/console.cc"
+#include "event/event.cc"
 #include "rect/rect.cc"
 #include "size/size.cc"
 #include "types.cc"

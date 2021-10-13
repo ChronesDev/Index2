@@ -37,4 +37,18 @@ namespace Index::UI
     };
 }
 
-int main() { Index::Console::LogF("Hello {0}", "World"); }
+void f()
+{
+
+}
+
+int main()
+{
+    Index::Event<void()> e;
+    auto a = e.Subscribers;
+    for (auto& v : e)
+    {
+        v();
+    }
+    Index::Console::LogF("Hello {0}\n{1}", "World", e.Subscribers.Length);
+}

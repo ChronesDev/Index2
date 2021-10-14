@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+#ifdef INDEX_Cpp20
+#include <format>
+#endif
+
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type)                                                               \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; }                             \
     __forceinline this_type(base_type&& other) { static_cast<base_type&>(*this) = other; }
@@ -119,6 +123,16 @@ namespace Index
     };
 
     typedef Index::String string;
+}
+
+namespace Index
+{
+#ifdef INDEX_Cpp20
+    template <class TArg, class... TArgs> String Format(TArg&& arg, TArgs&&... args)
+    {
+        return std::format(std::forward<TArg>(arg), std::forward<TArgs>(args)...);
+    }
+#endif
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

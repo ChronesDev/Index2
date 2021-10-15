@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../../helpers/include.cc"
 #include <functional>
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type)                                                               \
@@ -44,9 +43,9 @@ namespace Index
 
 namespace Index
 {
-    template <class T, class... TArgs> Func<T> Bind(T&& f, TArgs&&... args)
+    template <class T, class... TArgs> constexpr Func<T> Bind(T&& f, TArgs&&... args)
     {
-        return std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
+        return Func<T>(std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...));
     }
 }
 

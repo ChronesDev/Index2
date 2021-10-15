@@ -27,10 +27,10 @@ namespace Index
         auto begin() { return Subscribers_.begin(); }
         auto end() { return Subscribers_.end(); }
 
-        void Add(const Func<T>& f) { Subscribers_.template Add(f); }
-        void Remove(const Func<T>& f) { Subscribers_.template Remove(f); }
-        void RemoveAll(const Func<T>& f) { Subscribers_.template RemoveAll(f); }
-        bool Contains(const Func<T>& f) { return Subscribers_.template Contains(f); }
+        void Add(const Func<T>& f) { Subscribers_.Add(f); }
+        void Remove(const Func<T>& f) { Subscribers_.Remove(f); }
+        void RemoveAll(const Func<T>& f) { Subscribers_.RemoveAll(f); }
+        bool Contains(const Func<T>& f) { return Subscribers_.Contains(f); }
         void Clear() { Subscribers_.template Clear(); }
 
         Event<T>& operator+=(const Func<T>& f)

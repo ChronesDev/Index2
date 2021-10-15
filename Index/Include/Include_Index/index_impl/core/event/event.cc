@@ -31,6 +31,7 @@ namespace Index
         void Remove(const Func<T>& f) { Subscribers_.template Remove(f); }
         void RemoveAll(const Func<T>& f) { Subscribers_.template RemoveAll(f); }
         bool Contains(const Func<T>& f) { return Subscribers_.template Contains(f); }
+        void Clear() { Subscribers_.template Clear(); }
 
         Event<T>& operator+=(const Func<T>& f)
         {

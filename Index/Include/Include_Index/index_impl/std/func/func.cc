@@ -36,6 +36,14 @@ namespace Index
     };
 }
 
+namespace Index
+{
+    template <class T, class... TArgs> Func<T> Bind(T&& f, TArgs&&... args)
+    {
+        return std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
+    }
+}
+
 #undef ALIAS_RECLASS_CONSTRUCTOR
 #undef ALIAS_RECLASS_FUNCTION
 #undef ALIAS_RECLASS_FUNCTION_CONST

@@ -32,13 +32,13 @@ namespace Index
         using Iterator = typename std::vector<T>::iterator;
 
     public:
-        constexpr void Remove(T&& value)
+        constexpr void Remove(const T& value)
         {
             auto result = std::find(this->begin(), this->end(), value);
             if (result != this->end()) this->erase(result);
         }
 
-        constexpr void RemoveAll(T&& value)
+        constexpr void RemoveAll(const T& value)
         {
             this->erase(std::remove(this->begin(), this->end(), value), this->end());
         }
@@ -53,6 +53,11 @@ namespace Index
         {
             T& first = this->front();
             first = value;
+        }
+
+        constexpr bool Contains(const T& value)
+        {
+            return std::find(this->begin(), this->end(), value) != this->end();
         }
 
     public:

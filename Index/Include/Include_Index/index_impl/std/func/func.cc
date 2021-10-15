@@ -29,6 +29,12 @@ namespace Index
         ALIAS_RECLASS_CONSTRUCTOR(Func, std::function<T>);
 
     public:
+        bool IsIdentical(const Func<T>& other)
+        {
+            return *reinterpret_cast<void**>((std::function<T>*)this) == *reinterpret_cast<void**>((std::function<T>*)&other);
+        }
+
+    public:
         INDEX_Property(get = target_type) type_info& Type;
 
     public:

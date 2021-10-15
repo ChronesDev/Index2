@@ -30,7 +30,8 @@ namespace Index
     public:
         bool IsIdentical(const Func<T>& other)
         {
-            return *reinterpret_cast<void**>((std::function<T>*)this) == *reinterpret_cast<void**>((std::function<T>*)&other);
+            return *reinterpret_cast<void**>((std::function<T>*)this)
+                == *reinterpret_cast<void**>((std::function<T>*)&other);
         }
 
     public:
@@ -43,10 +44,14 @@ namespace Index
 
 namespace Index
 {
-    template <class T, class... TArgs> constexpr Func<T> Bind(T&& f, TArgs&&... args)
+    template <class T, class... TArgs> constexpr std::_Binder<std::_Unforced, T, TArgs...> Bind(T&& f, TArgs&&... args)
     {
-        Func<T> ret = std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
-        return ret;
+        return std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
+    }
+
+    template <class TFunc, class T, class... TArgs> constexpr Func<TFunc> Bind(T&& f, TArgs&&... args)
+    {
+        return Func<TFunc>(std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...));
     }
 }
 

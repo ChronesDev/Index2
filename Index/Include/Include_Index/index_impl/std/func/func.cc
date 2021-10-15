@@ -46,12 +46,12 @@ namespace Index
 {
     template <class T, class... TArgs> constexpr std::_Binder<std::_Unforced, T, TArgs...> Bind(T&& f, TArgs&&... args)
     {
-        return std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
+        return std::bind(std::forward<T>(f), std::forward<TArgs>(args)...);
     }
 
     template <class TFunc, class T, class... TArgs> constexpr Func<TFunc> BindFunc(T&& f, TArgs&&... args)
     {
-        Func<TFunc> ret = std::bind<T>(std::forward<T>(f), std::forward<TArgs>(args)...);
+        Func<TFunc> ret = std::bind(std::forward<T>(f), std::forward<TArgs>(args)...);
         return ret;
     }
 }

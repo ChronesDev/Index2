@@ -4,6 +4,17 @@
 #include <format>
 #include <iostream>
 
+#define INDEX_Console_Format(...) std::format(__VA_ARGS__)
+
+#if defined(__clang__)
+#undef INDEX_Console_Format
+#define INDEX_Console_Format(...) std::string("Not supported yet.")
+#elif defined(__GNUC__) || defined(__GNUG__)
+#undef INDEX_Console_Format
+#define INDEX_Console_Format(...) std::string("Not supported yet.")
+#elif defined(_MSC_VER)
+#endif
+
 namespace Index
 {
     class Console final
@@ -38,12 +49,12 @@ namespace Index
 
     template <class TArg, class... TArgs> auto Console::LogF(TArg&& arg, TArgs&&... args) -> void
     {
-        std::cout << std::format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;
+        std::cout << INDEX_Console_Format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;
     }
-    template <class... TArgs> auto Console::WriteF(TArgs&&... args) -> void { std::cout << std::format(std::forward<TArgs>(args)...); }
+    template <class... TArgs> auto Console::WriteF(TArgs&&... args) -> void { std::cout << INDEX_Console_Format(std::forward<TArgs>(args)...); }
     template <class... TArgs> auto Console::WriteLineF(TArgs&&... args) -> void
     {
-        std::cout << std::format(std::forward<TArgs>(args)...) << std::endl;
+        std::cout << INDEX_Console_Format(std::forward<TArgs>(args)...) << std::endl;
     }
 
     auto Console::ReadKey() -> int

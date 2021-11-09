@@ -4,8 +4,6 @@
 #include "../std/include.cc"
 #include "../time/include.cc"
 
-#include "easing_functions/include.cc"
-
 namespace Index
 {
     template <class TClass, class TType> struct IAnimation

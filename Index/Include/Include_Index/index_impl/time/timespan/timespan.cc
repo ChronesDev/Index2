@@ -26,76 +26,109 @@ namespace Index
 
     public:
         TimeSpan(StdChronoDuration duration)
-            : StdDuration(duration)
+            : Duration(duration.count())
         {
         }
 
+    protected:
+        double Duration = 0.0;
+
     public:
-        StdChronoDuration StdDuration = StdChronoDuration(0);
+        [[nodiscard]] StdChronoDuration GetStdDuration() const { return StdChronoDuration(Duration); }
+        INDEX_Property(get = GetStdDuration) StdChronoDuration StdDuration;
 
     protected:
-        template <class T> double DurationCastTo()
+        template <class T> [[nodiscard]] double DurationCastTo() const
         {
-            return std::chrono::duration_cast<T, double>(StdDuration).count();
+            return std::chrono::duration<double, T>(StdDuration).count();
         }
 
         template <class T> void SetStdDuration(double duration)
         {
-            StdDuration = std::chrono::duration_cast<std::chrono::seconds, double>(std::chrono::duration<double, T>(duration));
+            Duration = std::chrono::duration<double, T>(duration).count();
         }
 
     public:
-        double GetNano() { return DurationCastTo<std::chrono::nanoseconds>(); }
+        [[nodiscard]] double GetNano() const { return DurationCastTo<RatioNano>(); }
         void SetNano(double d) { SetStdDuration<RatioNano>(d); }
         INDEX_Property(get = GetNano, put = SetNano) double Nano;
+        INDEX_Property(get = GetNano, put = SetNano) double NanoSeconds;
 
-        double GetMicro() { return DurationCastTo<std::chrono::microseconds>(); }
+        [[nodiscard]] double GetMicro() const { return DurationCastTo<RatioMicro>(); }
         void SetMicro(double d) { SetStdDuration<RatioMicro>(d); }
         INDEX_Property(get = GetMicro, put = SetMicro) double Micro;
+        INDEX_Property(get = GetMicro, put = SetMicro) double MicroSeconds;
 
-        double GetMilli() { return DurationCastTo<std::chrono::milliseconds>(); }
+        [[nodiscard]] double GetMilli() const { return DurationCastTo<RatioMilli>(); }
         void SetMilli(double d) { SetStdDuration<RatioMilli>(d); }
         INDEX_Property(get = GetMilli, put = SetMilli) double Milli;
+        INDEX_Property(get = GetMilli, put = SetMilli) double MilliSeconds;
 
-        double GetSec() { return DurationCastTo<std::chrono::seconds>(); }
+        [[nodiscard]] double GetSec() const { return DurationCastTo<RatioSec>(); }
         void SetSec(double d) { SetStdDuration<RatioSec>(d); }
         INDEX_Property(get = GetSec, put = SetSec) double Sec;
+        INDEX_Property(get = GetSec, put = SetSec) double Seconds;
 
-        double GetMin() { return DurationCastTo<std::chrono::minutes>(); }
+        [[nodiscard]] double GetMin() const { return DurationCastTo<RatioMin>(); }
         void SetMin(double d) { SetStdDuration<RatioMin>(d); }
         INDEX_Property(get = GetMin, put = SetMin) double Min;
+        INDEX_Property(get = GetMin, put = SetMin) double Minutes;
 
-        double GetHours() { return DurationCastTo<std::chrono::hours>(); }
+        [[nodiscard]] double GetHours() const { return DurationCastTo<RatioHours>(); }
         void SetHours(double d) { SetStdDuration<RatioHours>(d); }
         INDEX_Property(get = GetHours, put = SetHours) double Hours;
 
-        double GetDays() { return DurationCastTo<std::chrono::days>(); }
+        [[nodiscard]] double GetDays() const { return DurationCastTo<RatioDays>(); }
         void SetDays(double d) { SetStdDuration<RatioDays>(d); }
         INDEX_Property(get = GetDays, put = SetDays) double Days;
 
-        double GetWeeks() { return DurationCastTo<std::chrono::weeks>(); }
+        [[nodiscard]] double GetWeeks() const { return DurationCastTo<RatioWeeks>(); }
         void SetWeeks(double d) { SetStdDuration<RatioWeeks>(d); }
         INDEX_Property(get = GetWeeks, put = SetWeeks) double Weeks;
 
-        double GetMonths() { return DurationCastTo<std::chrono::months>(); }
+        [[nodiscard]] double GetMonths() const { return DurationCastTo<RatioMonths>(); }
         void SetMonths(double d) { SetStdDuration<RatioMonths>(d); }
         INDEX_Property(get = GetMonths, put = SetMonths) double Months;
 
-        double GetYears() { return DurationCastTo<std::chrono::years>(); }
+        [[nodiscard]] double GetYears() const { return DurationCastTo<RatioYears>(); }
         void SetYears(double d) { SetStdDuration<RatioYears>(d); }
         INDEX_Property(get = GetYears, put = SetYears) double Years;
 
     public:
-        TimeSpan operator+() const { return TimeSpan(+StdDuration); }
-        TimeSpan operator-() const { return TimeSpan(-StdDuration); }
-        TimeSpan operator+(const TimeSpan& other) const { return TimeSpan(StdDuration + other.StdDuration); }
-        TimeSpan operator-(const TimeSpan& other) const { return TimeSpan(StdDuration - other.StdDuration); }
+        TimeSpan operator+() const { return { +StdDuration }; }
+        TimeSpan operator-() const { return { -StdDuration }; }
+        TimeSpan operator+(const TimeSpan& other) const { return MakeFromDouble(Duration + other.Duration); }
+        TimeSpan operator-(const TimeSpan& other) const { return MakeFromDouble(Duration - other.Duration); }
+        TimeSpan& operator+=(const TimeSpan& other)
+        {
+            Duration += other.Duration;
+            return *this;
+        }
+        TimeSpan& operator-=(const TimeSpan& other)
+        {
+            Duration -= other.Duration;
+            return *this;
+        }
+        bool operator==(const TimeSpan& other) const { return Duration == other.Duration; }
+        bool operator!=(const TimeSpan& other) const { return Duration != other.Duration; }
+        bool operator<(const TimeSpan& other) const { return Duration < other.Duration; }
+        bool operator>(const TimeSpan& other) const { return Duration > other.Duration; }
+        bool operator<=(const TimeSpan& other) const { return Duration <= other.Duration; }
+        bool operator>=(const TimeSpan& other) const { return Duration >= other.Duration; }
+
+    protected:
+        inline static TimeSpan MakeFromDouble(double durationValue)
+        {
+            TimeSpan timeSpan;
+            timeSpan.Duration = durationValue;
+            return timeSpan;
+        }
 
     public:
         template <class T> inline static TimeSpan From(std::chrono::duration<double, T> duration)
         {
             TimeSpan timeSpan;
-            timeSpan.StdDuration = std::chrono::duration_cast<std::chrono::seconds, double>(duration);
+            timeSpan.Duration = StdChronoDuration(duration).count();
             return timeSpan;
         }
 
@@ -105,10 +138,15 @@ namespace Index
         }
 
         inline static TimeSpan FromNano(double duration) { return From<RatioNano>((double)duration); }
+        inline static TimeSpan FromNanoSeconds(double duration) { return From<RatioNano>((double)duration); }
         inline static TimeSpan FromMicro(double duration) { return From<RatioMicro>((double)duration); }
+        inline static TimeSpan FromMicroSeconds(double duration) { return From<RatioMicro>((double)duration); }
         inline static TimeSpan FromMilli(double duration) { return From<RatioMilli>((double)duration); }
+        inline static TimeSpan FromMilliSeconds(double duration) { return From<RatioMilli>((double)duration); }
         inline static TimeSpan FromSec(double duration) { return From<RatioSec>((double)duration); }
+        inline static TimeSpan FromSeconds(double duration) { return From<RatioSec>((double)duration); }
         inline static TimeSpan FromMin(double duration) { return From<RatioMin>((double)duration); }
+        inline static TimeSpan FromMinutes(double duration) { return From<RatioMin>((double)duration); }
         inline static TimeSpan FromHours(double duration) { return From<RatioHours>((double)duration); }
         inline static TimeSpan FromDays(double duration) { return From<RatioDays>((double)duration); }
         inline static TimeSpan FromWeeks(double duration) { return From<RatioWeeks>((double)duration); }

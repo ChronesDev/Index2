@@ -54,7 +54,6 @@ int main()
     Console::LogF("Hello {0}\n", "World");
 
 
-    Console::Log(now.StdTimePoint.time_since_epoch());
-    Console::Log((now + TimeSpan::FromYears(1)).StdTimePoint.time_since_epoch());
-    Console::Log((now + TimeSpan::FromYears(1) - TimeSpan::FromYears(1)).StdTimePoint.time_since_epoch());
+    auto t = QuartInOutTransition { 10, 100 };
+    Console::Log(t(0.25), " ", t(0.5));
 }

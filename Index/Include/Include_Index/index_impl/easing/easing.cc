@@ -9,6 +9,7 @@
 #define INDEX_MakeEasingInlineClass(function)                                                                         \
     struct function##Easing : IEasing                                                                                 \
     {                                                                                                                 \
+        [[nodiscard]] double operator()(double v) const override { return Index::Easings::function(v); }              \
         [[nodiscard]] double operator()(double v, double from, double to) const override                              \
         {                                                                                                             \
             return (to - from) * Index::Easings::function(v) + from;                                                  \
@@ -35,6 +36,7 @@ namespace Index
 {
     struct IEasing
     {
+        [[nodiscard]] virtual double operator()(double v) const = 0;
         [[nodiscard]] virtual double operator()(double v, double from, double to) const = 0;
     };
 

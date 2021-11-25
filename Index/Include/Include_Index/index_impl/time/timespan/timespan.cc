@@ -139,7 +139,6 @@ namespace Index
             timeSpan.Duration = StdChronoDuration(duration).count();
             return timeSpan;
         }
-
         template <class T> inline static TimeSpan From(double duration)
         {
             return From(std::chrono::duration<double, T>(duration));
@@ -160,5 +159,7 @@ namespace Index
         inline static TimeSpan FromWeeks(double duration) { return From<RatioWeeks>((double)duration); }
         inline static TimeSpan FromMonths(double duration) { return From<RatioMonths>((double)duration); }
         inline static TimeSpan FromYears(double duration) { return From<RatioYears>((double)duration); }
+
+        inline static TimeSpan Zero() { return { }; };
     };
 }

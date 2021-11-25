@@ -95,6 +95,14 @@ namespace Index
         INDEX_Property(get = GetYears, put = SetYears) double Years;
 
     public:
+        TimeSpan Lerp(double v)
+        {
+            auto ret = TimeSpan();
+            ret.Duration = Duration * v;
+            return ret;
+        }
+
+    public:
         TimeSpan operator+() const { return { +StdDuration }; }
         TimeSpan operator-() const { return { -StdDuration }; }
         TimeSpan operator+(const TimeSpan& other) const { return MakeFromDouble(Duration + other.Duration); }

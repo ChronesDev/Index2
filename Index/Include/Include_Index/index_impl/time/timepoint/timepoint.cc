@@ -27,7 +27,25 @@ namespace Index
         StdChronoTimePoint StdTimePoint;
 
     public:
-        TimeSpan operator-(const TimePoint& other) const { return TimeSpan(StdTimePoint - other.StdTimePoint); }
+        TimePoint operator+(const TimeSpan& other) const
+        {
+            return TimePoint(StdTimePoint + std::chrono::nanoseconds((long long)other.Nano));
+        }
+        TimePoint& operator+=(const TimeSpan& other)
+        {
+            StdTimePoint += std::chrono::nanoseconds((long long)other.Nano);
+            return *this;
+        }
+        TimePoint operator-(const TimeSpan& other) const
+        {
+            return TimePoint(StdTimePoint - std::chrono::nanoseconds((long long)other.Nano));
+        }
+        TimePoint& operator-=(const TimeSpan& other)
+        {
+            StdTimePoint -= std::chrono::nanoseconds((long long)other.Nano);
+            return *this;
+        }
+        TimeSpan operator-(const TimePoint& other) const { return { StdTimePoint - other.StdTimePoint }; }
         bool operator==(const TimePoint& other) const { return StdTimePoint == other.StdTimePoint; }
         bool operator!=(const TimePoint& other) const { return StdTimePoint != other.StdTimePoint; }
         bool operator<(const TimePoint& other) const { return StdTimePoint < other.StdTimePoint; }
@@ -43,5 +61,7 @@ namespace Index
 
     public:
         inline static TimePoint Now() { return TimePoint(StdChronoClock::now()); }
+
+        inline static TimePoint Lerp(double v, TimePoint from, TimePoint to) { return from + (to - from).Lerp(v); }
     };
 }

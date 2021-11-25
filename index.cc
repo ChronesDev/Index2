@@ -52,4 +52,9 @@ int main()
     Console::Log("Here the time: ", (TimeSpan::FromHours(20)).Minutes);
 
     Console::LogF("Hello {0}\n", "World");
+
+
+    Console::Log(now.StdTimePoint.time_since_epoch());
+    Console::Log((now + TimeSpan::FromYears(1)).StdTimePoint.time_since_epoch());
+    Console::Log((now + TimeSpan::FromYears(1) - TimeSpan::FromYears(1)).StdTimePoint.time_since_epoch());
 }

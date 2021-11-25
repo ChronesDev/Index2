@@ -4,20 +4,15 @@
 #include "../std/include.cc"
 #include "../time/include.cc"
 
+#include "transition.cc"
+
 namespace Index
 {
-    template <class TClass, class TType> struct IAnimation
+    template <class TTransition> struct IAnimation : TTransition
     {
-        TType From;
-        TType To;
+        using TType = typename TTransition::T;
 
-        IAnimation(TType from, TType to)
-            : From(from)
-            , To(to)
-        {
-        }
-
-        TType Interpolate(double v) const { return ((TClass*)this)->Lerp(From, To, v); }
-        TType Interpolate(float v) const { return Interpolate((double)v); }
     };
+
+
 }

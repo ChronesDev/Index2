@@ -44,7 +44,7 @@ int main()
     auto now = Time.Now;
 
     Sleep(2800);
-    Console::Log("Here the time: ", TimeSpan::FromHours(20).Minutes);
+    Console::Log("Here the time: ", TimeSpan::FromHours(20).Minutes, " also: ", now);
 
     Console::LogF("Hello {0}\n", "World");
 

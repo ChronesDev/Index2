@@ -64,4 +64,10 @@ namespace Index
 
         inline static TimePoint Lerp(double v, TimePoint from, TimePoint to) { return from + (to - from).Lerp(v); }
     };
+
+    inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
+    {
+        os << "TimePoint : " << timePoint.StdTimePoint.time_since_epoch();
+        return os;
+    }
 }

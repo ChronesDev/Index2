@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "../vector/vector.cc"
 
 namespace Index
@@ -31,44 +33,38 @@ namespace Index
         }
 
         bool operator==(const Color& other) const = default;
-
         bool operator!=(const Color& other) const = default;
 
         Vec4F AsVec() const { return Vec4F { R * 255.0f, G * 255.0f, B * 255.0f, A * 255.0f }; };
-
         Vec4F AsRawVec() const { return Vec4F { R, G, B, A }; }
 
         static Color RGB(Vec3F rgb) { return Color(rgb.X, rgb.Y, rgb.Z); }
-
         static Color RGB(Vec3I rgb) { return Color(rgb.X, rgb.Y, rgb.Z); }
-
         static Color RGB(int r, int g, int b) { return Color(r, g, b); }
-
         static Color RGB(unsigned int rgb) { return Color((rgb & 0xFF0000) >> 16, (rgb & 0xFF00) >> 8, (rgb & 0xFF)); }
-
         static Color RGBA(Vec4F rgba) { return Color(rgba.X, rgba.Y, rgba.Z, rgba.W); }
-
         static Color RGBA(int r, int g, int b, int a = 255) { return Color(r, g, b, a); }
-
         static Color RGBA(unsigned int rgba)
         {
             return Color((rgba & 0xFF000000) >> 24, (rgba & 0xFF0000) >> 16, (rgba & 0xFF00) >> 8, (rgba & 0xFF));
         }
-
         static Color ARGB(Vec4F argb) { return Color(argb.Y, argb.X, argb.W, argb.X); }
-
         static Color ARGB(int r, int g, int b, int a = 255) { return Color(r, g, b, a); }
-
         static Color ARGB(unsigned int argb)
         {
             return Color((argb & 0xFF0000) >> 16, (argb & 0xFF00) >> 8, (argb & 0xFF), (argb & 0xFF000000) >> 24);
         }
-
         static Color Raw(Vec3F raw) { return Color(RawColor { .RawR = raw.X, .RawG = raw.Y, .RawB = raw.Z }); }
-
         static Color Raw(Vec4F raw)
         {
             return Color(RawColor { .RawR = raw.X, .RawG = raw.Y, .RawB = raw.Z, .RawA = raw.W });
         }
     };
+
+    inline std::ostream& operator<<(std::ostream& os, const Color& color)
+    {
+        os << "Color {" << (int)(color.R * 255.f) << ", " << (int)(color.G * 255.f) << ", " << (int)(color.B * 255.f) << ", "
+           << (int)(color.A * 255.f) << "}";
+        return os;
+    }
 }

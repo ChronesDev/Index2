@@ -40,6 +40,10 @@
 # CMake Build
 cmake-build-debug/
 cmake-build-release/
+cmake-build-debug-msvc/
+cmake-build-release-msvc/
+cmake-build-debug-clang/
+cmake-build-release-clang/
 
 build/
 out/

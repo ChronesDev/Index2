@@ -40,6 +40,7 @@ namespace Index
         [[nodiscard]] virtual double operator()(double v, double from, double to) const = 0;
     };
 
+    INDEX_MakeEasingInlineClass(Linear);
     INDEX_MakeEasingInlineClassInOut(Sine);
     INDEX_MakeEasingInlineClassInOut(Cubic);
     INDEX_MakeEasingInlineClassInOut(Quint);

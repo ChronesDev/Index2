@@ -16,6 +16,7 @@ namespace Index::Easings
     static double pow(double v1, double v2) { return ::pow(v1, v2); }
     static double sqrt(double v) { return ::sqrt(v); }
 
+    inline double Linear(double x) { return x; }
     inline double SineIn(double x) { return 1 - cos((x * PI) / 2); }
     inline double SineOut(double x) { return sin((x * PI) / 2); }
     inline double SineInOut(double x) { return -(cos(PI * x) - 1) / 2; }

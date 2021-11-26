@@ -37,11 +37,6 @@ namespace Index::UI
     };
 }
 
-void f()
-{
-
-}
-
 int main()
 {
     using namespace Index;
@@ -49,11 +44,11 @@ int main()
     auto now = Time.Now;
 
     Sleep(2800);
-    Console::Log("Here the time: ", (TimeSpan::FromHours(20)).Minutes);
+    Console::Log("Here the time: ", TimeSpan::FromHours(20).Minutes);
 
     Console::LogF("Hello {0}\n", "World");
 
 
-    auto t = QuartInOutTransition { 10, 100 };
+    auto t = LinearColorTransition(Color::RGB(0, 0, 0), Color::RGB(255, 255, 255));
     Console::Log(t(0.25), " ", t(0.5));
 }

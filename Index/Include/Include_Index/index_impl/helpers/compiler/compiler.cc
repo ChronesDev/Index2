@@ -19,7 +19,7 @@
 #define INDEX_CompilerName "MSVC"
 
 // Custom Supported Compiler
-#elifdef INDEX_CustomCompiler
+#elif defined(INDEX_CustomCompiler)
 #define INDEX_CompilerName "Custom"
 
 // Not Supported

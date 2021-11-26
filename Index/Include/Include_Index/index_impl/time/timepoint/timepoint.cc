@@ -67,7 +67,7 @@ namespace Index
 
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
-        os << "TimePoint : " << timePoint.StdTimePoint.time_since_epoch();
+        os << "TimePoint {" << timePoint.StdTimePoint.time_since_epoch() << "}";
         return os;
     }
 }

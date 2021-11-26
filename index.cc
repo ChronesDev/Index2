@@ -43,12 +43,13 @@ int main()
 
     auto now = Time.Now;
 
-    Sleep(2800);
-    Console::Log("Here the time: ", TimeSpan::FromHours(20).Minutes, " also: ", now);
+    Console.Log(INDEX_CompilerName);
 
-    Console::LogF("Hello {0}\n", "World");
+    Console.Log("Here the time: ", TimeSpan::FromHours(20).Minutes, " also: ", now);
 
+    Console.LogF("Hello {0}\n", "World");
+    auto console = ConsoleI::New();
 
     auto t = LinearColorTransition(Color::RGB(0, 0, 0), Color::RGB(255, 255, 255));
-    Console::Log(t(0.25), " ", t(0.5));
+    Console.Log(t(0.25), " ", t(0.5));
 }

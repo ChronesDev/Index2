@@ -1,17 +1,21 @@
 #pragma once
 
-#include <chrono>
+#include <thread>
 
 #include "../../helpers/include.cc"
 #include "../timepoint/timepoint.cc"
 
 namespace Index
 {
-    const inline struct TimeHelper
+    struct TimeI
     {
     public:
         TimePoint GetNow() const { return TimePoint::Now(); }
         INDEX_Property(get = GetNow) TimePoint Now;
-    }
-    Time;
+
+    public:
+        void Delay(TimeSpan duration) const { std::this_thread::sleep_for(duration.StdDuration); }
+    };
+
+    inline const TimeI Time = {};
 }

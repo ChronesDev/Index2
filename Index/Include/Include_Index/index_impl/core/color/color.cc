@@ -18,10 +18,10 @@ namespace Index
 
         Color(int r, int g, int b, int a = 255)
         {
-            R = r != 0 ? (float)r / 255.0f : 0;
-            G = g != 0 ? (float)g / 255.0f : 0;
-            B = b != 0 ? (float)b / 255.0f : 0;
-            A = a != 0 ? (float)a / 255.0f : 0;
+            R = (float)r / 255.0f;
+            G = (float)g / 255.0f;
+            B = (float)b / 255.0f;
+            A = (float)a / 255.0f;
         }
 
         explicit Color(RawColor rawColor)

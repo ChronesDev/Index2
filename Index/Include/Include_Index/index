@@ -1,1 +1,11 @@
+#ifdef INDEX_MACROS
+#include "index_macros_end"
+#define INDEX_MACROS_REVERT
+#endif
+
 #include "index_impl/include.cc"
+
+#ifdef INDEX_MACROS_REVERT
+#include "index_macros"
+#undef INDEX_MACROS_REVERT
+#endif

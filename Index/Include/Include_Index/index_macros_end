@@ -1,1 +1,6 @@
+#ifndef INDEX_MACROS
+#error include <index_macros> first.
+#endif
+#undef INDEX_MACROS
+
 #include "index_impl/macros/index_macros_end.cc"

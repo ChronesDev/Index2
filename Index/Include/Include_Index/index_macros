@@ -1,1 +1,6 @@
+#ifdef INDEX_MACROS
+#error <index_macros> has been included twice in a row.
+#endif
+#define INDEX_MACROS
+
 #include "index_impl/macros/index_macros.cc"

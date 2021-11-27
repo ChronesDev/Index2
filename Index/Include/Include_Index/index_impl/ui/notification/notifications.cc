@@ -5,42 +5,41 @@
 // Bundled Notification
 namespace Index::UI::Notifications
 {
-	struct BundledN : UINotification
-	{
-
-	};
+    struct BundledN : UINotification
+    {
+    };
 }
 
 // Keyboard Notifications
 namespace Index::UI::Notifications
 {
-	struct KeyEventN : UINotification
-	{
-		// Key
-	};
+    struct KeyEventN : UINotification
+    {
+        // Key
+    };
 
-	struct KeyPressedN : UINotification
-	{
-		// Key
-	};
+    struct KeyPressedN : UINotification
+    {
+        // Key
+    };
 
-	struct KeyReleasedN : UINotification
-	{
-		// Key
-	};
+    struct KeyReleasedN : UINotification
+    {
+        // Key
+    };
 }
 
 // Mouse Notifications
 namespace Index::UI::Notifications
 {
-	struct MouseMovedN : UINotification
-	{
-		// Delta Position
-		// Mouse Position
-	};
+    struct MouseMovedN : UINotification
+    {
+        // Delta Position
+        // Mouse Position
+    };
 
-	struct MouseScrolledN : UINotification
-	{
-		// Scroll
-	};
+    struct MouseScrolledN : UINotification
+    {
+        // Scroll
+    };
 }

@@ -40,6 +40,8 @@ namespace Index
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap);
     };
+
+    template <class... T> using Action = Func<void(T...)>;
 }
 
 namespace Index

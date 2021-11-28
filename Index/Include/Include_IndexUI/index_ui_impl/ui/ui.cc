@@ -50,6 +50,7 @@ namespace Index::UI2
     {
     protected:
         WPtr<UIElement> Parent_;
+        List<WPtr<UIElement>> MultiParents_;
 
     public:
         IPtr<UIElement> GetParent() { return Parent_.Lock; }
@@ -57,6 +58,80 @@ namespace Index::UI2
 
         WPtr<UIElement> GetWeakParent() { return Parent_; }
         INDEX_Property(get = GetParent) WPtr<UIElement> WeakParent;
+
+        virtual bool GetHasMultiParent() { return false; }
+        INDEX_Property(get = GetHasMultiParent) bool HasMultiParent;
+
+        virtual bool GetCanAttach() { return true; };
+        INDEX_Property(get = GetCanAttach) bool CanAttach;
+
+        virtual void Attach(IPtr<UIElement> parent)
+        {
+            if (parent.IsNull) throw std::exception("parent was null.");
+            if (!CanAttach) throw std::exception("CanAttach was false.");
+            if (HasMultiParent)
+            {
+                if (!Parent_.IsNull) throw std::exception("Parent_ was not null while in MultiParent state.");
+                for (auto p : MultiParents_)
+                {
+                    if (p.Lock.Ptr == parent.Ptr) throw std::exception("Duplicate parent found.");
+                }
+            }
+            else
+            {
+                if (!Parent_.IsNull)
+                    throw std::exception("Parent_ was not null. Make sure to detach this element first.");
+                Parent_ = parent;
+            }
+        }
+
+        virtual void TryAttach(IPtr<UIElement> parent)
+        {
+            if (!CanAttach) return;
+            if (parent.IsNull) return;
+            Attach(parent);
+        }
+
+        virtual void Detach()
+        {
+            if (Parent_.IsNull) return;
+            Parent_ = {};
+        }
+
+        virtual void Detach(IPtr<UIElement> parent)
+        {
+            Detach(parent.Ptr);
+        }
+
+        virtual void Detach(UIElement* parent)
+        {
+            if (parent == nullptr) return;
+            if (HasMultiParent)
+            {
+                for (int i = 0; i < MultiParents_.Length; i++)
+                {
+                    if (MultiParents_[i].Lock.Ptr == parent)
+                    {
+                        MultiParents_.Erase(MultiParents_.begin() + i);
+                        return;
+                    }
+                }
+            }
+            else if (Parent_.Lock.Ptr == parent)
+            {
+                Parent_ = {};
+                return;
+            }
+        }
+
+        virtual void DetachAll()
+        {
+            if (HasMultiParent) { MultiParents_ = {}; }
+            else
+            {
+                Parent_ = {};
+            }
+        }
 
     protected:
         YGNode YogaNode;
@@ -162,18 +237,20 @@ namespace Index::UI2
         {
             if (child.IsNull) return;
             YogaNode.insertChild(&child->YogaNode, YGNodeGetChildCount(&YogaNode));
+            child->TryAttach(ISelf());
         }
 
         void Remove(IPtr<UIElement> child)
         {
-            Content_.Remove(child);
-            YogaNode.removeChild(&child->YogaNode);
+            if (Content_.Contains(child))
+            {
+                Content_.Remove(child);
+                YogaNode.removeChild(&child->YogaNode);
+                child->Detach(this);
+            }
         }
 
-        void ComputeLayout()
-        {
-
-        }
+        void ComputeLayout() { }
     };
 
     void f()

@@ -1,4 +1,3 @@
-add_subdirectory(builder)
-
 target_sources(IndexUIInclude PRIVATE
-        include.cc)
+        include.cc
+        ui.cc)

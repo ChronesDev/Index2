@@ -13,9 +13,15 @@ namespace Index::SomeUI
     };
 
 #define sub parent.template Sub <
+
 #define map > () += [this](auto parent, auto mapper)
 #define mapn > () += [](auto parent, auto mapper)
 #define mapc(capture) > () += [capture](auto parent, auto mapper)
+
+#define mapm > () += [this](auto parent, auto mapper) { }
+#define mapmn > () += [](auto parent, auto mapper) { }
+#define mapmc(capture) > () += [capture](auto parent, auto mapper) { }
+
 #define set mapper.
 #define get mapper.
 
@@ -54,6 +60,8 @@ namespace Index::SomeUI
     struct ButtonMapper : ElementMapper
     {
         int SomeValue = 0;
+        Color Fill = Colors::Green;
+        string Text = "";
     };
 
     struct Button : Element
@@ -78,42 +86,14 @@ namespace Index::SomeUI
             ElementMapper parent;
             sub Button map
             {
-                A = 11;
-                set Name = "Hello There!";
-                sub Element mapn
-                {
-                    sub Button mapn
-                    {
-                        set Name = "Test";
-                        sub MyClass mapn
-                        {
-                            set Name = "??";
-                            set Name = "...";
-                        };
-                    };
-                    sub Button mapn
-                    {
-                        set SomeValue = 11;
-                        set Name = "Hi?";
-                        set Name = "";
-                    };
-                    sub Button mapn {};
-                    sub MyClass mapn
-                    {
-                        set Name = "?";
-                        sub MyClass mapn { string name = get Name; };
-                        sub MyClass mapn
-                        {
-                            set Name = "Hi";
-                            set Name = "Hi";
-                        };
-                        sub Button mapn
-                        {
-                            set Name = "L";
-                            set Name = "Hi";
-                        };
-                    };
-                };
+                set Fill = Colors::Red;
+                set Text = "Hello";
+                set Content.Add(INew<ButtonMapper>());
+                sub Button mapm;
+            };
+
+            sub Button map {
+                set Text = "Hello world";
             };
 
             /*

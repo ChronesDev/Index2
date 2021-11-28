@@ -37,28 +37,21 @@ namespace Index
             auto result = std::find(this->begin(), this->end(), value);
             if (result != this->end()) this->erase(result);
         }
-
         constexpr void RemoveAll(const T& value)
         {
             this->erase(std::remove(this->begin(), this->end(), value), this->end());
         }
-
         constexpr void SetFirst(T&& value)
         {
             T& first = this->front();
             first = value;
         }
-
         constexpr void SetLast(T&& value)
         {
             T& first = this->front();
             first = value;
         }
-
-        constexpr bool Contains(const T& value)
-        {
-            return std::find(this->begin(), this->end(), value) != this->end();
-        }
+        constexpr bool Contains(const T& value) const { return std::find(this->begin(), this->end(), value) != this->end(); }
 
     public:
         INDEX_Property(get = target_type) type_info& Type;
@@ -69,23 +62,14 @@ namespace Index
 
     public:
         ALIAS_RECLASS_FUNCTION_CONST(T&, At, at)
-
         ALIAS_RECLASS_FUNCTION(void, Add, push_back)
-
         ALIAS_RECLASS_FUNCTION(void, Push, push_back)
-
         ALIAS_RECLASS_FUNCTION(void, Pop, pop_back)
-
         ALIAS_RECLASS_FUNCTION(void, Clear, clear)
-
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-
         ALIAS_RECLASS_FUNCTION(void, Assign, assign)
-
         ALIAS_RECLASS_FUNCTION(Iterator, Erase, erase)
-
         ALIAS_RECLASS_FUNCTION(void, Reserve, reserve)
-
         ALIAS_RECLASS_FUNCTION(void, Resize, resize)
     };
 }

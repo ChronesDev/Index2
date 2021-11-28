@@ -50,19 +50,15 @@ namespace Index
         ALIAS_RECLASS_CONSTRUCTOR(IPtr, std::shared_ptr<T>)
 
     public:
-        template <class TTo> IPtr<TTo> As() { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> As() const { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> StaticAs() const { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> DynamicAs() const { return std::dynamic_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> ConstAs() const { return std::const_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> ReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(*this); }
 
-        template <class TTo> IPtr<TTo> StaticAs() { return std::static_pointer_cast<TTo>(*this); }
+        bool GetIsNull() const { return !(this->operator bool()); }
 
-        template <class TTo> IPtr<TTo> DynamicAs() { return std::dynamic_pointer_cast<TTo>(*this); }
-
-        template <class TTo> IPtr<TTo> ConstAs() { return std::const_pointer_cast<TTo>(*this); }
-
-        template <class TTo> IPtr<TTo> ReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(*this); }
-
-        bool GetIsNull() { return !(this->operator bool()); }
-
-        T& GetValue() { return *this->get(); }
+        T& GetValue() const { return *this->get(); }
 
     public:
         static __forceinline IPtr<T> Null() { return {}; }
@@ -75,9 +71,7 @@ namespace Index
 
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-
         ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
     };
 
@@ -89,31 +83,21 @@ namespace Index
         ALIAS_RECLASS_CONSTRUCTOR(WPtr, std::weak_ptr<T>)
 
     public:
-        template <class TTo> WPtr<TTo> As() { return std::static_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> WPtr<TTo> As() const { return std::static_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> WPtr<TTo> StaticAs() const { return std::static_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> WPtr<TTo> DynamicAs() const { return std::dynamic_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> WPtr<TTo> ConstAs() const { return std::const_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> WPtr<TTo> ReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
 
-        template <class TTo> WPtr<TTo> StaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
+        bool GetIsNull() const { return this->get() == nullptr; }
+        T& GetValue() const { return *this->get(); }
+        IPtr<T> GetLock() const { return this->lock(); }
 
-        template <class TTo> WPtr<TTo> DynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> WPtr<TTo> ConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> WPtr<TTo> ReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
-
-        bool GetIsNull() { return this->get() == nullptr; }
-
-        T& GetValue() { return *this->get(); }
-
-        IPtr<T> GetLock() { return this->lock(); }
-
-        template <class TTo> IPtr<TTo> LockAs() { return std::static_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> IPtr<TTo> LockStaticAs() { return std::static_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> IPtr<TTo> LockDynamicAs() { return std::dynamic_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> IPtr<TTo> LockConstAs() { return std::const_pointer_cast<TTo>(this->lock()); }
-
-        template <class TTo> IPtr<TTo> LockReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> IPtr<TTo> LockAs() const { return std::static_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> IPtr<TTo> LockStaticAs() const { return std::static_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> IPtr<TTo> LockDynamicAs() const { return std::dynamic_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> IPtr<TTo> LockConstAs() const { return std::const_pointer_cast<TTo>(this->lock()); }
+        template <class TTo> IPtr<TTo> LockReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
 
     public:
         static __forceinline IPtr<T> Null() { return {}; }
@@ -127,11 +111,8 @@ namespace Index
 
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-
         ALIAS_RECLASS_FUNCTION_CONST(bool, OwnerBefore, owner_before)
-
         ALIAS_RECLASS_FUNCTION_CONST(long, UseCount, use_count)
     };
 
@@ -151,19 +132,14 @@ namespace Index
         }
 
     public:
-        template <class TTo> IPtr<TTo> As() { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> As() const { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> StaticAs() const { return std::static_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> DynamicAs() const { return std::dynamic_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> ConstAs() const { return std::const_pointer_cast<TTo>(*this); }
+        template <class TTo> IPtr<TTo> ReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(*this); }
 
-        template <class TTo> IPtr<TTo> StaticAs() { return std::static_pointer_cast<TTo>(*this); }
-
-        template <class TTo> IPtr<TTo> DynamicAs() { return std::dynamic_pointer_cast<TTo>(*this); }
-
-        template <class TTo> IPtr<TTo> ConstAs() { return std::const_pointer_cast<TTo>(*this); }
-
-        template <class TTo> IPtr<TTo> ReinterpretAs() { return std::reinterpret_pointer_cast<TTo>(*this); }
-
-        bool GetIsNull() { return !(this->operator bool()); }
-
-        T& GetValue() { return *this->get(); }
+        bool GetIsNull() const { return !(this->operator bool()); }
+        T& GetValue() const { return *this->get(); }
 
     public:
         INDEX_Property(get = GetIsNull) bool IsNull;
@@ -173,20 +149,15 @@ namespace Index
 
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-
         ALIAS_RECLASS_FUNCTION(void, Reset, reset)
-
         ALIAS_RECLASS_FUNCTION(void, Release, release)
     };
 
     template <class T> struct IObj : public std::enable_shared_from_this<T>
     {
         [[nodiscard]] __forceinline IPtr<T> ISelf() { return this->shared_from_this(); }
-
         [[nodiscard]] __forceinline IPtr<T> ISelf() const { return this->shared_from_this(); }
-
         [[nodiscard]] __forceinline WPtr<T> WSelf() { return this->weak_from_this(); }
-
         [[nodiscard]] __forceinline WPtr<T> WSelf() const { return this->weak_from_this(); }
     };
 

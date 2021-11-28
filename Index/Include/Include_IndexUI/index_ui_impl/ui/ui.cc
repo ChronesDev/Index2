@@ -59,17 +59,21 @@ namespace Index::UI2
         WPtr<UIElement> GetWeakParent() { return Parent_; }
         INDEX_Property(get = GetParent) WPtr<UIElement> WeakParent;
 
-        virtual bool GetHasMultiParent() { return false; }
-        INDEX_Property(get = GetHasMultiParent) bool HasMultiParent;
+        virtual bool GetIsMultiParent() { return false; }
+        INDEX_Property(get = GetIsMultiParent) bool IsMultiParent;
 
         virtual bool GetCanAttach() { return true; };
         INDEX_Property(get = GetCanAttach) bool CanAttach;
 
-        virtual void Attach(IPtr<UIElement> parent)
+        virtual bool GetCanAttachYogaNode() { return true; };
+        INDEX_Property(get = GetCanAttach) bool CanAttachYogaNode;
+
+    protected:
+        virtual void ParentAttach(IPtr<UIElement> parent)
         {
             if (parent.IsNull) throw std::exception("parent was null.");
             if (!CanAttach) throw std::exception("CanAttach was false.");
-            if (HasMultiParent)
+            if (IsMultiParent)
             {
                 if (!Parent_.IsNull) throw std::exception("Parent_ was not null while in MultiParent state.");
                 for (auto p : MultiParents_)
@@ -85,28 +89,25 @@ namespace Index::UI2
             }
         }
 
-        virtual void TryAttach(IPtr<UIElement> parent)
+        virtual void ParentTryAttach(IPtr<UIElement> parent)
         {
             if (!CanAttach) return;
             if (parent.IsNull) return;
-            Attach(parent);
+            ParentAttach(parent);
         }
 
-        virtual void Detach()
+        virtual void ParentDetach()
         {
             if (Parent_.IsNull) return;
             Parent_ = {};
         }
 
-        virtual void Detach(IPtr<UIElement> parent)
-        {
-            Detach(parent.Ptr);
-        }
+        virtual void ParentDetach(IPtr<UIElement> parent) { ParentDetach(parent.Ptr); }
 
-        virtual void Detach(UIElement* parent)
+        virtual void ParentDetach(UIElement* parent)
         {
             if (parent == nullptr) return;
-            if (HasMultiParent)
+            if (IsMultiParent)
             {
                 for (int i = 0; i < MultiParents_.Length; i++)
                 {
@@ -124,9 +125,9 @@ namespace Index::UI2
             }
         }
 
-        virtual void DetachAll()
+        virtual void ParentDetachAll()
         {
-            if (HasMultiParent) { MultiParents_ = {}; }
+            if (IsMultiParent) { MultiParents_ = {}; }
             else
             {
                 Parent_ = {};
@@ -232,25 +233,40 @@ namespace Index::UI2
     public:
         const List<IPtr<UIElement>>& GetContent() { return Content_; }
         INDEX_Property(get = GetContent) const List<IPtr<UIElement>>& Content;
-
+        
+        virtual bool GetIsContentless() { return false; }
+        INDEX_Property(get = GetIsContentless) bool IsContentless;
+        
         void Add(IPtr<UIElement> child)
         {
+            if (IsContentless) throw std::exception("This element cannot hold content.");
+            TryAdd(child);
+        }
+
+        void TryAdd(IPtr<UIElement> child)
+        {
             if (child.IsNull) return;
-            YogaNode.insertChild(&child->YogaNode, YGNodeGetChildCount(&YogaNode));
-            child->TryAttach(ISelf());
+            if (IsContentless) return;
+            if (child->CanAttachYogaNode) YogaNode.insertChild(&child->YogaNode, YGNodeGetChildCount(&YogaNode));
+            child->ParentTryAttach(ISelf());
         }
 
         void Remove(IPtr<UIElement> child)
         {
+            if (IsContentless) throw std::exception("This element doesn't hold content.");
+            TryRemove(child);
+        }
+
+        void TryRemove(IPtr<UIElement> child)
+        {
+            if (child.IsNull) return;
             if (Content_.Contains(child))
             {
                 Content_.Remove(child);
-                YogaNode.removeChild(&child->YogaNode);
-                child->Detach(this);
+                if (child->CanAttachYogaNode) YogaNode.removeChild(&child->YogaNode);
+                child->ParentDetach(this);
             }
         }
-
-        void ComputeLayout() { }
     };
 
     void f()

@@ -23,7 +23,7 @@ namespace Index
         }
 
         bool operator==(const Size& other) const = default;
-
         bool operator!=(const Size& other) const = default;
+        operator Vec2F() const { return { Width, Height }; }
     };
 }

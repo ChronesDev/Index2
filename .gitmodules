@@ -1,0 +1,3 @@
+[submodule "Index/Lib/SimpleYoga"]
+	path = Index/Lib/SimpleYoga
+	url = https://github.com/ChronesDev/simple-yoga

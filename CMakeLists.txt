@@ -4,10 +4,20 @@ project(Index)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+add_executable(IndexTest index.cc)
+
+# Include Dirs
 set(Index_IncludeDir "Index/Include/Include_Index/")
 set(IndexUI_IncludeDir "Index/Include/Include_IndexUI/")
 
-add_executable(IndexTest index.cc)
-
 target_include_directories(IndexTest PUBLIC ${Index_IncludeDir})
 target_include_directories(IndexTest PUBLIC ${IndexUI_IncludeDir})
+
+# Library Include Dirs
+set(Lib_IncludeDir "Index/Lib/")
+
+target_include_directories(IndexTest PUBLIC ${Lib_IncludeDir})
+
+# Add Lib Folder
+add_subdirectory(Index/Lib/)
+target_link_libraries(IndexTest yogacore)

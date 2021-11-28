@@ -22,11 +22,15 @@ namespace Index::SomeUI
 
 #define sub element.template Sub <
 #define map > () += [](auto element, auto mapper)
+#define set element.
+#define get element.
 
-    struct ElementMapper
+	struct ElementMapper
     {
     public:
         IPtr<ElementMapper> Content;
+
+		string Name;
 
         // Content
         template <class TThis, class T> struct PlusAssignMaker
@@ -46,7 +50,7 @@ namespace Index::SomeUI
 
         template <class T> PlusAssignMaker<ElementMapper, T> Sub() { return PlusAssignMaker<ElementMapper, T>(this); }
 
-        IPtr<Element> Build() { }
+        IPtr<Element> Build() { return { }; }
     };
 
     struct ButtonMapper;
@@ -56,7 +60,7 @@ namespace Index::SomeUI
         using Mapper = ButtonMapper;
     };
 
-    struct ButtonMapper : Element
+    struct ButtonMapper : ElementMapper
     {
     };
 
@@ -65,6 +69,7 @@ namespace Index::SomeUI
         ElementMapper element;
         sub Button map
         {
+			set Name = "Hello There!";
             sub Button map
             {
                 sub Button map {
@@ -72,5 +77,6 @@ namespace Index::SomeUI
                 };
             };
         };
+		auto ui = element.Build();
     }
 }

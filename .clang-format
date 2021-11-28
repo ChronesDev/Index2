@@ -1,7 +1,6 @@
-# Made By CXCubeHD
+# By CXCubeHD
 
 Language: Cpp
-
 BasedOnStyle: WebKit
 AllowShortBlocksOnASingleLine: Always
 AllowShortFunctionsOnASingleLine: All
@@ -14,12 +13,9 @@ FixNamespaceComments: false
 NamespaceIndentation: All
 SpaceInEmptyParentheses: false
 SpacesInAngles: false
-
-
 ColumnLimit: 119
 ContinuationIndentWidth: 4
 IndentWidth: 4
 TabWidth: 8
 UseTab: Never
-
 PointerAlignment: Left

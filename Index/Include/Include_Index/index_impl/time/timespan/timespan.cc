@@ -37,6 +37,9 @@ namespace Index
         [[nodiscard]] StdChronoDuration GetStdDuration() const { return StdChronoDuration(Duration); }
         INDEX_Property(get = GetStdDuration) StdChronoDuration StdDuration;
 
+        [[nodiscard]] double GetRawDuration() const { return Duration; }
+        INDEX_Property(get = GetRawDuration) double RawDuration;
+
     protected:
         template <class T> [[nodiscard]] double DurationCastTo() const
         {
@@ -160,6 +163,6 @@ namespace Index
         inline static TimeSpan FromMonths(double duration) { return From<RatioMonths>((double)duration); }
         inline static TimeSpan FromYears(double duration) { return From<RatioYears>((double)duration); }
 
-        inline static TimeSpan Zero() { return { }; };
+        inline static TimeSpan Zero() { return {}; };
     };
 }

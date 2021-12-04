@@ -49,6 +49,8 @@ namespace Index::UI2
     struct UIElement : IObj<UIElement>
     {
     protected:
+
+    protected:
         WPtr<UIElement> Parent_;
         List<WPtr<UIElement>> MultiParents_;
 
@@ -57,7 +59,7 @@ namespace Index::UI2
         INDEX_Property(get = GetParent) IPtr<UIElement> Parent;
 
         WPtr<UIElement> GetWeakParent() { return Parent_; }
-        INDEX_Property(get = GetParent) WPtr<UIElement> WeakParent;
+        INDEX_Property(get = GetWeakParent) WPtr<UIElement> WeakParent;
 
         virtual bool GetIsMultiParent() { return false; }
         INDEX_Property(get = GetIsMultiParent) bool IsMultiParent;
@@ -222,10 +224,28 @@ namespace Index::UI2
         INDEX_Property(get = GetComputedBottomPosition) float ComputedBottomPosition;
 
         Vec2F GetComputedPosition() { return { ComputedTopPosition, ComputedLeftPosition }; }
-        INDEX_Property(get = GetComputedPosition) float ComputedPosition;
+        INDEX_Property(get = GetComputedPosition) Vec2F ComputedPosition;
 
         Rect GetComputedRect() { return { ComputedPosition, ComputedSize }; }
         INDEX_Property(get = GetComputedRect) Rect ComputedRect;
+
+    protected:
+        void YogaNode_MakeStretch_()
+        {
+            PercentWidth = 100;
+            PercentHeight = 100;
+        }
+
+        void YogaNode_MakeCenter_()
+        {
+            PercentWidth = 0;
+            PercentHeight = 0;
+        }
+
+        void YogaNode_Content_SetDirection_(YGFlexDirection value)
+        {
+            YGNodeStyleSetFlexDirection(&YogaNode, value);
+        }
 
     private:
         List<IPtr<UIElement>> Content_;
@@ -267,12 +287,28 @@ namespace Index::UI2
                 child->ParentDetach(this);
             }
         }
+
+        void SetContentAlign(Align value)
+        {
+            //if (value.IsS)
+        }
+
+    private:
+        bool ClipContent_ = false;
+
+    public:
+        bool GetClipContent() const { return ClipContent_; }
+        void SetClipContent(bool value) { ClipContent_ = value; }
+        INDEX_Property(get = GetClipContent, put = SetClipContent) bool ClipContent;
     };
+
+#define ui_ref IPtr<UIElement>
 
     void f()
     {
-        UIElement e;
-        e.AutoHeight = true;
-        Vec2F f = e.ComputedSize;
+        ui_ref e;
+        e->AutoHeight = true;
+        ui_ref e2 = INew<UIElement>();
+        if (e->IsContentless) { e->Add(e2); }
     }
 }

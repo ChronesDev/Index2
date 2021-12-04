@@ -8,6 +8,9 @@ namespace Index::UI2
 {
     struct UIElement;
     struct UIElementMapper;
+
+    struct UIElementAnimation;
+    template <class T, class TElement> struct UIElementPropertyAnimation;
 }
 
 // Variables
@@ -43,13 +46,53 @@ namespace Index::UI2
     }
 }
 
+// UIElementAnimation
+namespace Index::UI2
+{
+    struct UIElementAnimation
+    {
+        WPtr<UIElement> Element;
+
+        virtual void Update() = 0;
+
+        virtual bool GetIsDone() const = 0;
+        INDEX_Property(get = GetIsDone) bool IsDone;
+    };
+
+    template <class TAnimation, class TElement = UIElement> struct UIElementPropertyAnimation : UIElementAnimation
+    {
+    public:
+        UIElementPropertyAnimation() = default;
+        UIElementPropertyAnimation(WPtr<UIElement> element, Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
+            : Animation_(animation), PropertySetter_(propertySetter)
+        {
+            Element = Move(element);
+        }
+
+    protected:
+        Func<void(TElement*, typename TAnimation::TType)> PropertySetter_;
+        Nullable<TAnimation> Animation_;
+
+    public:
+        void Update() override
+        {
+            if (IsDone) return;
+            if (auto element = Element.Lock) PropertySetter_(element.Ptr, Animation_.Value.Value);
+        }
+
+        bool GetIsDone() const override { return !Animation_.HasValue || Animation_.Value.HasFinished; }
+
+        TAnimation& GetAnimation() const { return Animation_; }
+        INDEX_Property(get = GetAnimation) TAnimation& Animation;
+    };
+}
+
 // UIElement
 namespace Index::UI2
 {
     struct UIElement : IObj<UIElement>
     {
     protected:
-
     protected:
         WPtr<UIElement> Parent_;
         List<WPtr<UIElement>> MultiParents_;
@@ -68,7 +111,7 @@ namespace Index::UI2
         INDEX_Property(get = GetCanAttach) bool CanAttach;
 
         virtual bool GetCanAttachYogaNode() { return true; };
-        INDEX_Property(get = GetCanAttach) bool CanAttachYogaNode;
+        INDEX_Property(get = GetCanAttachYogaNode) bool CanAttachYogaNode;
 
     protected:
         virtual void ParentAttach(IPtr<UIElement> parent)
@@ -242,10 +285,7 @@ namespace Index::UI2
             PercentHeight = 0;
         }
 
-        void YogaNode_Content_SetDirection_(YGFlexDirection value)
-        {
-            YGNodeStyleSetFlexDirection(&YogaNode, value);
-        }
+        void YogaNode_Content_SetDirection_(YGFlexDirection value) { YGNodeStyleSetFlexDirection(&YogaNode, value); }
 
     private:
         List<IPtr<UIElement>> Content_;
@@ -253,10 +293,10 @@ namespace Index::UI2
     public:
         const List<IPtr<UIElement>>& GetContent() { return Content_; }
         INDEX_Property(get = GetContent) const List<IPtr<UIElement>>& Content;
-        
+
         virtual bool GetIsContentless() { return false; }
         INDEX_Property(get = GetIsContentless) bool IsContentless;
-        
+
         void Add(IPtr<UIElement> child)
         {
             if (IsContentless) throw std::exception("This element cannot hold content.");
@@ -290,7 +330,7 @@ namespace Index::UI2
 
         void SetContentAlign(Align value)
         {
-            //if (value.IsS)
+            // if (value.IsS)
         }
 
     private:
@@ -310,5 +350,7 @@ namespace Index::UI2
         e->AutoHeight = true;
         ui_ref e2 = INew<UIElement>();
         if (e->IsContentless) { e->Add(e2); }
+        Func<void(UIElement*, bool)> func = &UIElement::SetWidth;
+        UIElementPropertyAnimation<LinearAnimation> a = { e, &UIElement::SetWidth, LinearAnimation { } };
     }
 }

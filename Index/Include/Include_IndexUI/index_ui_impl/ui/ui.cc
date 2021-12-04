@@ -364,6 +364,42 @@ namespace Index::UI2
         {
             Animate<TAnimation>(std::forward<decltype(propertySetter)>(propertySetter), { from, to, duration });
         }
+
+    protected:
+        void AnimationTick_()
+        {
+            for (auto& a : ElementAnimations_)
+            {
+                if (a.IsNull) continue;
+                a->Update();
+            }
+
+            auto rm = std::remove_if(ElementAnimations_.begin(), ElementAnimations_.end(),
+                [&](IPtr<UIElementAnimation>& item) { return item.IsNull || item->IsDone; });
+            ElementAnimations_.erase(rm);
+        }
+
+    public:
+        virtual Span<IPtr<UIElement>> GetTickContent() { return Content_; }
+        INDEX_Property(get = GetTickContent) Span<IPtr<UIElement>> TickContent;
+
+        virtual void Tick()
+        {
+            AnimationTick_();
+        }
+
+        virtual void RecursiveTick()
+        {
+            Tick();
+            for (auto& c : TickContent)
+            {
+                c->RecursiveTick();
+            }
+        }
+
+    public:
+        virtual Span<IPtr<UIElement>> GetRenderContent() { return Content_; }
+        INDEX_Property(get = GetRenderContent) Span<IPtr<UIElement>> RenderContent;
     };
 
 #define ui_ref IPtr<UIElement>
@@ -375,6 +411,9 @@ namespace Index::UI2
         ui_ref e2 = INew<UIElement>();
         if (e->IsContentless) { e->Add(e2); }
         Func<void(UIElement*, bool)> func = &UIElement::SetWidth;
+        e->Add(e2);
         e->Animate<QuartInOutAnimation>(&UIElement::SetWidth, e->Width, 100, TimeSpan::FromSec(10));
+
+        e->RecursiveTick();
     }
 }

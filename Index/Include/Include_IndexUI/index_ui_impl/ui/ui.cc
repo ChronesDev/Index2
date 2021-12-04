@@ -49,13 +49,13 @@ namespace Index::UI2
 // UIElementAnimation
 namespace Index::UI2
 {
-    struct UIElementAnimation
+    struct UIElementAnimation : IObj<UIElementAnimation>
     {
         WPtr<UIElement> Element;
 
         virtual void Update() = 0;
 
-        virtual bool GetIsDone() const = 0;
+        virtual bool GetIsDone() = 0;
         INDEX_Property(get = GetIsDone) bool IsDone;
     };
 
@@ -63,8 +63,10 @@ namespace Index::UI2
     {
     public:
         UIElementPropertyAnimation() = default;
-        UIElementPropertyAnimation(WPtr<UIElement> element, Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
-            : Animation_(animation), PropertySetter_(propertySetter)
+        UIElementPropertyAnimation(WPtr<UIElement> element,
+            Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
+            : Animation_(animation)
+            , PropertySetter_(propertySetter)
         {
             Element = Move(element);
         }
@@ -80,7 +82,7 @@ namespace Index::UI2
             if (auto element = Element.Lock) PropertySetter_(element.Ptr, Animation_.Value.Value);
         }
 
-        bool GetIsDone() const override { return !Animation_.HasValue || Animation_.Value.HasFinished; }
+        bool GetIsDone() override { return !Animation_.HasValue || Animation_.Value.HasFinished; }
 
         TAnimation& GetAnimation() const { return Animation_; }
         INDEX_Property(get = GetAnimation) TAnimation& Animation;
@@ -340,6 +342,28 @@ namespace Index::UI2
         bool GetClipContent() const { return ClipContent_; }
         void SetClipContent(bool value) { ClipContent_ = value; }
         INDEX_Property(get = GetClipContent, put = SetClipContent) bool ClipContent;
+
+    private:
+        std::deque<IPtr<UIElementAnimation>> ElementAnimations_;
+
+    public:
+        decltype(ElementAnimations_)& GetElementAnimations() { return ElementAnimations_; }
+        INDEX_Property(get = GetElementAnimations) decltype(ElementAnimations_)& ElementAnimations;
+
+        void AddAnimation(IPtr<UIElementAnimation> animation) { ElementAnimations.push_back(animation); }
+
+        template <class TAnimation>
+        void Animate(Func<void(UIElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
+        {
+            AddAnimation(INew<UIElementPropertyAnimation<TAnimation>>(WSelf(), propertySetter, animation));
+        }
+
+        template <class TAnimation>
+        void Animate(Func<void(UIElement*, typename TAnimation::TType)> propertySetter,
+            typename TAnimation::TType from, typename TAnimation::TType to, TimeSpan duration)
+        {
+            Animate<TAnimation>(std::forward<decltype(propertySetter)>(propertySetter), { from, to, duration });
+        }
     };
 
 #define ui_ref IPtr<UIElement>
@@ -351,6 +375,6 @@ namespace Index::UI2
         ui_ref e2 = INew<UIElement>();
         if (e->IsContentless) { e->Add(e2); }
         Func<void(UIElement*, bool)> func = &UIElement::SetWidth;
-        UIElementPropertyAnimation<LinearAnimation> a = { e, &UIElement::SetWidth, LinearAnimation { } };
+        e->Animate<QuartInOutAnimation>(&UIElement::SetWidth, e->Width, 100, TimeSpan::FromSec(10));
     }
 }

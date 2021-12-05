@@ -347,6 +347,12 @@ namespace Index::UI2
 
         void YogaNode_Content_SetDirection_(YGFlexDirection value) { YGNodeStyleSetFlexDirection(&YogaNode, value); }
 
+    public:
+        // TODO: Implement GetAlignment
+        Align GetAlignment() { throw; }
+        void SetAlignment(Align value) { YogaNode_SetAlignmentFromAlign_(value); }
+        INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
+
     private:
         List<IPtr<UIElement>> Content_;
 

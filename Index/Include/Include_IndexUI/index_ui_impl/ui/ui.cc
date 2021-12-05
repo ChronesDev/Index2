@@ -95,6 +95,13 @@ namespace Index::UI2
     struct UIElement : IObj<UIElement>
     {
     protected:
+        string Name_;
+
+    public:
+        string GetName() const { return Name_; }
+        void SetName(string value) { Name_ = value; }
+        INDEX_Property(get = GetName, put = SetName) string Name;
+
     protected:
         WPtr<UIElement> Parent_;
         List<WPtr<UIElement>> MultiParents_;
@@ -106,8 +113,15 @@ namespace Index::UI2
         WPtr<UIElement> GetWeakParent() { return Parent_; }
         INDEX_Property(get = GetWeakParent) WPtr<UIElement> WeakParent;
 
-        virtual bool GetIsMultiParent() { return false; }
+        virtual bool GetIsMultiParent() const { return false; }
         INDEX_Property(get = GetIsMultiParent) bool IsMultiParent;
+
+        const List<WPtr<UIElement>>& GetParents() const
+        {
+            if (!IsMultiParent) throw std::exception("MultipleParent was false.");
+            return MultiParents_;
+        }
+        INDEX_Property(get = GetIsMultiParent) const List<WPtr<UIElement>>& Parents;
 
         virtual bool GetCanAttach() { return true; };
         INDEX_Property(get = GetCanAttach) bool CanAttach;
@@ -306,10 +320,7 @@ namespace Index::UI2
         {
             YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
 
-            if (align.IsHStretched)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, 0);
-            }
+            if (align.IsHStretched) { YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, 0); }
             else if (align.IsHCentered)
             {
                 YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, YGUndefined);
@@ -325,10 +336,7 @@ namespace Index::UI2
                 YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeRight, 0);
             }
 
-            if (align.IsVStretched)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, 0);
-            }
+            if (align.IsVStretched) { YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, 0); }
             else if (align.IsVCentered)
             {
                 YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, YGUndefined);
@@ -353,23 +361,27 @@ namespace Index::UI2
         void SetAlignment(Align value) { YogaNode_SetAlignmentFromAlign_(value); }
         INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
 
+        // TODO: Implement GetHasAlignment
+        bool GetHasAlignment() { }
+        INDEX_Property(get = GetHasAlignment) bool HasAlignment;
+
     private:
         List<IPtr<UIElement>> Content_;
 
     public:
-        const List<IPtr<UIElement>>& GetContent() { return Content_; }
+        virtual const List<IPtr<UIElement>>& GetContent() { return Content_; }
         INDEX_Property(get = GetContent) const List<IPtr<UIElement>>& Content;
 
         virtual bool GetIsContentless() { return false; }
         INDEX_Property(get = GetIsContentless) bool IsContentless;
 
-        void Add(IPtr<UIElement> child)
+        virtual void Add(IPtr<UIElement> child)
         {
             if (IsContentless) throw std::exception("This element cannot hold content.");
             TryAdd(child);
         }
 
-        void TryAdd(IPtr<UIElement> child)
+        virtual void TryAdd(IPtr<UIElement> child)
         {
             if (child.IsNull) return;
             if (IsContentless) return;
@@ -377,13 +389,13 @@ namespace Index::UI2
             child->ParentTryAttach(ISelf());
         }
 
-        void Remove(IPtr<UIElement> child)
+        virtual void Remove(IPtr<UIElement> child)
         {
             if (IsContentless) throw std::exception("This element doesn't hold content.");
             TryRemove(child);
         }
 
-        void TryRemove(IPtr<UIElement> child)
+        virtual void TryRemove(IPtr<UIElement> child)
         {
             if (child.IsNull) return;
             if (Content_.Contains(child))
@@ -392,11 +404,6 @@ namespace Index::UI2
                 if (child->CanAttachYogaNode) YogaNode.removeChild(&child->YogaNode);
                 child->ParentDetach(this);
             }
-        }
-
-        void SetContentAlign(Align value)
-        {
-            // if (value.IsS)
         }
 
     private:
@@ -463,7 +470,17 @@ namespace Index::UI2
         INDEX_Property(get = GetRenderContent) Span<IPtr<UIElement>> RenderContent;
     };
 
+    struct UIElementMapper : IObj<UIElementMapper>
+    {
+    public:
+        string Name;
+
+    public:
+        virtual IPtr<UIElement> Make() = 0;
+    };
+
 #define ui_ref IPtr<UIElement>
+#define ui_ptr UIElement*
 
     void f()
     {

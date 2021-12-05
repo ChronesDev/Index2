@@ -275,16 +275,74 @@ namespace Index::UI2
         INDEX_Property(get = GetComputedRect) Rect ComputedRect;
 
     protected:
-        void YogaNode_MakeStretch_()
+        void YogaNode_Make_()
         {
-            PercentWidth = 100;
-            PercentHeight = 100;
+            AutoWidth = true;
+            AutoHeight = true;
+
+            YogaNode_Stretch_();
+            YogaNode_CenterContent_();
         }
 
-        void YogaNode_MakeCenter_()
+        void YogaNode_Stretch_()
         {
-            PercentWidth = 0;
-            PercentHeight = 0;
+            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
+            YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeAll, 0);
+        }
+
+        void YogaNode_Center_()
+        {
+            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
+            YGNodeStyleSetPosition(&YogaNode, YGEdgeAll, YGUndefined);
+        }
+
+        void YogaNode_CenterContent_()
+        {
+            YGNodeStyleSetJustifyContent(&YogaNode, YGJustifyCenter);
+            YGNodeStyleSetAlignItems(&YogaNode, YGAlignCenter);
+        }
+
+        void YogaNode_SetAlignmentFromAlign_(Align align)
+        {
+            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
+
+            if (align.IsHStretched)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, 0);
+            }
+            else if (align.IsHCentered)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, YGUndefined);
+            }
+            else if (align.IsHLeft)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeLeft, 0);
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeRight, YGUndefined);
+            }
+            else if (align.IsHRight)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeLeft, YGUndefined);
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeRight, 0);
+            }
+
+            if (align.IsVStretched)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, 0);
+            }
+            else if (align.IsVCentered)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, YGUndefined);
+            }
+            else if (align.IsVTop)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeTop, 0);
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeBottom, YGUndefined);
+            }
+            else if (align.IsVBottom)
+            {
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeTop, YGUndefined);
+                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeBottom, 0);
+            }
         }
 
         void YogaNode_Content_SetDirection_(YGFlexDirection value) { YGNodeStyleSetFlexDirection(&YogaNode, value); }
@@ -383,10 +441,7 @@ namespace Index::UI2
         virtual Span<IPtr<UIElement>> GetTickContent() { return Content_; }
         INDEX_Property(get = GetTickContent) Span<IPtr<UIElement>> TickContent;
 
-        virtual void Tick()
-        {
-            AnimationTick_();
-        }
+        virtual void Tick() { AnimationTick_(); }
 
         virtual void RecursiveTick()
         {

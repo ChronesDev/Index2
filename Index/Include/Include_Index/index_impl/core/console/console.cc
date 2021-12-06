@@ -6,13 +6,9 @@
 
 #define INDEX_Console_Format(...) std::format(__VA_ARGS__)
 
-#if defined(__clang__)
+#ifndef INDEX_StdFormat
 #undef INDEX_Console_Format
-#define INDEX_Console_Format(...) std::string("Not supported yet.")
-#elif defined(__GNUC__) || defined(__GNUG__)
-#undef INDEX_Console_Format
-#define INDEX_Console_Format(...) std::string("Not supported yet.")
-#elif defined(_MSC_VER)
+#define INDEX_Console_Format(...) "[Index: std::format not supported.]"
 #endif
 
 namespace Index

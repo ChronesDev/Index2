@@ -1,8 +1,3 @@
-//
-// Created by lukax on 27.11.2021.
-//
+#pragma once
 
-#ifndef INDEX_INDEX_UI_MACROS_END_H
-#define INDEX_INDEX_UI_MACROS_END_H
-
-#endif // INDEX_INDEX_UI_MACROS_END_H
+#include "index_ui_impl/ui/macros/index_ui_macros_end.cc"

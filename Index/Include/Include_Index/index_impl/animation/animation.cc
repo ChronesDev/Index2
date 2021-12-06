@@ -19,6 +19,7 @@
 
 namespace Index
 {
+    // FIXME: Fix this for animations !!!
     template <class TTransition> struct IAnimation : public TTransition
     {
         using TType = typename TTransition::T;

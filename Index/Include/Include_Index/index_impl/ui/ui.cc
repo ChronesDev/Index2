@@ -885,15 +885,11 @@ namespace Index::UI
         __forceinline void CacheContent(UIDynamic* that, UIContext* u) { CachedSize = GetCache(that, u); }
 
     public:
-        INDEX_UI_DynSize_Constructor_All_Cast_FirstType_SecondType(float, int, float, float)
-
-            INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynFunc)
-
-                INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynThatFunc)
-
-                    INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynFunc, float, DynFunc)
-
-                        INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynThatFunc, float, DynThatFunc)
+        INDEX_UI_DynSize_Constructor_All_Cast_FirstType_SecondType(float, int, float, float);
+        INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynFunc);
+        INDEX_UI_DynSize_Constructor_FirstType_SecondType(float, DynThatFunc);
+        INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynFunc, float, DynFunc);
+        INDEX_UI_DynSize_Constructor_Cast_FirstType_SecondType(int, DynThatFunc, float, DynThatFunc);
     };
 }
 

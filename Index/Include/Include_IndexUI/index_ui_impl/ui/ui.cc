@@ -4,10 +4,14 @@
 #include <SimpleYoga/yoga/YGNode.h>
 #include <SimpleYoga/yoga/Yoga.h>
 
+#define INDEX_UI_Declare(name) struct name; struct name##Mapper
+#define INDEX_UI_DeclareExplicit(name, mapper_name) struct name; struct mapper_name
+#define INDEX_UI_UseMapper(name) using Mapper = name
+
 namespace Index::UI2
 {
     struct UIElement;
-    struct UIElementMapper;
+    struct UIMapper;
 
     struct UIElementAnimation;
     template <class T, class TElement> struct UIElementPropertyAnimation;
@@ -362,7 +366,7 @@ namespace Index::UI2
         INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
 
         // TODO: Implement GetHasAlignment
-        bool GetHasAlignment() { }
+        bool GetHasAlignment() { throw; }
         INDEX_Property(get = GetHasAlignment) bool HasAlignment;
 
     private:
@@ -470,28 +474,42 @@ namespace Index::UI2
         INDEX_Property(get = GetRenderContent) Span<IPtr<UIElement>> RenderContent;
     };
 
-    struct UIElementMapper : IObj<UIElementMapper>
+    template <class TThis, class T> struct UIMapper_SubMaker_
+    {
+    protected:
+        TThis* That;
+
+    public:
+        explicit UIMapper_SubMaker_(TThis* that)
+            : That(that)
+        {
+        }
+
+        void operator+=(Func<void(TThis&, typename T::Mapper&)> f)
+        {
+            auto mapper = INew<typename T::Mapper>();
+            f(*That, mapper.Value);
+            That->Content.Add(mapper.template DynamicAs<UIMapper>());
+        }
+    };
+
+    struct UIMapper : IObj<UIMapper>
     {
     public:
         string Name;
 
     public:
+        List<IPtr<UIMapper>> Content;
+
+        virtual void Add(IPtr<UIMapper> child) { Content.Add(child); }
+        virtual void Remove(IPtr<UIMapper> child) { Content.Remove(child); }
+
+        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+
+    protected:
+        virtual IPtr<UIElement> MakeSelf() { throw std::exception("Not implemented."); };
+
+    public:
         virtual IPtr<UIElement> Make() = 0;
     };
-
-#define ui_ref IPtr<UIElement>
-#define ui_ptr UIElement*
-
-    void f()
-    {
-        ui_ref e;
-        e->AutoHeight = true;
-        ui_ref e2 = INew<UIElement>();
-        if (e->IsContentless) { e->Add(e2); }
-        Func<void(UIElement*, bool)> func = &UIElement::SetWidth;
-        e->Add(e2);
-        e->Animate<QuartInOutAnimation>(&UIElement::SetWidth, e->Width, 100, TimeSpan::FromSec(10));
-
-        e->RecursiveTick();
-    }
 }

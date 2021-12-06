@@ -1,17 +1,17 @@
 #pragma once
 
-#define ui_ref IPtr<UIElement>
-#define ui_ptr UIElement*
+#undef ui_ref Index::IPtr<Index::UI::UIElement>
+#undef ui_ptr Index::UI::UIElement*
 
-#define sub parent.template Sub <
+#undef sub parent.template Sub <
 
-#define map > () += [this](auto& parent, auto mapper)
-#define mapn > () += [](auto& parent, auto mapper)
-#define mapc(capture) > () += [capture](auto& parent, auto mapper)
+#undef map > () += [this](auto& parent, auto mapper)
+#undef mapn > () += [](auto& parent, auto mapper)
+#undef mapc(capture) > () += [capture](auto& parent, auto mapper)
 
-#define mapm > () += [this](auto& parent, auto mapper) {}
-#define mapmn > () += [](auto& parent, auto mapper) {}
-#define mapmc(capture) > () += [capture](auto& parent, auto mapper) {}
+#undef mapm > () += [this](auto& parent, auto mapper) {}
+#undef mapmn > () += [](auto& parent, auto mapper) {}
+#undef mapmc(capture) > () += [capture](auto& parent, auto mapper) {}
 
-#define set mapper.
-#define get mapper.
+#undef set mapper.
+#undef get mapper.

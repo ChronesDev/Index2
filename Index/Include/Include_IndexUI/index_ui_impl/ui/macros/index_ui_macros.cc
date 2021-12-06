@@ -1,7 +1,7 @@
 #pragma once
 
-#define ui_ref IPtr<UIElement>
-#define ui_ptr UIElement*
+#define ui_ref Index::IPtr<Index::UI::UIElement>
+#define ui_ptr Index::UI::UIElement*
 
 #define sub parent.template Sub <
 

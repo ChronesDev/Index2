@@ -1,3 +1,6 @@
-#pragma once
+#ifdef INDEX_UI_MACROS
+#error <index_ui_macros> has been included twice in a row.
+#endif
+#define INDEX_UI_MACROS
 
 #include "index_ui_impl/ui/macros/index_ui_macros.cc"

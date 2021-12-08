@@ -263,7 +263,7 @@ namespace Index
                 {
                     if (!firstMatch) firstMatch = pCur;
                     if (!pat[2]) { return firstMatch; };
-                    if (*(PWORD)pat == '\?\?' || *(PBYTE)pat != '\?')
+                    if (*(PWORD)pat == *(PWORD)"\?\?" || *(PBYTE)pat != '\?')
                         pat += 3;
                     else
                         pat += 2;

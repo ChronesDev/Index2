@@ -1,3 +1,7 @@
+#ifdef INDEX_UI_MACROS
+#error index: Include <index_ui_macros_end> before including <index>
+#endif
+
 #ifdef INDEX_MACROS
 #include "index_macros_end"
 #define INDEX_MACROS_REVERT

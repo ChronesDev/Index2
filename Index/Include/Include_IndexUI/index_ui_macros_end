@@ -1,3 +1,6 @@
-#pragma once
+#ifndef INDEX_UI_MACROS
+#error include <index_ui_macros> first.
+#endif
+#undef INDEX_UI_MACROS
 
 #include "index_ui_impl/ui/macros/index_ui_macros_end.cc"

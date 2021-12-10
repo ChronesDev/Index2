@@ -26,3 +26,7 @@
 #endif
 
 #endif
+
+#ifdef INDEX_StdFormat
+#include <format>
+#endif

@@ -4,10 +4,6 @@
 #include <string>
 #include <vector>
 
-#ifdef INDEX_Cpp20
-#include <format>
-#endif
-
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type)                                                               \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; }                             \
     __forceinline this_type(base_type&& other) { static_cast<base_type&>(*this) = other; }

@@ -85,41 +85,24 @@ namespace Index
         INDEX_Property(get = back, put = SetLast) char& Last;
 
     public:
-        ALIAS_RECLASS_FUNCTION_CONST(char, At, at)
-
-        ALIAS_RECLASS_FUNCTION(void, Swap, swap)
-
-        ALIAS_RECLASS_FUNCTION(void, Clear, clear)
-
-        ALIAS_RECLASS_FUNCTION(void, Reserve, reserve)
-
-        ALIAS_RECLASS_FUNCTION(void, Resize, resize)
-
-        ALIAS_RECLASS_FUNCTION(Iterator, Erase, erase)
-
-        ALIAS_RECLASS_FUNCTION(String, Assign, assign)
-
-        ALIAS_RECLASS_FUNCTION(void, Push, push_back)
-
-        ALIAS_RECLASS_FUNCTION(void, Pop, pop_back)
-
-        ALIAS_RECLASS_FUNCTION(void, ShrinkToFit, shrink_to_fit)
-
-        ALIAS_RECLASS_FUNCTION_CONST(int, Compare, compare)
-
-        ALIAS_RECLASS_FUNCTION(void, Append, append)
-
-        ALIAS_RECLASS_FUNCTION_CONST(size_t, Find, find)
-
-        ALIAS_RECLASS_FUNCTION(String::Iterator, Insert, insert)
-
-        ALIAS_RECLASS_FUNCTION(String, SubString, substr)
-
-        ALIAS_RECLASS_FUNCTION_CONST(void, Data, data)
-
-        ALIAS_RECLASS_FUNCTION_CONST(bool, StarsWith, starts_with)
-
-        ALIAS_RECLASS_FUNCTION_CONST(bool, EndsWith, ends_with)
+        ALIAS_RECLASS_FUNCTION_CONST(char, At, at);
+        ALIAS_RECLASS_FUNCTION(void, Swap, swap);
+        ALIAS_RECLASS_FUNCTION(void, Clear, clear);
+        ALIAS_RECLASS_FUNCTION(void, Reserve, reserve);
+        ALIAS_RECLASS_FUNCTION(void, Resize, resize);
+        ALIAS_RECLASS_FUNCTION(Iterator, Erase, erase);
+        ALIAS_RECLASS_FUNCTION(String, Assign, assign);
+        ALIAS_RECLASS_FUNCTION(void, Push, push_back);
+        ALIAS_RECLASS_FUNCTION(void, Pop, pop_back);
+        ALIAS_RECLASS_FUNCTION(void, ShrinkToFit, shrink_to_fit);
+        ALIAS_RECLASS_FUNCTION_CONST(int, Compare, compare);
+        ALIAS_RECLASS_FUNCTION(void, Append, append);
+        ALIAS_RECLASS_FUNCTION_CONST(size_t, Find, find);
+        ALIAS_RECLASS_FUNCTION(String::Iterator, Insert, insert);
+        ALIAS_RECLASS_FUNCTION(String, SubString, substr);
+        ALIAS_RECLASS_FUNCTION_CONST(void, Data, data);
+        ALIAS_RECLASS_FUNCTION_CONST(bool, StarsWith, starts_with);
+        ALIAS_RECLASS_FUNCTION_CONST(bool, EndsWith, ends_with);
     };
 
     typedef Index::String string;
@@ -127,7 +110,7 @@ namespace Index
 
 namespace Index
 {
-#ifdef INDEX_Cpp20
+#ifdef INDEX_StdFormat
     template <class TArg, class... TArgs> String Format(TArg&& arg, TArgs&&... args)
     {
         return std::format(std::forward<TArg>(arg), std::forward<TArgs>(args)...);

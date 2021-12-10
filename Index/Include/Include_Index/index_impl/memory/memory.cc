@@ -263,10 +263,11 @@ namespace Index
                 {
                     if (!firstMatch) firstMatch = pCur;
                     if (!pat[2]) { return firstMatch; };
-                    if (*(PWORD)pat == *(PWORD)"\?\?" || *(PBYTE)pat != '\?')
-                        pat += 3;
+                    if (*(PWORD)pat == *(PWORD) "\?\?" || *(PBYTE)pat != '\?') { pat += 3; }
                     else
+                    {
                         pat += 2;
+                    }
                 }
                 else
                 {
@@ -295,15 +296,9 @@ namespace Index
             return FindSignature(Base, Base + moduleinfo.SizeOfImage, std::forward<string>(pattern));
         }
 
-        void* FindSignaturePtr(string pattern)
-        {
-            return (void*)FindSignature(pattern);
-        }
+        void* FindSignaturePtr(string pattern) { return (void*)FindSignature(pattern); }
 
-        void* TryFindSignaturePtr(string pattern)
-        {
-            return (void*)TryFindSignature(pattern);
-        }
+        void* TryFindSignaturePtr(string pattern) { return (void*)TryFindSignature(pattern); }
 
 #endif
 

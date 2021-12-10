@@ -125,7 +125,7 @@ namespace Index::UI2
             if (!IsMultiParent) throw std::exception("MultipleParent was false.");
             return MultiParents_;
         }
-        INDEX_Property(get = GetIsMultiParent) const List<WPtr<UIElement>>& Parents;
+        INDEX_Property(get = GetParents) const List<WPtr<UIElement>>& Parents;
 
         virtual bool GetCanAttach() { return true; };
         INDEX_Property(get = GetCanAttach) bool CanAttach;

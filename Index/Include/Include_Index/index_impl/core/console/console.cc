@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../std/string/string.cc"
-#include <format>
 #include <iostream>
 
 #define INDEX_Console_Format(...) std::format(__VA_ARGS__)

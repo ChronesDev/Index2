@@ -6,6 +6,11 @@
 // Begin compiler checks
 #ifndef INDEX_NoStdFormat
 
+// __has_include check
+#if __has_include(<format>)
+#define INDEX_NoStdFormat
+#endif
+
 // If Clang
 #ifdef INDEX_Clang
 #define INDEX_NoStdFormat // Not yet supported in Clang

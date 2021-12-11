@@ -26,16 +26,19 @@ namespace Index
         IntPtr Base;
 
     public:
+        IntPtr At(int offset) { return Base + offset; }
+        IntPtr At(Int64 offset) { return Base + offset; }
+        IntPtr At(UInt64 offset) { return Base + offset; }
+        void* AtPtr(int offset) { return (void*)(Base + offset); }
+        void* AtPtr(Int64 offset) { return (void*)(Base + offset); }
+        void* AtPtr(UInt64 offset) { return (void*)(Base + offset); }
+
+    public:
         template <class T> constexpr T& Read(void* at) { return *(T*)(at); }
-
         template <class T> constexpr T& Read(IntPtr at) { return *(T*)(at); }
-
         template <class T> constexpr T& ReadOr(void* at, T _or) { return at != nullptr ? *(T*)(at) : _or; }
-
         template <class T> constexpr T& ReadOr(IntPtr at, T _or) { return at != 0 ? *(T*)(at) : _or; }
-
         template <class T> constexpr T& ReadStatic(IntPtr offset) { return Read<T>(Base += offset); }
-
         template <class T> constexpr T& TryReadOr(void* at, T _or)
         {
             try
@@ -47,7 +50,6 @@ namespace Index
                 return _or;
             }
         }
-
         template <class T> constexpr T& TryReadOr(IntPtr at, T _or)
         {
             try
@@ -59,7 +61,6 @@ namespace Index
                 return _or;
             }
         }
-
         template <class T> constexpr T& TryReadStaticOr(IntPtr offset, T _or)
         {
             try
@@ -74,7 +75,6 @@ namespace Index
 
     public:
         template <class T> constexpr void Write(void* at, T value) { *(T*)(at) = value; }
-
         template <class T> constexpr void Write(IntPtr at, T value) { *(T*)(at) = value; }
 
 #ifndef INDEX_NO_WINDOWS_H
@@ -86,7 +86,6 @@ namespace Index
             *(T*)(at) = value;
             VirtualProtect(at, sizeof(T), oldProtection, (PDWORD)&oldProtection);
         }
-
         template <class T> constexpr void WriteProtected(IntPtr at, T value)
         {
             uint oldProtection;
@@ -120,7 +119,6 @@ namespace Index
             memcpy(at, &bytes.First, bytes.Length);
             VirtualProtect(at, bytes.Length, oldProtection, (PDWORD)&oldProtection);
         }
-
         void PatchBytes(IntPtr at, List<byte> bytes)
         {
             uint oldProtection;
@@ -128,7 +126,6 @@ namespace Index
             memcpy((void*)at, &bytes.First, bytes.Length);
             VirtualProtect((void*)at, bytes.Length, oldProtection, (PDWORD)&oldProtection);
         }
-
         void Patch(void* at, byte* source, size_t length)
         {
             uint oldProtection;
@@ -136,7 +133,6 @@ namespace Index
             memcpy(at, source, length);
             VirtualProtect(at, length, oldProtection, (PDWORD)&oldProtection);
         }
-
         void Patch(IntPtr at, byte* source, size_t length)
         {
             uint oldProtection;
@@ -144,7 +140,6 @@ namespace Index
             memcpy((void*)at, source, length);
             VirtualProtect((void*)at, length, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void Patch(void* at, byte (&bytes)[TSize])
         {
             uint oldProtection;
@@ -152,7 +147,6 @@ namespace Index
             memcpy(at, &bytes, TSize);
             VirtualProtect(at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void Patch(IntPtr at, byte (&bytes)[TSize])
         {
             uint oldProtection;
@@ -160,7 +154,6 @@ namespace Index
             memcpy((void*)at, &bytes, TSize);
             VirtualProtect((void*)at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void Patch(void* at, byte(&&bytes)[TSize])
         {
             uint oldProtection;
@@ -168,7 +161,6 @@ namespace Index
             memcpy(at, &bytes, TSize);
             VirtualProtect(at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void Patch(IntPtr at, byte(&&bytes)[TSize])
         {
             uint oldProtection;
@@ -176,7 +168,6 @@ namespace Index
             memcpy((void*)at, &bytes, TSize);
             VirtualProtect((void*)at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void PatchChars(void* at, const char (&chars)[TSize])
         {
             uint oldProtection;
@@ -184,7 +175,6 @@ namespace Index
             memcpy(at, &chars, TSize);
             VirtualProtect(at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void PatchChars(IntPtr at, const char (&chars)[TSize])
         {
             uint oldProtection;
@@ -192,7 +182,6 @@ namespace Index
             memcpy((void*)at, &chars, TSize);
             VirtualProtect((void*)at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void PatchChars(void* at, const char(&&chars)[TSize])
         {
             uint oldProtection;
@@ -200,7 +189,6 @@ namespace Index
             memcpy(at, &chars, TSize);
             VirtualProtect(at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         template <size_t TSize> void PatchChars(IntPtr at, const char(&&chars)[TSize])
         {
             uint oldProtection;
@@ -208,7 +196,6 @@ namespace Index
             memcpy((void*)at, &chars, TSize);
             VirtualProtect((void*)at, TSize, oldProtection, (PDWORD)&oldProtection);
         }
-
         void Patch(void* at, const char* source, size_t length)
         {
             uint oldProtection;
@@ -216,7 +203,6 @@ namespace Index
             memcpy(at, source, length);
             VirtualProtect(at, length, oldProtection, (PDWORD)&oldProtection);
         }
-
         void Patch(IntPtr at, const char* source, size_t length)
         {
             uint oldProtection;

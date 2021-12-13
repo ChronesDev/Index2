@@ -1,20 +1,13 @@
 #pragma once
 
-#include "../../std/string/string.cc"
-#include <iostream>
-
-#define INDEX_Console_Format(...) std::format(__VA_ARGS__)
-
-#ifndef INDEX_StdFormat
-#undef INDEX_Console_Format
-#define INDEX_Console_Format(...) "[Index: std::format not supported.]"
-#endif
+#include "../../helpers/include.cc"
+#include "../console/console.cc"
 
 namespace Index
 {
-    class ConsoleI
+    class DebugI
     {
-        ConsoleI() = default;
+        DebugI() = default;
 
     public:
         template <class TArg, class... TArgs> inline auto Log(TArg&& arg, TArgs&&... args) const -> void;
@@ -29,52 +22,74 @@ namespace Index
         inline auto ReadLine() const -> string;
 
     public:
-        inline static auto New() noexcept -> ConsoleI;
+        inline static auto New() noexcept -> DebugI;
     };
 
-    inline ConsoleI Console = ConsoleI::New();
+    inline DebugI Debug = DebugI::New();
 
 #pragma region Implementation
 
-    template <class TArg, class... TArgs> auto ConsoleI::Log(TArg&& arg, TArgs&&... args) const -> void
+    template <class TArg, class... TArgs> auto DebugI::Log(TArg&& arg, TArgs&&... args) const -> void
     {
+#ifdef INDEX_DEBUG
         std::cout << arg;
         (std::cout << ... << args);
         std::cout << std::endl;
+#endif
     }
-    template <class... TArgs> auto ConsoleI::Write(TArgs&&... args) const -> void { (std::cout << ... << args); }
-    template <class... TArgs> auto ConsoleI::WriteLine(TArgs&&... args) const -> void
+    template <class... TArgs> auto DebugI::Write(TArgs&&... args) const -> void
     {
+#ifdef INDEX_DEBUG
+        (std::cout << ... << args);
+#endif
+    }
+    template <class... TArgs> auto DebugI::WriteLine(TArgs&&... args) const -> void
+    {
+#ifdef INDEX_DEBUG
         (std::cout << ... << args);
         std::cout << std::endl;
+#endif
     }
 
-    template <class TArg, class... TArgs> auto ConsoleI::LogF(TArg&& arg, TArgs&&... args) const -> void
+    template <class TArg, class... TArgs> auto DebugI::LogF(TArg&& arg, TArgs&&... args) const -> void
     {
+#ifdef INDEX_DEBUG
         std::cout << INDEX_Console_Format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;
+#endif
     }
-    template <class... TArgs> auto ConsoleI::WriteF(TArgs&&... args) const -> void
+    template <class... TArgs> auto DebugI::WriteF(TArgs&&... args) const -> void
     {
+#ifdef INDEX_DEBUG
         std::cout << INDEX_Console_Format(std::forward<TArgs>(args)...);
+#endif
     }
-    template <class... TArgs> auto ConsoleI::WriteLineF(TArgs&&... args) const -> void
+    template <class... TArgs> auto DebugI::WriteLineF(TArgs&&... args) const -> void
     {
+#ifdef INDEX_DEBUG
         std::cout << INDEX_Console_Format(std::forward<TArgs>(args)...) << std::endl;
+#endif
     }
 
-    auto ConsoleI::ReadKey() const -> int { return std::cin.get(); }
-    auto ConsoleI::ReadLine() const -> string
+    auto DebugI::ReadKey() const -> int
     {
+#ifdef INDEX_DEBUG
+        return std::cin.get();
+#endif
+    }
+    auto DebugI::ReadLine() const -> string
+    {
+#ifdef INDEX_DEBUG
         string ret;
         std::getline(std::cin, ret);
         return ret;
+#endif
     }
 
 #pragma endregion
 
 #pragma region StaticImplementation
 
-    auto ConsoleI::New() noexcept -> ConsoleI { return {}; }
+    auto DebugI::New() noexcept -> DebugI { return {}; }
 
 #pragma endregion
 }

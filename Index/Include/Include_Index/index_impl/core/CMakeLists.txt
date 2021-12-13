@@ -5,6 +5,7 @@ target_sources(IndexInclude PRIVATE
         color/color.cc
         colors/colors.cc
         console/console.cc
+        debug/debug.cc
         event/event.cc
         rect/rect.cc
         size/size.cc

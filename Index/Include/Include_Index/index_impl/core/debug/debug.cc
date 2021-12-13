@@ -9,6 +9,13 @@ namespace Index
     {
         DebugI() = default;
 
+    protected:
+#ifdef INDEX_DEBUG
+        static constexpr bool IsDebug = true;
+#else
+        static constexpr bool IsDebug = false;
+#endif
+
     public:
         template <class TArg, class... TArgs> inline auto Log(TArg&& arg, TArgs&&... args) const -> void;
         template <class... TArgs> inline auto Write(TArgs&&... args) const -> void;
@@ -20,6 +27,8 @@ namespace Index
 
         inline auto ReadKey() const -> int;
         inline auto ReadLine() const -> string;
+
+        [[nodiscard]] inline INDEX_Consteval operator bool();
 
     public:
         inline static auto New() noexcept -> DebugI;
@@ -82,6 +91,15 @@ namespace Index
         string ret;
         std::getline(std::cin, ret);
         return ret;
+#endif
+    }
+
+    INDEX_Consteval DebugI::operator bool()
+    {
+#ifdef INDEX_DEBUG
+        return true;
+#else
+        return false;
 #endif
     }
 

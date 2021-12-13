@@ -7,7 +7,7 @@ int main()
 {
     using namespace Index;
 
-    Debug.Log("Hello World");
+    if (Debug) { Console.Log("Hello World"); }
 
     Console.ReadLine();
 }

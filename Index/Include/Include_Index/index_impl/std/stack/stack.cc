@@ -57,11 +57,8 @@ namespace Index
 
     public:
         ALIAS_RECLASS_FUNCTION_CONST(T&, At, at)
-
         ALIAS_RECLASS_FUNCTION(void, Push, push)
-
         ALIAS_RECLASS_FUNCTION(void, Pop, pop)
-
         ALIAS_RECLASS_FUNCTION(void, Swap, swap)
     };
 }

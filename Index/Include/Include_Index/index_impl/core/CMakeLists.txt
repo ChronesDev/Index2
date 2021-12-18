@@ -9,4 +9,5 @@ target_sources(IndexInclude PRIVATE
         event/event.cc
         rect/rect.cc
         size/size.cc
-        vector/vector.cc)
+        vector/vector.cc
+        version/version.cc)

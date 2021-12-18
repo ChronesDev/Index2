@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../../helpers/include.cc"
 #include <string>
-#include <vector>
+
+#include "../../helpers/include.cc"
+#include "../vector/vector.cc"
 
 #define ALIAS_RECLASS_CONSTRUCTOR(this_type, base_type)                                                               \
     __forceinline this_type(base_type& other) { static_cast<base_type&>(*this) = other; }                             \
@@ -33,7 +34,7 @@ namespace Index
         using Iterator = iterator;
 
     public:
-        std::vector<String> Split(String delimiter)
+        List<String> Split(String delimiter)
         {
             size_t pos = 0;
             std::vector<String> matches {};

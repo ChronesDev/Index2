@@ -8,3 +8,4 @@
 #include "size/size.cc"
 #include "types.cc"
 #include "vector/vector.cc"
+#include "version/version.cc"

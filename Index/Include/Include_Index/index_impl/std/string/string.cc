@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 #include "../../helpers/include.cc"
 #include "../vector/vector.cc"
@@ -107,12 +108,45 @@ namespace Index
 
 namespace Index
 {
+    struct SS : std::stringstream
+    {
+    public:
+        using std::stringstream::stringstream;
+
+        SS() = default;
+
+    public:
+        String Make() const
+        {
+            return str();
+        }
+
+    public:
+        INDEX_Property(get = Make) String Str;
+
+    public:
+        operator String() const
+        {
+            return Make();
+        }
+    };
+}
+
+namespace Index
+{
 #ifdef INDEX_StdFormat
     template <class TArg, class... TArgs> String Format(TArg&& arg, TArgs&&... args)
     {
         return std::format(std::forward<TArg>(arg), std::forward<TArgs>(args)...);
     }
 #endif
+
+    template <class... TArgs> String Str(TArgs&&... args)
+    {
+        std::stringstream ss;
+        (ss << ... << args);
+        return ss.str();
+    }
 }
 
 #undef ALIAS_RECLASS_CONSTRUCTOR

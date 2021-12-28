@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <locale>
 
 #include "../../helpers/include.cc"
 #include "../vector/vector.cc"
@@ -72,7 +73,28 @@ namespace Index
             first = value;
         }
 
-        operator const char*() { return this->c_str(); }
+        explicit operator const char*() { return this->c_str(); }
+
+    public:
+        [[nodiscard]] String ToLower()
+        {
+            String s = *this;
+            for (auto& c : s)
+            {
+                c = std::tolower(c);
+            }
+            return s;
+        }
+
+        [[nodiscard]] String ToUpper()
+        {
+            String s = *this;
+            for (auto& c : s)
+            {
+                c = std::toupper(c);
+            }
+            return s;
+        }
 
     public:
         INDEX_Property(get = capacity) size_t Capacity;

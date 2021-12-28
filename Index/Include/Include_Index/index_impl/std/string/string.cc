@@ -76,7 +76,7 @@ namespace Index
         explicit operator const char*() { return this->c_str(); }
 
     public:
-        [[nodiscard]] String ToLower()
+        [[nodiscard]] String ToLower() const
         {
             String s = *this;
             for (auto& c : s)
@@ -86,7 +86,7 @@ namespace Index
             return s;
         }
 
-        [[nodiscard]] String ToUpper()
+        [[nodiscard]] String ToUpper() const
         {
             String s = *this;
             for (auto& c : s)

@@ -257,7 +257,7 @@ namespace Index
                 }
                 else
                 {
-                    pat = pattern;
+                    pat = (const char*)pattern;
                     firstMatch = 0;
                 }
             }

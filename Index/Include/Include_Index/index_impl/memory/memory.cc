@@ -290,8 +290,8 @@ namespace Index
 
             for (int i = 0; i < mlptr.Offsets.Length; i++)
             {
-                a = *(uintptr_t*)(a);
-                if ((uintptr_t*)(a) == nullptr) return a;
+                a = *(IntPtr*)(a);
+                if ((IntPtr*)(a) == nullptr) return a;
                 a += mlptr.Offsets[i];
             }
 

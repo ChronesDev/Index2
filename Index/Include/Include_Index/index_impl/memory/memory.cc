@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "../std/include.cc"
+#include "multilevelptr.cc"
 
 #define INDEX_MEM_IsInRange(x, a, b) (x >= a && x <= b)
 #define INDEX_MEM_GetBits(x)                                                                                          \
@@ -218,7 +219,6 @@ namespace Index
             VirtualProtect(at, length, PAGE_EXECUTE_READWRITE, (PDWORD)&oldProtection);
             return oldProtection;
         }
-
         uint Unprotect(IntPtr at, size_t length)
         {
             DWORD oldProtection;
@@ -231,7 +231,6 @@ namespace Index
             DWORD oldProtection2;
             VirtualProtect(at, length, oldProtection, (PDWORD)&oldProtection2);
         }
-
         void Reprotect(IntPtr at, size_t length, uint oldProtection)
         {
             DWORD oldProtection2;
@@ -263,7 +262,6 @@ namespace Index
             }
             return 0;
         }
-
         IntPtr FindSignature(string pattern)
         {
             if (Base == 0) throw std::exception("Invalid Base.");
@@ -273,7 +271,6 @@ namespace Index
             if (result == 0) throw std::exception("Could not find the Sig.");
             return result;
         }
-
         IntPtr TryFindSignature(string pattern)
         {
             if (Base == 0) throw std::exception("Invalid Base.");
@@ -281,12 +278,33 @@ namespace Index
             K32GetModuleInformation(GetCurrentProcess(), GetModuleHandleA(nullptr), &moduleinfo, sizeof(moduleinfo));
             return FindSignature(Base, Base + moduleinfo.SizeOfImage, std::forward<string>(pattern));
         }
-
         void* FindSignaturePtr(string pattern) { return (void*)FindSignature(pattern); }
-
         void* TryFindSignaturePtr(string pattern) { return (void*)TryFindSignature(pattern); }
 
 #endif
+
+    public:
+        static IntPtr FindMultiLevelPtr(IntPtr base, MultiLevelPtrPath mlptr)
+        {
+            IntPtr a = base + mlptr.BaseOffset;
+
+            for (int i = 0; i < mlptr.Offsets.Length; i++)
+            {
+                a = *(uintptr_t*)(a);
+                if ((uintptr_t*)(a) == nullptr) return a;
+                a += mlptr.Offsets[i];
+            }
+
+            return a;
+        }
+
+        IntPtr FindMultiLevelPtr(MultiLevelPtrPath mlptr)
+        {
+            if (mlptr.Base == "")
+                return FindMultiLevelPtr(this->Base, mlptr);
+            else
+                throw std::exception("Not implemented");
+        }
 
     public:
         static Memory New()
@@ -297,9 +315,7 @@ namespace Index
             return mem;
 #endif
         }
-
         static Memory New(IntPtr baseAddress) { return Memory(baseAddress); }
-
         static Memory New(void* baseAddress) { return Memory((IntPtr)baseAddress); }
     };
 

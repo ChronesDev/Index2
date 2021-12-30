@@ -19,7 +19,7 @@ namespace Index
 
     template <class T> inline constexpr T Limit(T v, T a, T b)
     {
-        if constexpr (a > b)
+        if (a > b)
             return Clamp(v, b, a);
         else
             return Clamp(v, a, b);

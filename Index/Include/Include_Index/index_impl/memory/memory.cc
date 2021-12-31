@@ -35,16 +35,16 @@ namespace Index
         void* AtPtr(UInt64 offset) { return (void*)(Base + offset); }
 
     public:
-        template <class T> constexpr T& Read(void* at) { return *(T*)(at); }
-        template <class T> constexpr T& Read(IntPtr at) { return *(T*)(at); }
-        template <class T> constexpr T& ReadOr(void* at, T _or) { return at != nullptr ? *(T*)(at) : _or; }
-        template <class T> constexpr T& ReadOr(IntPtr at, T _or) { return at != 0 ? *(T*)(at) : _or; }
+        template <class T> constexpr T& Read(void* at) { return *(T*)(void*)(at); }
+        template <class T> constexpr T& Read(IntPtr at) { return *(T*)(void*)(at); }
+        template <class T> constexpr T& ReadOr(void* at, T _or) { return at != nullptr ? *(T*)(void*)(at) : _or; }
+        template <class T> constexpr T& ReadOr(IntPtr at, T _or) { return at != 0 ? *(T*)(void*)(at) : _or; }
         template <class T> constexpr T& ReadStatic(IntPtr offset) { return Read<T>(Base += offset); }
         template <class T> constexpr T& TryReadOr(void* at, T _or)
         {
             try
             {
-                return *(T*)(at);
+                return *(T*)(void*)(at);
             }
             catch (...)
             {
@@ -55,7 +55,7 @@ namespace Index
         {
             try
             {
-                return *(T*)(at);
+                return *(T*)(void*)(at);
             }
             catch (...)
             {
@@ -75,8 +75,8 @@ namespace Index
         }
 
     public:
-        template <class T> constexpr void Write(void* at, T value) { *(T*)(at) = value; }
-        template <class T> constexpr void Write(IntPtr at, T value) { *(T*)(at) = value; }
+        template <class T> constexpr void Write(void* at, T value) { *(T*)(void*)(at) = value; }
+        template <class T> constexpr void Write(IntPtr at, T value) { *(T*)(void*)(at) = value; }
 
 #ifndef INDEX_NO_WINDOWS_H
 
@@ -84,20 +84,20 @@ namespace Index
         {
             uint oldProtection;
             VirtualProtect(at, sizeof(T), PAGE_EXECUTE_READWRITE, (PDWORD)&oldProtection);
-            *(T*)(at) = value;
+            *(T*)(void*)(at) = value;
             VirtualProtect(at, sizeof(T), oldProtection, (PDWORD)&oldProtection);
         }
         template <class T> constexpr void WriteProtected(IntPtr at, T value)
         {
             uint oldProtection;
             VirtualProtect((void*)at, sizeof(T), PAGE_EXECUTE_READWRITE, (PDWORD)&oldProtection);
-            *(T*)(at) = value;
+            *(T*)(void*)(at) = value;
             VirtualProtect((void*)at, sizeof(T), oldProtection, (PDWORD)&oldProtection);
         }
 
 #endif
 
-        template <class T> constexpr void WriteStatic(IntPtr at, T value) { *(T*)(Base + at) = value; }
+        template <class T> constexpr void WriteStatic(IntPtr at, T value) { *(T*)(void*)(Base + at) = value; }
 
 #ifndef INDEX_NO_WINDOWS_H
 
@@ -105,7 +105,7 @@ namespace Index
         {
             uint oldProtection;
             VirtualProtect((void*)(Base + offset), sizeof(T), PAGE_EXECUTE_READWRITE, (PDWORD)&oldProtection);
-            *(T*)(Base + offset) = value;
+            *(T*)(void*)(Base + offset) = value;
             VirtualProtect((void*)(Base + offset), sizeof(T), oldProtection, (PDWORD)&oldProtection);
         }
 

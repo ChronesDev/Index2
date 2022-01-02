@@ -44,6 +44,8 @@ cmake-build-debug-msvc/
 cmake-build-release-msvc/
 cmake-build-debug-clang/
 cmake-build-release-clang/
+cmake-build-debug-gcc/
+cmake-build-release-gcc/
 
 build/
 out/

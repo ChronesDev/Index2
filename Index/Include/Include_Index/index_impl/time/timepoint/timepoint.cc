@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <iomanip>
 
 #include "../../helpers/include.cc"
 #include "../timespan/timespan.cc"
@@ -68,7 +69,7 @@ namespace Index
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
         auto t = std::chrono::system_clock::to_time_t(timePoint.StdTimePoint);
-        os << "TimePoint {" << std::ctime(&t) << "}";
+        os << "TimePoint {" << std::put_time(std::localtime(&t), "%F %T") << "}";
         return os;
     }
 }

@@ -6,5 +6,6 @@ target_sources(IndexClient PRIVATE
         errors/errors.cc
         format/format.cc
         overload/overload.cc
+        platform/platform.cc
         property/property.cc
         version/version.cc)

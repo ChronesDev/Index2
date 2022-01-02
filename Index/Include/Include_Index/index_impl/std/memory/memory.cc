@@ -89,8 +89,7 @@ namespace Index
         template <class TTo> WPtr<TTo> ConstAs() const { return std::const_pointer_cast<TTo>(this->lock()); }
         template <class TTo> WPtr<TTo> ReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
 
-        bool GetIsNull() const { return this->get() == nullptr; }
-        T& GetValue() const { return *this->get(); }
+        bool GetIsNull() const { return this->expired(); }
         IPtr<T> GetLock() const { return this->lock(); }
 
         template <class TTo> IPtr<TTo> LockAs() const { return std::static_pointer_cast<TTo>(this->lock()); }
@@ -103,9 +102,6 @@ namespace Index
         static __forceinline IPtr<T> Null() { return {}; }
 
         INDEX_Property(get = GetIsNull) bool IsNull;
-        INDEX_Property(get = get) T* Get;
-        INDEX_Property(get = get) T* Ptr;
-        INDEX_Property(get = GetValue) T& Value;
         INDEX_Property(get = expired) bool Expired;
         INDEX_Property(get = GetLock) IPtr<T> Lock;
 

@@ -50,7 +50,7 @@ namespace Index
         T& operator+() { return this->top(); }
 
     public:
-        INDEX_Property(get = target_type) type_info& Type;
+        INDEX_Property(get = target_type) std::type_info& Type;
         INDEX_Property(get = capacity) size_t Capacity;
         INDEX_Property(get = size) size_t Length;
         INDEX_Property(get = top) T& Top;

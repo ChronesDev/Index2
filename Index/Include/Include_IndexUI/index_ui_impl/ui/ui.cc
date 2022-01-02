@@ -122,7 +122,7 @@ namespace Index::UI2
 
         const List<WPtr<UIElement>>& GetParents() const
         {
-            if (!IsMultiParent) throw std::exception("MultipleParent was false.");
+            if (!IsMultiParent) INDEX_THROW("MultipleParent was false.");
             return MultiParents_;
         }
         INDEX_Property(get = GetParents) const List<WPtr<UIElement>>& Parents;
@@ -136,20 +136,20 @@ namespace Index::UI2
     protected:
         virtual void ParentAttach(IPtr<UIElement> parent)
         {
-            if (parent.IsNull) throw std::exception("parent was null.");
-            if (!CanAttach) throw std::exception("CanAttach was false.");
+            if (parent.IsNull) INDEX_THROW("parent was null.");
+            if (!CanAttach) INDEX_THROW("CanAttach was false.");
             if (IsMultiParent)
             {
-                if (!Parent_.IsNull) throw std::exception("Parent_ was not null while in MultiParent state.");
+                if (!Parent_.IsNull) INDEX_THROW("Parent_ was not null while in MultiParent state.");
                 for (auto p : MultiParents_)
                 {
-                    if (p.Lock.Ptr == parent.Ptr) throw std::exception("Duplicate parent found.");
+                    if (p.Lock.Ptr == parent.Ptr) INDEX_THROW("Duplicate parent found.");
                 }
             }
             else
             {
                 if (!Parent_.IsNull)
-                    throw std::exception("Parent_ was not null. Make sure to detach this element first.");
+                    INDEX_THROW("Parent_ was not null. Make sure to detach this element first.");
                 Parent_ = parent;
             }
         }
@@ -381,7 +381,7 @@ namespace Index::UI2
 
         virtual void Add(IPtr<UIElement> child)
         {
-            if (IsContentless) throw std::exception("This element cannot hold content.");
+            if (IsContentless) INDEX_THROW("This element cannot hold content.");
             TryAdd(child);
         }
 
@@ -395,7 +395,7 @@ namespace Index::UI2
 
         virtual void Remove(IPtr<UIElement> child)
         {
-            if (IsContentless) throw std::exception("This element doesn't hold content.");
+            if (IsContentless) INDEX_THROW("This element doesn't hold content.");
             TryRemove(child);
         }
 
@@ -507,7 +507,7 @@ namespace Index::UI2
         template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
 
     protected:
-        virtual IPtr<UIElement> MakeSelf() { throw std::exception("Not implemented."); };
+        virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
 
     public:
         virtual IPtr<UIElement> Make() = 0;

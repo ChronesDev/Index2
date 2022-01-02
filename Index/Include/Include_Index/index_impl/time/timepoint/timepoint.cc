@@ -67,7 +67,8 @@ namespace Index
 
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
-        os << "TimePoint {" << timePoint.StdTimePoint.time_since_epoch() << "}";
+        auto t = std::chrono::system_clock::to_time_t(timePoint.StdTimePoint);
+        os << "TimePoint {" << std::ctime(&t) << "}";
         return os;
     }
 }

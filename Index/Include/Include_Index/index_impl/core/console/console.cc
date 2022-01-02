@@ -17,10 +17,12 @@ namespace Index
         ConsoleI() = default;
 
     public:
+        template <class TArg> inline auto Log(TArg&& arg) const -> void;
         template <class TArg, class... TArgs> inline auto Log(TArg&& arg, TArgs&&... args) const -> void;
         template <class... TArgs> inline auto Write(TArgs&&... args) const -> void;
         template <class... TArgs> inline auto WriteLine(TArgs&&... args) const -> void;
 
+        template <class TArg> inline auto LogF(TArg&& arg) const -> void;
         template <class TArg, class... TArgs> inline auto LogF(TArg&& arg, TArgs&&... args) const -> void;
         template <class... TArgs> inline auto WriteF(TArgs&&... args) const -> void;
         template <class... TArgs> inline auto WriteLineF(TArgs&&... args) const -> void;
@@ -36,6 +38,11 @@ namespace Index
 
 #pragma region Implementation
 
+    template <class TArg> auto ConsoleI::Log(TArg&& arg) const -> void
+    {
+        std::cout << arg;
+        std::cout << std::endl;
+    }
     template <class TArg, class... TArgs> auto ConsoleI::Log(TArg&& arg, TArgs&&... args) const -> void
     {
         std::cout << arg;
@@ -49,6 +56,10 @@ namespace Index
         std::cout << std::endl;
     }
 
+    template <class TArg> auto ConsoleI::LogF(TArg&& arg) const -> void
+    {
+        std::cout << INDEX_Console_Format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;
+    }
     template <class TArg, class... TArgs> auto ConsoleI::LogF(TArg&& arg, TArgs&&... args) const -> void
     {
         std::cout << INDEX_Console_Format(std::forward<TArg>(arg), std::forward<TArgs>(args)...) << std::endl;

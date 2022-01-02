@@ -54,7 +54,7 @@ namespace Index
         constexpr bool Contains(const T& value) const { return std::find(this->begin(), this->end(), value) != this->end(); }
 
     public:
-        INDEX_Property(get = target_type) type_info& Type;
+        INDEX_Property(get = target_type) std::type_info& Type;
         INDEX_Property(get = capacity) size_t Capacity;
         INDEX_Property(get = size) size_t Length;
         INDEX_Property(get = front, put = SetFirst) T& First;

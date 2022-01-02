@@ -303,7 +303,7 @@ namespace Index
             if (mlptr.Base == "")
                 return FindMultiLevelPtr(this->Base, mlptr);
             else
-                throw std::exception("Not implemented");
+                INDEX_THROW("Not implemented");
         }
 
     public:
@@ -313,6 +313,8 @@ namespace Index
             auto baseAddress = (IntPtr)GetModuleHandleW(nullptr);
             auto mem = Memory(baseAddress);
             return mem;
+#else
+            INDEX_THROW("Not implemented");
 #endif
         }
         static Memory New(IntPtr baseAddress) { return Memory(baseAddress); }

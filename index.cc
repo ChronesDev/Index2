@@ -10,12 +10,8 @@ int main()
 
     if (Debug) { Console.Log("Hello World"); }
 
-    var t = Time.Now;
-    Console.Log("Time: ", t);
-
-
     Console.ReadLine();
 }
 
-#include <index_ui_macros_end>
 #include <index_macros_end>
+#include <index_ui_macros_end>

@@ -21,3 +21,5 @@ target_include_directories(IndexTest PUBLIC ${Lib_IncludeDir})
 # Add Lib Folder
 add_subdirectory(Index/Lib/)
 target_link_libraries(IndexTest yogacore)
+
+add_compile_options(IndexTest -fdeclspec -fms-extensions)

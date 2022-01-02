@@ -4,8 +4,12 @@
 #include <SimpleYoga/yoga/YGNode.h>
 #include <SimpleYoga/yoga/Yoga.h>
 
-#define INDEX_UI_Declare(name) struct name; struct name##Mapper
-#define INDEX_UI_DeclareExplicit(name, mapper_name) struct name; struct mapper_name
+#define INDEX_UI_Declare(name)                                                                                        \
+    struct name;                                                                                                      \
+    struct name##Mapper
+#define INDEX_UI_DeclareExplicit(name, mapper_name)                                                                   \
+    struct name;                                                                                                      \
+    struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
 namespace Index::UI2
@@ -100,416 +104,83 @@ namespace Index::UI2
     {
     protected:
         string Name_;
+        string Id_;
 
     public:
         string GetName() const { return Name_; }
         void SetName(string value) { Name_ = value; }
         INDEX_Property(get = GetName, put = SetName) string Name;
 
+        string GetId() const { return Id_; }
+        void SetId(string value) { Id_ = value; }
+        INDEX_Property(get = GetId, put = SetId) string Id;
+
     protected:
         WPtr<UIElement> Parent_;
-        List<WPtr<UIElement>> MultiParents_;
+        List<IPtr<UIElement>> Children_;
 
     public:
-        IPtr<UIElement> GetParent() { return Parent_.Lock; }
-        INDEX_Property(get = GetParent) IPtr<UIElement> Parent;
+        WPtr<UIElement> GetParent() const { return Parent_; }
+        INDEX_Property(get = GetParent) WPtr<UIElement> Parent;
 
-        WPtr<UIElement> GetWeakParent() { return Parent_; }
-        INDEX_Property(get = GetWeakParent) WPtr<UIElement> WeakParent;
-
-        virtual bool GetIsMultiParent() const { return false; }
-        INDEX_Property(get = GetIsMultiParent) bool IsMultiParent;
-
-        const List<WPtr<UIElement>>& GetParents() const
-        {
-            if (!IsMultiParent) INDEX_THROW("MultipleParent was false.");
-            return MultiParents_;
-        }
-        INDEX_Property(get = GetParents) const List<WPtr<UIElement>>& Parents;
-
-        virtual bool GetCanAttach() { return true; };
-        INDEX_Property(get = GetCanAttach) bool CanAttach;
-
-        virtual bool GetCanAttachYogaNode() { return true; };
-        INDEX_Property(get = GetCanAttachYogaNode) bool CanAttachYogaNode;
+        const List<IPtr<UIElement>>& GetChildren() const { return Children_; }
+        INDEX_Property(get = GetChildren) const List<IPtr<UIElement>>& Children;
 
     protected:
-        virtual void ParentAttach(IPtr<UIElement> parent)
-        {
-            if (parent.IsNull) INDEX_THROW("parent was null.");
-            if (!CanAttach) INDEX_THROW("CanAttach was false.");
-            if (IsMultiParent)
-            {
-                if (!Parent_.IsNull) INDEX_THROW("Parent_ was not null while in MultiParent state.");
-                for (auto p : MultiParents_)
-                {
-                    if (p.Lock.Ptr == parent.Ptr) INDEX_THROW("Duplicate parent found.");
-                }
-            }
-            else
-            {
-                if (!Parent_.IsNull)
-                    INDEX_THROW("Parent_ was not null. Make sure to detach this element first.");
-                Parent_ = parent;
-            }
-        }
-
-        virtual void ParentTryAttach(IPtr<UIElement> parent)
-        {
-            if (!CanAttach) return;
-            if (parent.IsNull) return;
-            ParentAttach(parent);
-        }
-
-        virtual void ParentDetach()
-        {
-            if (Parent_.IsNull) return;
-            Parent_ = {};
-        }
-
-        virtual void ParentDetach(IPtr<UIElement> parent) { ParentDetach(parent.Ptr); }
-
-        virtual void ParentDetach(UIElement* parent)
-        {
-            if (parent == nullptr) return;
-            if (IsMultiParent)
-            {
-                for (int i = 0; i < MultiParents_.Length; i++)
-                {
-                    if (MultiParents_[i].Lock.Ptr == parent)
-                    {
-                        MultiParents_.Erase(MultiParents_.begin() + i);
-                        return;
-                    }
-                }
-            }
-            else if (Parent_.Lock.Ptr == parent)
-            {
-                Parent_ = {};
-                return;
-            }
-        }
-
-        virtual void ParentDetachAll()
-        {
-            if (IsMultiParent) { MultiParents_ = {}; }
-            else
-            {
-                Parent_ = {};
-            }
-        }
+        void Children_Add_(const IPtr<UIElement>& child) { Children_.Add(child); }
+        void Children_Remove_(const IPtr<UIElement>& child) { Children_.Remove(child); }
+        bool Children_Contains_(const IPtr<UIElement>& child) { return Children_.Contains(child); }
 
     protected:
-        YGNode YogaNode;
+        UInt64 ComputeFrame_ = 0;
+        Size ComputedSize_;
 
     public:
-        const YGNode& GetYogaNode() const { return YogaNode; }
+        UInt64 GetComputeFrame() const { return ComputeFrame_; }
+        INDEX_Property(get = GetComputeFrame) UInt64 ComputeFrame;
 
-        float GetWidth() const
-        {
-            auto style = YGNodeStyleGetWidth(&YogaNode);
-            return style.unit == YGUnitPoint ? style.value : 0;
-        }
-        void SetWidth(float value) { YGNodeStyleSetWidth(&YogaNode, value); }
-        INDEX_Property(get = GetWidth, put = SetWidth) float Width;
-
-        float GetHeight() const
-        {
-            auto style = YGNodeStyleGetHeight(&YogaNode);
-            return style.unit == YGUnitPoint ? style.value : 0;
-        }
-        void SetHeight(float value) { YGNodeStyleSetWidth(&YogaNode, value); }
-        INDEX_Property(get = GetHeight, put = SetHeight) float Height;
-
-        float GetPercentWidth() const
-        {
-            auto style = YGNodeStyleGetWidth(&YogaNode);
-            return style.unit == YGUnitPercent ? style.value : 0;
-        }
-        void SetPercentWidth(float value) { YGNodeStyleSetWidthPercent(&YogaNode, value); }
-        INDEX_Property(get = GetPercentWidth, put = SetPercentWidth) float PercentWidth;
-
-        float GetPercentHeight() const
-        {
-            auto style = YGNodeStyleGetHeight(&YogaNode);
-            return style.unit == YGUnitPercent ? style.value : 0;
-        }
-        void SetPercentHeight(float value) { YGNodeStyleSetWidthPercent(&YogaNode, value); }
-        INDEX_Property(get = GetPercentHeight, put = SetPercentHeight) float PercentHeight;
-
-        bool GetAutoWidth() const
-        {
-            auto style = YGNodeStyleGetWidth(&YogaNode);
-            return style.unit == YGUnitAuto;
-        }
-        void SetAutoWidth(bool value)
-        {
-            if (value) YGNodeStyleSetWidthAuto(&YogaNode);
-        }
-        INDEX_Property(get = GetAutoWidth, put = SetAutoWidth) bool AutoWidth;
-
-        bool GetAutoHeight() const
-        {
-            auto style = YGNodeStyleGetHeight(&YogaNode);
-            return style.unit == YGUnitAuto;
-        }
-        void SetAutoHeight(bool value)
-        {
-            if (value) YGNodeStyleSetHeightAuto(&YogaNode);
-        }
-        INDEX_Property(get = GetAutoHeight, put = SetAutoHeight) bool AutoHeight;
-
-        float ComputedGetWidth() { return YGNodeLayoutGetWidth(&YogaNode); }
-        INDEX_Property(get = ComputedGetWidth) float ComputedWidth;
-
-        float ComputedGetHeight() { return YGNodeLayoutGetHeight(&YogaNode); }
-        INDEX_Property(get = ComputedGetHeight) float ComputedHeight;
-
-        Size GetComputedSize() { return { ComputedWidth, ComputedHeight }; }
+        Size GetComputedSize() const { return ComputedSize_; }
         INDEX_Property(get = GetComputedSize) Size ComputedSize;
-
-        UIUnit GetWidthUnit() const { return UIUnitFromYGUnit(YGNodeStyleGetWidth(&YogaNode).unit); }
-        INDEX_Property(get = GetWidthUnit) UIUnit WidthUnit;
-
-        UIUnit GetHeightUnit() const { return UIUnitFromYGUnit(YGNodeStyleGetHeight(&YogaNode).unit); }
-        INDEX_Property(get = GetHeightUnit) UIUnit HeightUnit;
-
-        float GetComputedLeftPosition() { return YGNodeLayoutGetLeft(&YogaNode); }
-        INDEX_Property(get = GetComputedLeftPosition) float ComputedLeftPosition;
-
-        float GetComputedTopPosition() { return YGNodeLayoutGetTop(&YogaNode); }
-        INDEX_Property(get = GetComputedTopPosition) float ComputedTopPosition;
-
-        float GetComputedRightPosition() { return YGNodeLayoutGetRight(&YogaNode); }
-        INDEX_Property(get = GetComputedRightPosition) float ComputedRightPosition;
-
-        float GetComputedBottomPosition() { return YGNodeLayoutGetBottom(&YogaNode); }
-        INDEX_Property(get = GetComputedBottomPosition) float ComputedBottomPosition;
-
-        Vec2F GetComputedPosition() { return { ComputedTopPosition, ComputedLeftPosition }; }
-        INDEX_Property(get = GetComputedPosition) Vec2F ComputedPosition;
-
-        Rect GetComputedRect() { return { ComputedPosition, ComputedSize }; }
-        INDEX_Property(get = GetComputedRect) Rect ComputedRect;
-
-    protected:
-        void YogaNode_Make_()
-        {
-            AutoWidth = true;
-            AutoHeight = true;
-
-            YogaNode_Stretch_();
-            YogaNode_CenterContent_();
-        }
-
-        void YogaNode_Stretch_()
-        {
-            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
-            YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeAll, 0);
-        }
-
-        void YogaNode_Center_()
-        {
-            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
-            YGNodeStyleSetPosition(&YogaNode, YGEdgeAll, YGUndefined);
-        }
-
-        void YogaNode_CenterContent_()
-        {
-            YGNodeStyleSetJustifyContent(&YogaNode, YGJustifyCenter);
-            YGNodeStyleSetAlignItems(&YogaNode, YGAlignCenter);
-        }
-
-        void YogaNode_SetAlignmentFromAlign_(Align align)
-        {
-            YGNodeStyleSetPositionType(&YogaNode, YGPositionTypeAbsolute);
-
-            if (align.IsHStretched) { YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, 0); }
-            else if (align.IsHCentered)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeHorizontal, YGUndefined);
-            }
-            else if (align.IsHLeft)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeLeft, 0);
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeRight, YGUndefined);
-            }
-            else if (align.IsHRight)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeLeft, YGUndefined);
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeRight, 0);
-            }
-
-            if (align.IsVStretched) { YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, 0); }
-            else if (align.IsVCentered)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeVertical, YGUndefined);
-            }
-            else if (align.IsVTop)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeTop, 0);
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeBottom, YGUndefined);
-            }
-            else if (align.IsVBottom)
-            {
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeTop, YGUndefined);
-                YGNodeStyleSetPositionPercent(&YogaNode, YGEdgeBottom, 0);
-            }
-        }
-
-        void YogaNode_Content_SetDirection_(YGFlexDirection value) { YGNodeStyleSetFlexDirection(&YogaNode, value); }
-
-    public:
-        // TODO: Implement GetAlignment
-        Align GetAlignment() { throw; }
-        void SetAlignment(Align value) { YogaNode_SetAlignmentFromAlign_(value); }
-        INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
-
-        // TODO: Implement GetHasAlignment
-        bool GetHasAlignment() { throw; }
-        INDEX_Property(get = GetHasAlignment) bool HasAlignment;
-
-    private:
-        List<IPtr<UIElement>> Content_;
-
-    public:
-        virtual const List<IPtr<UIElement>>& GetContent() { return Content_; }
-        INDEX_Property(get = GetContent) const List<IPtr<UIElement>>& Content;
-
-        virtual bool GetIsContentless() { return false; }
-        INDEX_Property(get = GetIsContentless) bool IsContentless;
-
-        virtual void Add(IPtr<UIElement> child)
-        {
-            if (IsContentless) INDEX_THROW("This element cannot hold content.");
-            TryAdd(child);
-        }
-
-        virtual void TryAdd(IPtr<UIElement> child)
-        {
-            if (child.IsNull) return;
-            if (IsContentless) return;
-            if (child->CanAttachYogaNode) YogaNode.insertChild(&child->YogaNode, YGNodeGetChildCount(&YogaNode));
-            child->ParentTryAttach(ISelf());
-        }
-
-        virtual void Remove(IPtr<UIElement> child)
-        {
-            if (IsContentless) INDEX_THROW("This element doesn't hold content.");
-            TryRemove(child);
-        }
-
-        virtual void TryRemove(IPtr<UIElement> child)
-        {
-            if (child.IsNull) return;
-            if (Content_.Contains(child))
-            {
-                Content_.Remove(child);
-                if (child->CanAttachYogaNode) YogaNode.removeChild(&child->YogaNode);
-                child->ParentDetach(this);
-            }
-        }
-
-    private:
-        bool ClipContent_ = false;
-
-    public:
-        bool GetClipContent() const { return ClipContent_; }
-        void SetClipContent(bool value) { ClipContent_ = value; }
-        INDEX_Property(get = GetClipContent, put = SetClipContent) bool ClipContent;
-
-    private:
-        std::deque<IPtr<UIElementAnimation>> ElementAnimations_;
-
-    public:
-        decltype(ElementAnimations_)& GetElementAnimations() { return ElementAnimations_; }
-        INDEX_Property(get = GetElementAnimations) decltype(ElementAnimations_)& ElementAnimations;
-
-        void AddAnimation(IPtr<UIElementAnimation> animation) { ElementAnimations.push_back(animation); }
-
-        template <class TAnimation>
-        void Animate(Func<void(UIElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
-        {
-            AddAnimation(INew<UIElementPropertyAnimation<TAnimation>>(WSelf(), propertySetter, animation));
-        }
-
-        template <class TAnimation>
-        void Animate(Func<void(UIElement*, typename TAnimation::TType)> propertySetter,
-            typename TAnimation::TType from, typename TAnimation::TType to, TimeSpan duration)
-        {
-            Animate<TAnimation>(std::forward<decltype(propertySetter)>(propertySetter), { from, to, duration });
-        }
-
-    protected:
-        void AnimationTick_()
-        {
-            for (auto& a : ElementAnimations_)
-            {
-                if (a.IsNull) continue;
-                a->Update();
-            }
-
-            auto rm = std::remove_if(ElementAnimations_.begin(), ElementAnimations_.end(),
-                [&](IPtr<UIElementAnimation>& item) { return item.IsNull || item->IsDone; });
-            ElementAnimations_.erase(rm);
-        }
-
-    public:
-        virtual Span<IPtr<UIElement>> GetTickContent() { return Content_; }
-        INDEX_Property(get = GetTickContent) Span<IPtr<UIElement>> TickContent;
-
-        virtual void Tick() { AnimationTick_(); }
-
-        virtual void RecursiveTick()
-        {
-            Tick();
-            for (auto& c : TickContent)
-            {
-                c->RecursiveTick();
-            }
-        }
-
-    public:
-        virtual Span<IPtr<UIElement>> GetRenderContent() { return Content_; }
-        INDEX_Property(get = GetRenderContent) Span<IPtr<UIElement>> RenderContent;
     };
 
-    template <class TThis, class T> struct UIMapper_SubMaker_
-    {
-    protected:
-        TThis* That;
-
-    public:
-        explicit UIMapper_SubMaker_(TThis* that)
-            : That(that)
+    /*
+        template <class TThis, class T> struct UIMapper_SubMaker_
         {
-        }
+        protected:
+            TThis* That;
 
-        void operator+=(Func<void(TThis&, typename T::Mapper&)> f)
+        public:
+            explicit UIMapper_SubMaker_(TThis* that)
+                : That(that)
+            {
+            }
+
+            void operator+=(Func<void(TThis&, typename T::Mapper&)> f)
+            {
+                auto mapper = INew<typename T::Mapper>();
+                f(*That, mapper.Value);
+                That->Content.Add(mapper.template DynamicAs<UIMapper>());
+            }
+        };
+
+        struct UIMapper : IObj<UIMapper>
         {
-            auto mapper = INew<typename T::Mapper>();
-            f(*That, mapper.Value);
-            That->Content.Add(mapper.template DynamicAs<UIMapper>());
-        }
-    };
+        public:
+            string Name;
 
-    struct UIMapper : IObj<UIMapper>
-    {
-    public:
-        string Name;
+        public:
+            List<IPtr<UIMapper>> Content;
 
-    public:
-        List<IPtr<UIMapper>> Content;
+            virtual void Add(IPtr<UIMapper> child) { Content.Add(child); }
+            virtual void Remove(IPtr<UIMapper> child) { Content.Remove(child); }
 
-        virtual void Add(IPtr<UIMapper> child) { Content.Add(child); }
-        virtual void Remove(IPtr<UIMapper> child) { Content.Remove(child); }
+            template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
 
-        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+        protected:
+            virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
 
-    protected:
-        virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
-
-    public:
-        virtual IPtr<UIElement> Make() = 0;
-    };
+        public:
+            virtual IPtr<UIElement> Make() = 0;
+        };
+        */
 }

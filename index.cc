@@ -10,6 +10,10 @@ int main()
 
     if (Debug) { Console.Log("Hello World"); }
 
+    Index::UI2::UIElement e;
+    e.Width = 100;
+    e.AutoMarginTop = true;
+
     Console.ReadLine();
 }
 

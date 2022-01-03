@@ -132,14 +132,26 @@ namespace Index::UI2
 
     protected:
         Index::Size Size_ = { AutoF, AutoF };
-        Vec4F Margin_;
-        Vec4F Padding_;
+        Index::Size MinSize_ = { AutoF, AutoF };
+        Index::Size MaxSize_ = { AutoF, AutoF };
+        Vec4F Margin_ = { 0 };
+        Vec4F Padding_ = { 0 };
 
     public:
         Index::Size& GetSize() { return Size_; }
         const Index::Size& GetSize() const { return Size_; }
         void SetSize(Index::Size value) { Size_ = value; }
         INDEX_Property(get = GetSize, put = SetSize) Index::Size& Size;
+
+        Index::Size& GetMinSize() { return MinSize_; }
+        const Index::Size& GetMinSize() const { return MinSize_; }
+        void SetMinSize(Index::Size value) { MinSize_ = value; }
+        INDEX_Property(get = GetMinSize, put = SetMinSize) Index::Size& MinSize;
+
+        Index::Size& GetMaxSize() { return MaxSize_; }
+        const Index::Size& GetMaxSize() const { return MaxSize_; }
+        void SetMaxSize(Index::Size value) { MaxSize_ = value; }
+        INDEX_Property(get = GetMaxSize, put = SetMaxSize) Index::Size& MaxSize;
 
         float GetWidth() const { return Size_.Width; }
         void SetWidth(float value) { Size_.Width = value; }
@@ -163,6 +175,50 @@ namespace Index::UI2
         }
         INDEX_Property(get = GetAutoHeight, put = SetAutoHeight) bool AutoHeight;
 
+        float GetMinWidth() const { return MinSize_.Width; }
+        void SetMinWidth(float value) { MinSize_.Width = value; }
+        INDEX_Property(get = GetMinWidth, put = SetMinWidth) float MinWidth;
+
+        float GetMinHeight() const { return MinSize_.Height; }
+        void SetMinHeight(float value) { MinSize_.Height = value; }
+        INDEX_Property(get = GetMinHeight, put = SetMinHeight) float MinHeight;
+
+        bool GetAutoMinWidth() const { return MinSize_.Width == AutoF; }
+        void SetAutoMinWidth(bool value)
+        {
+            if (value) MinSize_.Width = AutoF;
+        }
+        INDEX_Property(get = GetAutoMinWidth, put = SetAutoMinWidth) bool AutoMinWidth;
+
+        bool GetAutoMinHeight() const { return MinSize_.Height == AutoF; }
+        void SetAutoMinHeight(bool value)
+        {
+            if (value) MinSize_.Height = AutoF;
+        }
+        INDEX_Property(get = GetAutoMinHeight, put = SetAutoMinHeight) bool AutoMinHeight;
+
+        float GetMaxWidth() const { return MaxSize_.Width; }
+        void SetMaxWidth(float value) { MaxSize_.Width = value; }
+        INDEX_Property(get = GetMaxWidth, put = SetMaxWidth) float MaxWidth;
+
+        float GetMaxHeight() const { return MaxSize_.Height; }
+        void SetMaxHeight(float value) { MaxSize_.Height = value; }
+        INDEX_Property(get = GetMaxHeight, put = SetMaxHeight) float MaxHeight;
+
+        bool GetAutoMaxWidth() const { return MaxSize_.Width == AutoF; }
+        void SetAutoMaxWidth(bool value)
+        {
+            if (value) MaxSize_.Width = AutoF;
+        }
+        INDEX_Property(get = GetAutoMaxWidth, put = SetAutoMaxWidth) bool AutoMaxWidth;
+
+        bool GetAutoMaxHeight() const { return MaxSize_.Height == AutoF; }
+        void SetAutoMaxHeight(bool value)
+        {
+            if (value) MaxSize_.Height = AutoF;
+        }
+        INDEX_Property(get = GetAutoMaxHeight, put = SetAutoMaxHeight) bool AutoMaxHeight;
+
         float WidthOr(float value)
         {
             if (AutoWidth)
@@ -176,6 +232,34 @@ namespace Index::UI2
                 return value;
             else
                 return Height;
+        }
+        float MinWidthOr(float value)
+        {
+            if (AutoMinWidth)
+                return value;
+            else
+                return MinWidth;
+        }
+        float MinHeightOr(float value)
+        {
+            if (AutoMinHeight)
+                return value;
+            else
+                return MinHeight;
+        }
+        float MaxWidthOr(float value)
+        {
+            if (AutoMaxWidth)
+                return value;
+            else
+                return MaxWidth;
+        }
+        float MaxHeightOr(float value)
+        {
+            if (AutoMaxHeight)
+                return value;
+            else
+                return MaxHeight;
         }
         Index::Size SizeOr(float value) { return { WidthOr(value), HeightOr(value) }; }
 
@@ -348,9 +432,11 @@ namespace Index::UI2
         Index::Size GetComputedSize() const { return ComputedSize_; }
         INDEX_Property(get = GetComputedSize) Index::Size ComputedSize;
 
-    protected:
-        virtual void OnCalculateLayout() { }
-        virtual void OnRender() { }
+        float GetComputedWidth() const { return ComputedSize_.Width; }
+        INDEX_Property(get = GetComputedWidth, put = SetComputedWidth) float ComputedWidth;
+
+        float GetComputedHeight() const { return ComputedSize_.Height; }
+        INDEX_Property(get = GetComputedHeight, put = SetComputedHeight) float ComputedHeight;
     };
 
     /*

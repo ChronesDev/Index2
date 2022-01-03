@@ -13,6 +13,12 @@ int main()
     Index::UI2::UIElement e;
     e.Width = 100;
     e.AutoMarginTop = true;
+    e.MinWidth = 100;
+    e.PaddingLeft = 11;
+    var padding = e.PaddingOr(0);
+    e.Id = "11";
+    e.Name = "11";
+    var& children = e.Children;
 
     Console.ReadLine();
 }

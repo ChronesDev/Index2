@@ -4,11 +4,11 @@
 #include <SimpleYoga/yoga/YGNode.h>
 #include <SimpleYoga/yoga/Yoga.h>
 
-#define INDEX_UI_Declare(name)                                                                                                                                 \
-    struct name;                                                                                                                                               \
+#define INDEX_UI_Declare(name)                                                                                        \
+    struct name;                                                                                                      \
     struct name##Mapper
-#define INDEX_UI_DeclareExplicit(name, mapper_name)                                                                                                            \
-    struct name;                                                                                                                                               \
+#define INDEX_UI_DeclareExplicit(name, mapper_name)                                                                   \
+    struct name;                                                                                                      \
     struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
@@ -71,7 +71,8 @@ namespace Index::UI2
     {
     public:
         UIElementPropertyAnimation() = default;
-        UIElementPropertyAnimation(WPtr<UIElement> element, Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
+        UIElementPropertyAnimation(WPtr<UIElement> element,
+            Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
             : Animation_(animation)
             , PropertySetter_(propertySetter)
         {
@@ -340,7 +341,10 @@ namespace Index::UI2
             else
                 return MarginBottom;
         }
-        Vec4F MarginOr(float value) { return { MarginLeftOr(value), MarginTopOr(value), MarginRightOr(value), MarginBottomOr(value) }; }
+        Vec4F MarginOr(float value)
+        {
+            return { MarginLeftOr(value), MarginTopOr(value), MarginRightOr(value), MarginBottomOr(value) };
+        }
 
         Vec4F& GetPadding() { return Padding_; }
         const Vec4F& GetPadding() const { return Padding_; }
@@ -419,24 +423,75 @@ namespace Index::UI2
             else
                 return PaddingBottom;
         }
-        Vec4F PaddingOr(float value) { return { PaddingLeftOr(value), PaddingTopOr(value), PaddingRightOr(value), PaddingBottomOr(value) }; }
+        Vec4F PaddingOr(float value)
+        {
+            return { PaddingLeftOr(value), PaddingTopOr(value), PaddingRightOr(value), PaddingBottomOr(value) };
+        }
 
     protected:
         UInt64 ComputeFrame_ = 0;
-        Index::Size ComputedSize_;
+        Index::Size ComputedMinSize_;
+        Index::Size ComputedMaxSize_;
 
     public:
         UInt64 GetComputeFrame() const { return ComputeFrame_; }
         INDEX_Property(get = GetComputeFrame) UInt64 ComputeFrame;
 
-        Index::Size GetComputedSize() const { return ComputedSize_; }
-        INDEX_Property(get = GetComputedSize) Index::Size ComputedSize;
+        Index::Size GetComputedMinSize() const { return ComputedMinSize_; }
+        INDEX_Property(get = GetComputedMinSize) Index::Size ComputedMinSize;
 
-        float GetComputedWidth() const { return ComputedSize_.Width; }
-        INDEX_Property(get = GetComputedWidth, put = SetComputedWidth) float ComputedWidth;
+        float GetComputedMinWidth() const { return ComputedMinSize_.Width; }
+        INDEX_Property(get = GetComputedMinWidth, put = SetComputedMinWidth) float ComputedMinWidth;
 
-        float GetComputedHeight() const { return ComputedSize_.Height; }
-        INDEX_Property(get = GetComputedHeight, put = SetComputedHeight) float ComputedHeight;
+        float GetComputedMinHeight() const { return ComputedMinSize_.Height; }
+        INDEX_Property(get = GetComputedMinHeight, put = SetComputedMinHeight) float ComputedMinHeight;
+
+        Index::Size GetComputedMaxSize() const { return ComputedMaxSize_; }
+        INDEX_Property(get = GetComputedMaxSize) Index::Size ComputedMaxSize;
+
+        float GetComputedMaxWidth() const { return ComputedMaxSize_.Width; }
+        INDEX_Property(get = GetComputedMaxWidth, put = SetComputedMaxWidth) float ComputedMaxWidth;
+
+        float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
+        INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
+
+    protected:
+        Rect Rect_Expand_Margin_(Rect r)
+        {
+            return { r.X - MarginLeft, r.Y - MarginTop, r.Width + MarginRight, r.Height + MarginBottom };
+        }
+        Rect Rect_Resize_Margin_(Rect r)
+        {
+            return { r.X, r.Y, r.Width + MarginLeft + MarginRight, r.Height + MarginTop + MarginBottom };
+        }
+        Rect Rect_ExpandOr_Margin_(Rect r, float value)
+        {
+            return { r.X - MarginLeftOr(value), r.Y - MarginTopOr(value), r.Width + MarginRightOr(value),
+                r.Height + MarginBottomOr(value) };
+        }
+        Rect Rect_ResizeOr_Margin_(Rect r, float value)
+        {
+            return { r.X, r.Y, r.Width + MarginLeftOr(value) + MarginRightOr(value),
+                r.Height + MarginTopOr(value) + MarginBottomOr(value) };
+        }
+        Rect Rect_Expand_Padding_(Rect r)
+        {
+            return { r.X - PaddingLeft, r.Y - PaddingTop, r.Width + PaddingRight, r.Height + PaddingBottom };
+        }
+        Rect Rect_Resize_Padding_(Rect r)
+        {
+            return { r.X, r.Y, r.Width + PaddingLeft + PaddingRight, r.Height + PaddingTop + PaddingBottom };
+        }
+        Rect Rect_ExpandOr_Padding_(Rect r, float value)
+        {
+            return { r.X - PaddingLeftOr(value), r.Y - PaddingTopOr(value), r.Width + PaddingRightOr(value),
+                r.Height + PaddingBottomOr(value) };
+        }
+        Rect Rect_ResizeOr_Padding_(Rect r, float value)
+        {
+            return { r.X, r.Y, r.Width + PaddingLeftOr(value) + PaddingRightOr(value),
+                r.Height + PaddingTopOr(value) + PaddingBottomOr(value) };
+        }
     };
 
     /*

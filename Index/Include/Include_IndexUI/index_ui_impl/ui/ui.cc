@@ -499,10 +499,6 @@ namespace Index::UI2
 
     protected:
         virtual bool ShouldComputeSelf_() { return IsLayoutDirty; }
-        virtual bool ShouldComputeSelf_(bool childrenDirty)
-        {
-            if (childrenDirty) return IsLayoutDirty; return false;
-        }
 
         virtual bool AreChildrenLayoutDirty_()
         {
@@ -540,14 +536,22 @@ namespace Index::UI2
 
     public:
         /**
+         * @brief Determines whether it should compute the layout
+         */
+        INDEX_Property(get = GetShouldCompute) bool ShouldCompute;
+        virtual bool GetShouldCompute() { return ShouldComputeSelf_() || AreChildrenLayoutDirty_(); }
+
+    public:
+        /**
          * @brief Computes the layout of itself and its children
          */
         virtual void ComputeLayout(UInt64 frame)
         {
             if (frame == 0) ForceComputeLayout();
+            ComputeFrame_ = frame;
 
             ComputeChildrenLayout_(frame);
-            OnComputeLayout();
+            if (ShouldCompute) OnComputeLayout();
         }
 
         /**
@@ -565,8 +569,11 @@ namespace Index::UI2
          */
         virtual void SubComputeLayout(UInt64 frame)
         {
+            if (frame == ComputeFrame_) return;
+            ComputeFrame_ = frame;
+
             ComputeChildrenLayout_(frame);
-            OnComputeLayout();
+            if (ShouldCompute) OnComputeLayout();
         }
 
         /**
@@ -578,8 +585,6 @@ namespace Index::UI2
             ForceComputeChildrenLayout_();
             OnComputeLayout();
         }
-
-        virtual void OnComputeLayout() { }
 
     protected:
         virtual void ComputeChildrenLayout_(UInt64 frame)
@@ -597,6 +602,19 @@ namespace Index::UI2
                 c->SubForceComputeLayout();
             }
         }
+
+    public:
+        /**
+         * @brief Computes its own layout
+         */
+        virtual void OnComputeLayout()
+        {
+            Rect min;
+            Rect max;
+        }
+
+    protected:
+
 
     protected:
         Rect Rect_Expand_Margin_(Rect r)

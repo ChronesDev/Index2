@@ -25,7 +25,6 @@ namespace Index
         {
             return HorizontalAlignment_ == Stretch_ && VerticalAlignment_ == Stretch_;
         }
-
         [[nodiscard]] constexpr bool GetIsCentered() const
         {
             return HorizontalAlignment_ == Stretch_ && VerticalAlignment_ == Stretch_;
@@ -35,32 +34,40 @@ namespace Index
         INDEX_Property(get = GetIsCentered) bool IsCentered;
 
         [[nodiscard]] constexpr bool GetIsHStretched() const { return HorizontalAlignment_ == Stretch_; }
-
         [[nodiscard]] constexpr bool GetIsVStretched() const { return VerticalAlignment_ == Stretch_; }
 
         INDEX_Property(get = GetIsHStretched) bool IsHStretched;
         INDEX_Property(get = GetIsVStretched) bool IsVStretched;
 
         [[nodiscard]] constexpr bool GetIsHCentered() const { return HorizontalAlignment_ == Center_; }
-
         [[nodiscard]] constexpr bool GetIsVCentered() const { return VerticalAlignment_ == Center_; }
 
         INDEX_Property(get = GetIsHCentered) bool IsHCentered;
         INDEX_Property(get = GetIsVCentered) bool IsVCentered;
 
         [[nodiscard]] constexpr bool GetIsHLeft() const { return HorizontalAlignment_ == -1; }
-
         [[nodiscard]] constexpr bool GetIsVTop() const { return VerticalAlignment_ == -1; }
 
         INDEX_Property(get = GetIsHLeft) bool IsHLeft;
         INDEX_Property(get = GetIsVTop) bool IsVTop;
 
         [[nodiscard]] constexpr bool GetIsHRight() const { return HorizontalAlignment_ == 1; }
-
         [[nodiscard]] constexpr bool GetIsVBottom() const { return VerticalAlignment_ == 1; }
 
         INDEX_Property(get = GetIsHRight) bool IsHRight;
         INDEX_Property(get = GetIsVBottom) bool IsVBottom;
+
+    public:
+        bool operator==(const Align& other) const
+        {
+            return (HorizontalAlignment_ == other.HorizontalAlignment_)
+                && (VerticalAlignment_ == other.VerticalAlignment_);
+        }
+        bool operator!=(const Align& other) const
+        {
+            return (HorizontalAlignment_ != other.HorizontalAlignment_)
+                && (VerticalAlignment_ != other.VerticalAlignment_);
+        }
 
     public:
         static const Align Stretch;

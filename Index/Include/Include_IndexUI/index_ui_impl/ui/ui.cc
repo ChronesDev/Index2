@@ -451,6 +451,7 @@ namespace Index::UI2
 
     protected:
         bool LayoutDirty_ = false;
+        bool ComputedLayoutDirty_ = false;
 
     public:
         bool GetIsLayoutDirty() const { return LayoutDirty_; }
@@ -460,6 +461,14 @@ namespace Index::UI2
             if (condition) MakeLayoutDirty();
         }
         INDEX_Property(get = GetIsLayoutDirty) bool IsLayoutDirty;
+
+        bool GetIsComputedLayoutDirty() const { return ComputedLayoutDirty_; }
+        void MakeComputedLayoutDirty() { ComputedLayoutDirty_ = true; }
+        constexpr void MakeComputedLayoutDirtyIf(bool condition)
+        {
+            if (condition) MakeComputedLayoutDirty();
+        }
+        INDEX_Property(get = GetIsComputedLayoutDirty) bool IsComputedLayoutDirty;
 
     protected:
         UInt64 ComputeFrame_ = 0;
@@ -487,6 +496,107 @@ namespace Index::UI2
 
         float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
         INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
+
+    protected:
+        virtual bool ShouldComputeSelf_() { return IsLayoutDirty; }
+        virtual bool ShouldComputeSelf_(bool childrenDirty)
+        {
+            if (childrenDirty) return IsLayoutDirty; return false;
+        }
+
+        virtual bool AreChildrenLayoutDirty_()
+        {
+            for (auto& c : Children_)
+            {
+                if (c->IsLayoutDirty) return true;
+            }
+            return false;
+        }
+        virtual bool AreAllChildrenLayoutDirty_()
+        {
+            for (auto& c : Children_)
+            {
+                if (!c->IsLayoutDirty) return false;
+            }
+            return true;
+        }
+
+        virtual bool AreChildrenComputedLayoutDirty_()
+        {
+            for (auto& c : Children_)
+            {
+                if (c->IsComputedLayoutDirty) return true;
+            }
+            return false;
+        }
+        virtual bool AreAllChildrenComputedLayoutDirty_()
+        {
+            for (auto& c : Children_)
+            {
+                if (!c->IsComputedLayoutDirty) return false;
+            }
+            return true;
+        }
+
+    public:
+        /**
+         * @brief Computes the layout of itself and its children
+         */
+        virtual void ComputeLayout(UInt64 frame)
+        {
+            if (frame == 0) ForceComputeLayout();
+
+            ComputeChildrenLayout_(frame);
+            OnComputeLayout();
+        }
+
+        /**
+         * @brief Computes the layout of itself and its children. Ignores IsDirty and FrameIndex
+         */
+        virtual void ForceComputeLayout()
+        {
+            ForceComputeChildrenLayout_();
+            OnComputeLayout();
+        }
+
+        /**
+         * @brief Computes the layout of itself and its children.
+         * @note RECURSIVE
+         */
+        virtual void SubComputeLayout(UInt64 frame)
+        {
+            ComputeChildrenLayout_(frame);
+            OnComputeLayout();
+        }
+
+        /**
+         * @brief Forces the computing the layout of itself and its children. Ignores IsDirty and FrameIndex
+         * @note RECURSIVE
+         */
+        virtual void SubForceComputeLayout()
+        {
+            ForceComputeChildrenLayout_();
+            OnComputeLayout();
+        }
+
+        virtual void OnComputeLayout() { }
+
+    protected:
+        virtual void ComputeChildrenLayout_(UInt64 frame)
+        {
+            for (auto& c : Children_)
+            {
+                c->SubComputeLayout(frame);
+            }
+        }
+
+        virtual void ForceComputeChildrenLayout_()
+        {
+            for (auto& c : Children_)
+            {
+                c->SubForceComputeLayout();
+            }
+        }
 
     protected:
         Rect Rect_Expand_Margin_(Rect r)
@@ -684,8 +794,7 @@ namespace Index::UI2
 
         static Rect Rect_LimitVAlignLeftBottom_(Rect parent, Rect r)
         {
-            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), r.Width,
-                Min(r.Height, parent.Height) };
+            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), r.Width, Min(r.Height, parent.Height) };
         }
         static Rect Rect_LimitVAlignRightBottom_(Rect parent, Rect r)
         {
@@ -699,9 +808,8 @@ namespace Index::UI2
         }
         static Rect Rect_LimitHAlignBottomCenter_(Rect parent, Rect r)
         {
-            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
-                parent.Second.Y - r.Height, Min(r.Width, parent.Width),
-                r.Height };
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Second.Y - r.Height,
+                Min(r.Width, parent.Width), r.Height };
         }
 
         static Rect Rect_Align_(Rect parent, Rect r, Align a)
@@ -721,15 +829,16 @@ namespace Index::UI2
             if (a.IsHRight && a.IsVTop) return Rect_AlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_AlignRightBottom_(parent, r);
 
-            if (a.IsVTop && a.IsHStretched) return Rect_LimitHAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVTop && a.IsHStretched)
+                return Rect_LimitHAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
             if (a.IsVTop && a.IsHCentered) return Rect_AlignTopCenter_(parent, r);
 
-            if (a.IsVBottom && a.IsHStretched) return Rect_LimitHAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVBottom && a.IsHStretched)
+                return Rect_LimitHAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
             if (a.IsVBottom && a.IsHCentered) return Rect_AlignBottomCenter_(parent, r);
 
             return parent;
         }
-
         static Rect Rect_LimitAlign_(Rect parent, Rect r, Align a)
         {
             if (a.IsCentered) return Rect_LimitAlignCenter_(parent, r);
@@ -747,10 +856,12 @@ namespace Index::UI2
             if (a.IsHRight && a.IsVTop) return Rect_LimitAlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_LimitAlignRightBottom_(parent, r);
 
-            if (a.IsVTop && a.IsHStretched) return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVTop && a.IsHStretched)
+                return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
             if (a.IsVTop && a.IsHCentered) return Rect_LimitAlignTopCenter_(parent, r);
 
-            if (a.IsVBottom && a.IsHStretched) return Rect_LimitAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVBottom && a.IsHStretched)
+                return Rect_LimitAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
             if (a.IsVBottom && a.IsHCentered) return Rect_LimitAlignBottomCenter_(parent, r);
 
             return parent;

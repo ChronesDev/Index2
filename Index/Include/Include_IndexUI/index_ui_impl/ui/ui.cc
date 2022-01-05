@@ -460,6 +460,7 @@ namespace Index::UI2
         {
             if (condition) MakeLayoutDirty();
         }
+        void PolishLayout() { LayoutDirty_ = false; }
         INDEX_Property(get = GetIsLayoutDirty) bool IsLayoutDirty;
 
         bool GetIsComputedLayoutDirty() const { return ComputedLayoutDirty_; }
@@ -468,12 +469,14 @@ namespace Index::UI2
         {
             if (condition) MakeComputedLayoutDirty();
         }
+        void PolishComputedLayout() { ComputedLayoutDirty_ = false; }
         INDEX_Property(get = GetIsComputedLayoutDirty) bool IsComputedLayoutDirty;
 
     protected:
         UInt64 ComputeFrame_ = 0;
         Index::Size ComputedMinSize_;
         Index::Size ComputedMaxSize_;
+        Rect ComputedLayout_;
 
     public:
         UInt64 GetComputeFrame() const { return ComputeFrame_; }
@@ -496,6 +499,8 @@ namespace Index::UI2
 
         float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
         INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
+
+        Rect GetComputedLayout() const { return ComputedLayout_; }
 
     protected:
         virtual bool ShouldComputeSelf_() { return IsLayoutDirty; }
@@ -586,6 +591,11 @@ namespace Index::UI2
             OnComputeLayout();
         }
 
+        virtual void PositionLayout(Rect i)
+        {
+            OnPositionLayout(i);
+        }
+
     protected:
         virtual void ComputeChildrenLayout_(UInt64 frame)
         {
@@ -609,12 +619,73 @@ namespace Index::UI2
          */
         virtual void OnComputeLayout()
         {
-            Rect min;
-            Rect max;
+            Index::Size min = ApplyPadding_(FitRectToChildren_());
+            Index::Size max = { AutoF };
+            ComputedMinSize_ = ApplyMargin_(min);
+            ComputedMaxSize_ = ApplyMargin_(max);
+
+            PolishLayout();
+            PolishComputedLayout();
         }
 
-    protected:
+        /**
+         * @brief Computes its own layout position
+         * @param i: The layout
+         */
+        virtual void OnPositionLayout(Rect i)
+        {
+            // Position itself
 
+            // Position children
+        }
+
+    public:
+        /**
+         * @brief Renders the element
+         */
+        virtual void Render()
+        {
+            OnPreRender();
+
+            for (auto& c : Children_)
+            {
+                c->Render();
+            }
+
+            OnRender();
+        }
+
+        /**
+         * @brief OnPreRender
+         */
+        virtual void OnPreRender() { }
+
+        /**
+         * @brief OnRender
+         */
+        virtual void OnRender() { }
+
+    protected:
+        Index::Size ApplyMargin_(Index::Size s) { return Rect_ResizeExpand_Margin_({ 0, 0, s.Width, s.Height }).Size; }
+        Index::Size ApplyPadding_(Index::Size s)
+        {
+            return Rect_ResizeExpand_Padding_({ 0, 0, s.Width, s.Height }).Size;
+        }
+        Index::Size ApplyMarginAndPadding_(Index::Size s) { return ApplyMargin_(ApplyPadding_(s)); }
+
+        Index::Size FitRectToChildren_()
+        {
+            Index::Size s;
+            for (auto& c : Children_)
+            {
+                float width = c->ComputedMinWidth;
+                if (s.Width < width) s.Width = width;
+
+                float height = c->ComputedMinHeight;
+                if (s.Height < height) s.Height = height;
+            }
+            return s;
+        }
 
     protected:
         Rect Rect_Expand_Margin_(Rect r)

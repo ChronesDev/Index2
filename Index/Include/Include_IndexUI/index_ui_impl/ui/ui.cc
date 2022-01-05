@@ -4,6 +4,13 @@
 #include <SimpleYoga/yoga/YGNode.h>
 #include <SimpleYoga/yoga/Yoga.h>
 
+/**
+ * @param field: The internal field
+ * @param value: The current value
+ */
+#define INDEX_UI_LayoutDirtyChecker_(field, value)                                                                    \
+    if (this->field != value) this->MakeLayoutDirty();
+
 #define INDEX_UI_Declare(name)                                                                                        \
     struct name;                                                                                                      \
     struct name##Mapper
@@ -141,60 +148,60 @@ namespace Index::UI2
     public:
         Index::Size& GetSize() { return Size_; }
         const Index::Size& GetSize() const { return Size_; }
-        void SetSize(Index::Size value) { Size_ = value; }
+        void SetSize(Index::Size value) { INDEX_UI_LayoutDirtyChecker_(Size_, value) Size_ = value; }
         INDEX_Property(get = GetSize, put = SetSize) Index::Size& Size;
 
         Index::Size& GetMinSize() { return MinSize_; }
         const Index::Size& GetMinSize() const { return MinSize_; }
-        void SetMinSize(Index::Size value) { MinSize_ = value; }
+        void SetMinSize(Index::Size value) { INDEX_UI_LayoutDirtyChecker_(MinSize_, value) MinSize_ = value; }
         INDEX_Property(get = GetMinSize, put = SetMinSize) Index::Size& MinSize;
 
         Index::Size& GetMaxSize() { return MaxSize_; }
         const Index::Size& GetMaxSize() const { return MaxSize_; }
-        void SetMaxSize(Index::Size value) { MaxSize_ = value; }
+        void SetMaxSize(Index::Size value) { INDEX_UI_LayoutDirtyChecker_(MaxSize_, value) MaxSize_ = value; }
         INDEX_Property(get = GetMaxSize, put = SetMaxSize) Index::Size& MaxSize;
 
         float GetWidth() const { return Size_.Width; }
-        void SetWidth(float value) { Size_.Width = value; }
+        void SetWidth(float value) { INDEX_UI_LayoutDirtyChecker_(Size_.Width, value) Size_.Width = value; }
         INDEX_Property(get = GetWidth, put = SetWidth) float Width;
 
         float GetHeight() const { return Size_.Height; }
-        void SetHeight(float value) { Size_.Height = value; }
+        void SetHeight(float value) { INDEX_UI_LayoutDirtyChecker_(Size_.Height, value) Size_.Height = value; }
         INDEX_Property(get = GetHeight, put = SetHeight) float Height;
 
         bool GetAutoWidth() const { return Size_.Width == AutoF; }
         void SetAutoWidth(bool value)
         {
-            if (value) Size_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Size_.Width, value) if (value) Size_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoWidth, put = SetAutoWidth) bool AutoWidth;
 
         bool GetAutoHeight() const { return Size_.Height == AutoF; }
         void SetAutoHeight(bool value)
         {
-            if (value) Size_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Size_.Height, value) if (value) Size_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoHeight, put = SetAutoHeight) bool AutoHeight;
 
         float GetMinWidth() const { return MinSize_.Width; }
-        void SetMinWidth(float value) { MinSize_.Width = value; }
+        void SetMinWidth(float value) { INDEX_UI_LayoutDirtyChecker_(MinSize_.Width, value) MinSize_.Width = value; }
         INDEX_Property(get = GetMinWidth, put = SetMinWidth) float MinWidth;
 
         float GetMinHeight() const { return MinSize_.Height; }
-        void SetMinHeight(float value) { MinSize_.Height = value; }
+        void SetMinHeight(float value) { INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, value) MinSize_.Height = value; }
         INDEX_Property(get = GetMinHeight, put = SetMinHeight) float MinHeight;
 
         bool GetAutoMinWidth() const { return MinSize_.Width == AutoF; }
         void SetAutoMinWidth(bool value)
         {
-            if (value) MinSize_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MinSize_.Width, value) if (value) MinSize_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoMinWidth, put = SetAutoMinWidth) bool AutoMinWidth;
 
         bool GetAutoMinHeight() const { return MinSize_.Height == AutoF; }
         void SetAutoMinHeight(bool value)
         {
-            if (value) MinSize_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, value) if (value) MinSize_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoMinHeight, put = SetAutoMinHeight) bool AutoMinHeight;
 
@@ -203,20 +210,20 @@ namespace Index::UI2
         INDEX_Property(get = GetMaxWidth, put = SetMaxWidth) float MaxWidth;
 
         float GetMaxHeight() const { return MaxSize_.Height; }
-        void SetMaxHeight(float value) { MaxSize_.Height = value; }
+        void SetMaxHeight(float value) { INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, value) MaxSize_.Height = value; }
         INDEX_Property(get = GetMaxHeight, put = SetMaxHeight) float MaxHeight;
 
         bool GetAutoMaxWidth() const { return MaxSize_.Width == AutoF; }
         void SetAutoMaxWidth(bool value)
         {
-            if (value) MaxSize_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Width, value) if (value) MaxSize_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoMaxWidth, put = SetAutoMaxWidth) bool AutoMaxWidth;
 
         bool GetAutoMaxHeight() const { return MaxSize_.Height == AutoF; }
         void SetAutoMaxHeight(bool value)
         {
-            if (value) MaxSize_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, value) if (value) MaxSize_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoMaxHeight, put = SetAutoMaxHeight) bool AutoMaxHeight;
 
@@ -266,50 +273,50 @@ namespace Index::UI2
 
         Vec4F& GetMargin() { return Margin_; }
         const Vec4F& GetMargin() const { return Margin_; }
-        void SetMargin(Vec4F value) { Margin_ = value; }
+        void SetMargin(Vec4F value) { INDEX_UI_LayoutDirtyChecker_(Margin_, value) Margin_ = value; }
         INDEX_Property(get = GetMargin, put = SetMargin) Vec4F& Margin;
 
         float GetMarginLeft() const { return Margin_.X; }
-        void SetMarginLeft(float value) { Margin_.X = value; }
+        void SetMarginLeft(float value) { INDEX_UI_LayoutDirtyChecker_(Margin_.X, value) Margin_.X = value; }
         INDEX_Property(get = GetMarginLeft, put = SetMarginLeft) float MarginLeft;
 
         bool GetAutoMarginLeft() const { return Margin_.X == AutoF; }
         void SetAutoMarginLeft(bool value)
         {
-            if (value) Margin_.X = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.X, value) if (value) Margin_.X = AutoF;
         }
         INDEX_Property(get = GetAutoMarginLeft, put = SetAutoMarginLeft) bool AutoMarginLeft;
 
         float GetMarginTop() const { return Margin_.Y; }
-        void SetMarginTop(float value) { Margin_.Y = value; }
+        void SetMarginTop(float value) { INDEX_UI_LayoutDirtyChecker_(Margin_.Y, value) Margin_.Y = value; }
         INDEX_Property(get = GetMarginTop, put = SetMarginTop) float MarginTop;
 
         bool GetAutoMarginTop() const { return Margin_.Y == AutoF; }
         void SetAutoMarginTop(bool value)
         {
-            if (value) Margin_.Y = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.Y, value) if (value) Margin_.Y = AutoF;
         }
         INDEX_Property(get = GetAutoMarginTop, put = SetAutoMarginTop) bool AutoMarginTop;
 
         float GetMarginRight() const { return Margin_.Z; }
-        void SetMarginRight(float value) { Margin_.Z = value; }
+        void SetMarginRight(float value) { INDEX_UI_LayoutDirtyChecker_(Margin_.Z, value) Margin_.Z = value; }
         INDEX_Property(get = GetMarginRight, put = SetMarginRight) float MarginRight;
 
         bool GetAutoMarginRight() const { return Margin_.Z == AutoF; }
         void SetAutoMarginRight(bool value)
         {
-            if (value) Margin_.Z = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.Z, value) if (value) Margin_.Z = AutoF;
         }
         INDEX_Property(get = GetAutoMarginRight, put = SetAutoMarginRight) bool AutoMarginRight;
 
         float GetMarginBottom() const { return Margin_.W; }
-        void SetMarginBottom(float value) { Margin_.W = value; }
+        void SetMarginBottom(float value) { INDEX_UI_LayoutDirtyChecker_(Margin_.W, value) Margin_.W = value; }
         INDEX_Property(get = GetMarginBottom, put = SetMarginBottom) float MarginBottom;
 
         bool GetAutoMarginBottom() const { return Margin_.W == AutoF; }
         void SetAutoMarginBottom(bool value)
         {
-            if (value) Margin_.W = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.W, value) if (value) Margin_.W = AutoF;
         }
         INDEX_Property(get = GetAutoMarginBottom, put = SetAutoMarginBottom) bool AutoMarginBottom;
 
@@ -348,50 +355,50 @@ namespace Index::UI2
 
         Vec4F& GetPadding() { return Padding_; }
         const Vec4F& GetPadding() const { return Padding_; }
-        void SetPadding(Vec4F value) { Padding_ = value; }
+        void SetPadding(Vec4F value) { INDEX_UI_LayoutDirtyChecker_(Padding_, value) Padding_ = value; }
         INDEX_Property(get = GetPadding, put = SetPadding) Vec4F& Padding;
 
         float GetPaddingLeft() const { return Padding_.X; }
-        void SetPaddingLeft(float value) { Padding_.X = value; }
+        void SetPaddingLeft(float value) { INDEX_UI_LayoutDirtyChecker_(Padding_.X, value) Padding_.X = value; }
         INDEX_Property(get = GetPaddingLeft, put = SetPaddingLeft) float PaddingLeft;
 
         bool GetAutoPaddingLeft() const { return Padding_.X == AutoF; }
         void SetAutoPaddingLeft(bool value)
         {
-            if (value) Padding_.X = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.X, value) if (value) Padding_.X = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingLeft, put = SetAutoPaddingLeft) bool AutoPaddingLeft;
 
         float GetPaddingTop() const { return Padding_.Y; }
-        void SetPaddingTop(float value) { Padding_.Y = value; }
+        void SetPaddingTop(float value) { INDEX_UI_LayoutDirtyChecker_(Padding_.Y, value) Padding_.Y = value; }
         INDEX_Property(get = GetPaddingTop, put = SetPaddingTop) float PaddingTop;
 
         bool GetAutoPaddingTop() const { return Padding_.Y == AutoF; }
         void SetAutoPaddingTop(bool value)
         {
-            if (value) Padding_.Y = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.Y, value) if (value) Padding_.Y = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingTop, put = SetAutoPaddingTop) bool AutoPaddingTop;
 
         float GetPaddingRight() const { return Padding_.Z; }
-        void SetPaddingRight(float value) { Padding_.Z = value; }
+        void SetPaddingRight(float value) { INDEX_UI_LayoutDirtyChecker_(Padding_.Z, value) Padding_.Z = value; }
         INDEX_Property(get = GetPaddingRight, put = SetPaddingRight) float PaddingRight;
 
         bool GetAutoPaddingRight() const { return Padding_.Z == AutoF; }
         void SetAutoPaddingRight(bool value)
         {
-            if (value) Padding_.Z = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.Z, value) if (value) Padding_.Z = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingRight, put = SetAutoPaddingRight) bool AutoPaddingRight;
 
         float GetPaddingBottom() const { return Padding_.W; }
-        void SetPaddingBottom(float value) { Padding_.W = value; }
+        void SetPaddingBottom(float value) { INDEX_UI_LayoutDirtyChecker_(Padding_.W, value) Padding_.W = value; }
         INDEX_Property(get = GetPaddingBottom, put = SetPaddingBottom) float PaddingBottom;
 
         bool GetAutoPaddingBottom() const { return Padding_.W == AutoF; }
         void SetAutoPaddingBottom(bool value)
         {
-            if (value) Padding_.W = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.W, value) if (value) Padding_.W = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingBottom, put = SetAutoPaddingBottom) bool AutoPaddingBottom;
 
@@ -429,6 +436,14 @@ namespace Index::UI2
         }
 
     protected:
+        Align Alignment_ = Align::Stretch;
+
+    public:
+        Align GetAlignment() const { return Alignment_; }
+        void SetAlignment(Align value) { INDEX_UI_LayoutDirtyChecker_(Alignment_, value) Alignment_ = value; }
+        INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
+
+    protected:
         UInt64 ComputeFrame_ = 0;
         Index::Size ComputedMinSize_;
         Index::Size ComputedMaxSize_;
@@ -456,11 +471,23 @@ namespace Index::UI2
         INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
 
     protected:
+        bool LayoutDirty_ = false;
+
+    public:
+        bool GetIsLayoutDirty() const { return LayoutDirty_; }
+        void MakeLayoutDirty() { LayoutDirty_ = true; }
+        constexpr void MakeLayoutDirtyIf(bool condition)
+        {
+            if (condition) MakeLayoutDirty();
+        }
+        INDEX_Property(get = GetIsLayoutDirty) bool IsLayoutDirty;
+
+    protected:
         Rect Rect_Expand_Margin_(Rect r)
         {
             return { r.X - MarginLeft, r.Y - MarginTop, r.Width + MarginRight, r.Height + MarginBottom };
         }
-        Rect Rect_Resize_Margin_(Rect r)
+        Rect Rect_ResizeExpand_Margin_(Rect r)
         {
             return { r.X, r.Y, r.Width + MarginLeft + MarginRight, r.Height + MarginTop + MarginBottom };
         }
@@ -469,16 +496,17 @@ namespace Index::UI2
             return { r.X - MarginLeftOr(value), r.Y - MarginTopOr(value), r.Width + MarginRightOr(value),
                 r.Height + MarginBottomOr(value) };
         }
-        Rect Rect_ResizeOr_Margin_(Rect r, float value)
+        Rect Rect_ResizeExpandOr_Margin_(Rect r, float value)
         {
             return { r.X, r.Y, r.Width + MarginLeftOr(value) + MarginRightOr(value),
                 r.Height + MarginTopOr(value) + MarginBottomOr(value) };
         }
+
         Rect Rect_Expand_Padding_(Rect r)
         {
             return { r.X - PaddingLeft, r.Y - PaddingTop, r.Width + PaddingRight, r.Height + PaddingBottom };
         }
-        Rect Rect_Resize_Padding_(Rect r)
+        Rect Rect_ResizeExpand_Padding_(Rect r)
         {
             return { r.X, r.Y, r.Width + PaddingLeft + PaddingRight, r.Height + PaddingTop + PaddingBottom };
         }
@@ -487,10 +515,48 @@ namespace Index::UI2
             return { r.X - PaddingLeftOr(value), r.Y - PaddingTopOr(value), r.Width + PaddingRightOr(value),
                 r.Height + PaddingBottomOr(value) };
         }
-        Rect Rect_ResizeOr_Padding_(Rect r, float value)
+        Rect Rect_ResizeExpandOr_Padding_(Rect r, float value)
         {
             return { r.X, r.Y, r.Width + PaddingLeftOr(value) + PaddingRightOr(value),
                 r.Height + PaddingTopOr(value) + PaddingBottomOr(value) };
+        }
+
+        Rect Rect_Shrink_Margin_(Rect r)
+        {
+            return { r.X + MarginLeft, r.Y + MarginTop, r.Width - MarginRight, r.Height - MarginBottom };
+        }
+        Rect Rect_ResizeShrink_Margin_(Rect r)
+        {
+            return { r.X, r.Y, r.Width - MarginLeft - MarginRight, r.Height - MarginTop - MarginBottom };
+        }
+        Rect Rect_ShrinkOr_Margin_(Rect r, float value)
+        {
+            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value),
+                r.Height - MarginBottomOr(value) };
+        }
+        Rect Rect_ResizeShrinkOr_Margin_(Rect r, float value)
+        {
+            return { r.X, r.Y, r.Width - MarginLeftOr(value) - MarginRightOr(value),
+                r.Height - MarginTopOr(value) - MarginBottomOr(value) };
+        }
+
+        Rect Rect_Shrink_Padding_(Rect r)
+        {
+            return { r.X + PaddingLeft, r.Y + PaddingTop, r.Width - PaddingRight, r.Height - PaddingBottom };
+        }
+        Rect Rect_ResizeShrink_Padding_(Rect r)
+        {
+            return { r.X, r.Y, r.Width - PaddingLeft - PaddingRight, r.Height - PaddingTop - PaddingBottom };
+        }
+        Rect Rect_ShrinkOr_Padding_(Rect r, float value)
+        {
+            return { r.X + PaddingLeftOr(value), r.Y + PaddingTopOr(value), r.Width - PaddingRightOr(value),
+                r.Height - PaddingBottomOr(value) };
+        }
+        Rect Rect_ResizeShrinkOr_Padding_(Rect r, float value)
+        {
+            return { r.X, r.Y, r.Width - PaddingLeftOr(value) - PaddingRightOr(value),
+                r.Height - PaddingTopOr(value) - PaddingBottomOr(value) };
         }
     };
 

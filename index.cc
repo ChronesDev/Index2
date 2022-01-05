@@ -19,6 +19,10 @@ int main()
     e.Id = "11";
     e.Name = "11";
     var& children = e.Children;
+    if (e.IsLayoutDirty)
+    {
+
+    }
 
     Console.ReadLine();
 }

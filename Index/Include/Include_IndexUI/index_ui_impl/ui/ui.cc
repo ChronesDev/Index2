@@ -188,7 +188,10 @@ namespace Index::UI2
         INDEX_Property(get = GetMinWidth, put = SetMinWidth) float MinWidth;
 
         float GetMinHeight() const { return MinSize_.Height; }
-        void SetMinHeight(float value) { INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, value) MinSize_.Height = value; }
+        void SetMinHeight(float value)
+        {
+            INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, value) MinSize_.Height = value;
+        }
         INDEX_Property(get = GetMinHeight, put = SetMinHeight) float MinHeight;
 
         bool GetAutoMinWidth() const { return MinSize_.Width == AutoF; }
@@ -210,7 +213,10 @@ namespace Index::UI2
         INDEX_Property(get = GetMaxWidth, put = SetMaxWidth) float MaxWidth;
 
         float GetMaxHeight() const { return MaxSize_.Height; }
-        void SetMaxHeight(float value) { INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, value) MaxSize_.Height = value; }
+        void SetMaxHeight(float value)
+        {
+            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, value) MaxSize_.Height = value;
+        }
         INDEX_Property(get = GetMaxHeight, put = SetMaxHeight) float MaxHeight;
 
         bool GetAutoMaxWidth() const { return MaxSize_.Width == AutoF; }
@@ -444,6 +450,18 @@ namespace Index::UI2
         INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
 
     protected:
+        bool LayoutDirty_ = false;
+
+    public:
+        bool GetIsLayoutDirty() const { return LayoutDirty_; }
+        void MakeLayoutDirty() { LayoutDirty_ = true; }
+        constexpr void MakeLayoutDirtyIf(bool condition)
+        {
+            if (condition) MakeLayoutDirty();
+        }
+        INDEX_Property(get = GetIsLayoutDirty) bool IsLayoutDirty;
+
+    protected:
         UInt64 ComputeFrame_ = 0;
         Index::Size ComputedMinSize_;
         Index::Size ComputedMaxSize_;
@@ -469,18 +487,6 @@ namespace Index::UI2
 
         float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
         INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
-
-    protected:
-        bool LayoutDirty_ = false;
-
-    public:
-        bool GetIsLayoutDirty() const { return LayoutDirty_; }
-        void MakeLayoutDirty() { LayoutDirty_ = true; }
-        constexpr void MakeLayoutDirtyIf(bool condition)
-        {
-            if (condition) MakeLayoutDirty();
-        }
-        INDEX_Property(get = GetIsLayoutDirty) bool IsLayoutDirty;
 
     protected:
         Rect Rect_Expand_Margin_(Rect r)
@@ -557,6 +563,112 @@ namespace Index::UI2
         {
             return { r.X, r.Y, r.Width - PaddingLeftOr(value) - PaddingRightOr(value),
                 r.Height - PaddingTopOr(value) - PaddingBottomOr(value) };
+        }
+
+        static Rect Rect_AlignTopCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - (r.Width / 2), parent.Y, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignTopCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Y, Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignTopLeft(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
+        static Rect Rect_LimitAlignTopLeft(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignTopRight(Rect parent, Rect r)
+        {
+            return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignTopRight(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+
+        static Rect Rect_AlignBottomCenter(Rect parent, Rect r)
+        {
+            return { parent.Center.X - (r.Width / 2), parent.Second.Y - r.Height, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignBottomCenter(Rect parent, Rect r)
+        {
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
+                parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignBottomLeft(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignBottomLeft(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignBottomRight(Rect parent, Rect r)
+        {
+            return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignBottomRight(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
+                Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
+        }
+
+        static Rect Rect_AlignLeftCenter(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Center.Y - (r.Width / 2), r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignLeftCenter(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Center.Y - Min(r.Width / 2, parent.Width / 2), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignLeftTop(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
+        static Rect Rect_LimitAlignLeftTop(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignLeftBottom(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignLeftBottom(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+
+        static Rect Rect_AlignRightCenter(Rect parent, Rect r)
+        {
+            return { parent.Second.X - r.Width, parent.Center.Y - (r.Height / 2), r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignRightCenter(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width),
+                parent.Center.Y - Min(r.Height / 2, parent.Height / 2), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignRightTop(Rect parent, Rect r)
+        {
+            return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignRightTop(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_AlignRightBottom(Rect parent, Rect r)
+        {
+            return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignRightBottom(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
+                Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
     };
 

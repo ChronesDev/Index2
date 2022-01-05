@@ -565,6 +565,17 @@ namespace Index::UI2
                 r.Height - PaddingTopOr(value) - PaddingBottomOr(value) };
         }
 
+        static Rect Rect_AlignCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - (r.Width / 2), parent.Center.Y - (r.Height / 2), r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
+                parent.Center.Y - Min(r.Height / 2, parent.Height / 2), Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
+        }
+
         static Rect Rect_AlignTopCenter_(Rect parent, Rect r)
         {
             return { parent.Center.X - (r.Width / 2), parent.Y, r.Width, r.Height };
@@ -574,101 +585,175 @@ namespace Index::UI2
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignTopLeft(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
-        static Rect Rect_LimitAlignTopLeft(Rect parent, Rect r)
+        static Rect Rect_AlignTopLeft_(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
+        static Rect Rect_LimitAlignTopLeft_(Rect parent, Rect r)
         {
             return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignTopRight(Rect parent, Rect r)
+        static Rect Rect_AlignTopRight_(Rect parent, Rect r)
         {
             return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignTopRight(Rect parent, Rect r)
+        static Rect Rect_LimitAlignTopRight_(Rect parent, Rect r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignBottomCenter(Rect parent, Rect r)
+        static Rect Rect_AlignBottomCenter_(Rect parent, Rect r)
         {
             return { parent.Center.X - (r.Width / 2), parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomCenter(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomCenter_(Rect parent, Rect r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
                 parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignBottomLeft(Rect parent, Rect r)
+        static Rect Rect_AlignBottomLeft_(Rect parent, Rect r)
         {
             return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomLeft(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomLeft_(Rect parent, Rect r)
         {
             return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignBottomRight(Rect parent, Rect r)
+        static Rect Rect_AlignBottomRight_(Rect parent, Rect r)
         {
             return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomRight(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomRight_(Rect parent, Rect r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
                 Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignLeftCenter(Rect parent, Rect r)
+        static Rect Rect_AlignLeftCenter_(Rect parent, Rect r)
         {
             return { parent.X, parent.Center.Y - (r.Width / 2), r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignLeftCenter(Rect parent, Rect r)
+        static Rect Rect_LimitAlignLeftCenter_(Rect parent, Rect r)
         {
             return { parent.X, parent.Center.Y - Min(r.Width / 2, parent.Width / 2), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignLeftTop(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
-        static Rect Rect_LimitAlignLeftTop(Rect parent, Rect r)
+        static Rect Rect_AlignLeftTop_(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
+        static Rect Rect_LimitAlignLeftTop_(Rect parent, Rect r)
         {
             return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignLeftBottom(Rect parent, Rect r)
+        static Rect Rect_AlignLeftBottom_(Rect parent, Rect r)
         {
             return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignLeftBottom(Rect parent, Rect r)
+        static Rect Rect_LimitAlignLeftBottom_(Rect parent, Rect r)
         {
             return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignRightCenter(Rect parent, Rect r)
+        static Rect Rect_AlignRightCenter_(Rect parent, Rect r)
         {
             return { parent.Second.X - r.Width, parent.Center.Y - (r.Height / 2), r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightCenter(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightCenter_(Rect parent, Rect r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width),
                 parent.Center.Y - Min(r.Height / 2, parent.Height / 2), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignRightTop(Rect parent, Rect r)
+        static Rect Rect_AlignRightTop_(Rect parent, Rect r)
         {
             return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightTop(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightTop_(Rect parent, Rect r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignRightBottom(Rect parent, Rect r)
+        static Rect Rect_AlignRightBottom_(Rect parent, Rect r)
         {
             return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightBottom(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightBottom_(Rect parent, Rect r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
                 Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
+        }
+
+        static Rect Rect_LimitVAlignLeftBottom_(Rect parent, Rect r)
+        {
+            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), r.Width,
+                Min(r.Height, parent.Height) };
+        }
+        static Rect Rect_LimitVAlignRightBottom_(Rect parent, Rect r)
+        {
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - r.Height,
+                Min(r.Width, parent.Width), r.Height };
+        }
+        static Rect Rect_LimitHAlignTopCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Y, Min(r.Width, parent.Width),
+                r.Height };
+        }
+        static Rect Rect_LimitHAlignBottomCenter_(Rect parent, Rect r)
+        {
+            return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
+                parent.Second.Y - r.Height, Min(r.Width, parent.Width),
+                r.Height };
+        }
+
+        static Rect Rect_Align_(Rect parent, Rect r, Align a)
+        {
+            if (a.IsCentered) return Rect_AlignCenter_(parent, r);
+            if (a.IsStretched) return parent;
+
+            if (a.IsHLeft && a.IsVStretched)
+                return Rect_LimitVAlignLeftBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+            if (a.IsHLeft && a.IsVCentered) return Rect_AlignLeftBottom_(parent, r);
+            if (a.IsHLeft && a.IsVTop) return Rect_AlignLeftTop_(parent, r);
+            if (a.IsHLeft && a.IsVBottom) return Rect_AlignLeftBottom_(parent, r);
+
+            if (a.IsHRight && a.IsVStretched)
+                return Rect_LimitVAlignRightBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+            if (a.IsHRight && a.IsVCentered) return Rect_AlignRightBottom_(parent, r);
+            if (a.IsHRight && a.IsVTop) return Rect_AlignRightTop_(parent, r);
+            if (a.IsHRight && a.IsVBottom) return Rect_AlignRightBottom_(parent, r);
+
+            if (a.IsVTop && a.IsHStretched) return Rect_LimitHAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVTop && a.IsHCentered) return Rect_AlignTopCenter_(parent, r);
+
+            if (a.IsVBottom && a.IsHStretched) return Rect_LimitHAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVBottom && a.IsHCentered) return Rect_AlignBottomCenter_(parent, r);
+
+            return parent;
+        }
+
+        static Rect Rect_LimitAlign_(Rect parent, Rect r, Align a)
+        {
+            if (a.IsCentered) return Rect_LimitAlignCenter_(parent, r);
+            if (a.IsStretched) return parent;
+
+            if (a.IsHLeft && a.IsVStretched)
+                return Rect_LimitAlignLeftBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+            if (a.IsHLeft && a.IsVCentered) return Rect_LimitAlignLeftBottom_(parent, r);
+            if (a.IsHLeft && a.IsVTop) return Rect_LimitAlignLeftTop_(parent, r);
+            if (a.IsHLeft && a.IsVBottom) return Rect_LimitAlignLeftBottom_(parent, r);
+
+            if (a.IsHRight && a.IsVStretched)
+                return Rect_LimitAlignRightBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+            if (a.IsHRight && a.IsVCentered) return Rect_LimitAlignRightBottom_(parent, r);
+            if (a.IsHRight && a.IsVTop) return Rect_LimitAlignRightTop_(parent, r);
+            if (a.IsHRight && a.IsVBottom) return Rect_LimitAlignRightBottom_(parent, r);
+
+            if (a.IsVTop && a.IsHStretched) return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVTop && a.IsHCentered) return Rect_LimitAlignTopCenter_(parent, r);
+
+            if (a.IsVBottom && a.IsHStretched) return Rect_LimitAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+            if (a.IsVBottom && a.IsHCentered) return Rect_LimitAlignBottomCenter_(parent, r);
+
+            return parent;
         }
     };
 

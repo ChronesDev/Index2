@@ -68,8 +68,12 @@ namespace Index
 
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
-        auto t = std::chrono::system_clock::to_time_t(timePoint.StdTimePoint);
+#ifdef INDEX_MSVC
+        os << "TimePoint {" <<  timePoint.StdTimePoint << "}";
+#else
+        auto t = std::chrono::high_resolution_clock::to_time_t(timePoint.StdTimePoint);
         os << "TimePoint {" << std::put_time(std::localtime(&t), "%F %T") << "}";
+#endif
         return os;
     }
 }

@@ -313,10 +313,12 @@ namespace Index
             auto baseAddress = (IntPtr)GetModuleHandleW(nullptr);
             auto mem = Memory(baseAddress);
             return mem;
-#elifdef INDEX_LINUX
+#else
+#ifdef INDEX_LINUX
             INDEX_THROW_NOT_IMPLEMENTED();
 #else
             INDEX_THROW_NOT_IMPLEMENTED();
+#endif
 #endif
         }
         static Memory New(IntPtr baseAddress) { return Memory(baseAddress); }

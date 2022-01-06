@@ -37,7 +37,9 @@
 // INDEX_DEBUG
 #define INDEX_DEBUG
 
-#elifndef NDEBUG
+#else
+
+#ifdef NDEBUG
 
 // INDEX_DEBUG
 #define INDEX_DEBUG
@@ -46,6 +48,8 @@
 
 // INDEX_RELEASE
 #define INDEX_RELEASE
+
+#endif
 
 #endif
 

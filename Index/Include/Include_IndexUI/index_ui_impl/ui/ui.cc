@@ -626,13 +626,17 @@ namespace Index::UI2
          */
         virtual void OnComputeLayoutPosition(Rect i)
         {
-            // Position itself
+            Rect r = AlignToComputedLayout_(i);
+            Rect rp = Rect_ResizeShrinkOr_Padding_(r, 0);
+
+            ComputedLayout_ = rp;
 
             for (auto& c : Children_)
             {
-                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(i);
+                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(rp);
             }
-            // Position children
+
+            PolishComputedLayoutPosition();
         }
 
     public:
@@ -950,6 +954,14 @@ namespace Index::UI2
             if (a.IsVBottom && a.IsHCentered) return Rect_LimitAlignBottomCenter_(parent, r);
 
             return parent;
+        }
+
+        Rect AlignToComputedLayout_(Rect i)
+        {
+            Rect im = Rect_ShrinkOr_Margin_(i, 0);
+            Rect r1 = Rect_Align_(im, { 0, 0, ComputedMinWidth, ComputedMinHeight }, Alignment_);
+            Rect r2 = Rect_LimitAlign_(r1, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
+            return r2;
         }
     };
 

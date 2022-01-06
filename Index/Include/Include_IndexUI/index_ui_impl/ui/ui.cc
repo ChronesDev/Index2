@@ -19,16 +19,37 @@
     struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
-namespace Index::UI
-{
-    struct UIElement;
-    // struct UIMapper;
-}
-
 // Variables
 namespace Index::UI
 {
     constexpr float AutoF = Limits::FloatMax;
+}
+
+// Math
+namespace Index::UI
+{
+    Size Min_(Size a, Size b) { return { Min(a.Width, a.Width), Min(a.Height, a.Height) }; }
+    Size Max_(Size a, Size b) { return { Max(a.Width, a.Width), Max(a.Height, a.Height) }; }
+
+    Vec2F Min_(Vec2F a, Vec2F b) { return { Min(a.X, a.X), Min(a.Y, a.Y) }; }
+    Vec2F Max_(Vec2F a, Vec2F b) { return { Max(a.X, a.X), Max(a.Y, a.Y) }; }
+
+    Vec3F Min_(Vec3F a, Vec3F b) { return { Min(a.X, a.X), Min(a.Y, a.Y), Min(a.Z, b.Z) }; }
+    Vec3F Max_(Vec3F a, Vec3F b) { return { Max(a.X, a.X), Max(a.Y, a.Y), Max(a.Z, b.Z) }; }
+
+    float AutoF_ValueOr_(float a, float x)
+    {
+        if (a == AutoF)
+            return x;
+        else
+            return a;
+    }
+}
+
+namespace Index::UI
+{
+    struct UIElement;
+    // struct UIMapper;
 }
 
 // UIElement
@@ -203,6 +224,45 @@ namespace Index::UI
                 return MaxHeight;
         }
         Index::Size SizeOr(float value) { return { WidthOr(value), HeightOr(value) }; }
+        Index::Size MinSizeOr(float value) { return { MinWidthOr(value), MinHeightOr(value) }; }
+        Index::Size MaxSizeOr(float value) { return { MaxWidthOr(value), MaxHeightOr(value) }; }
+
+        Index::Size GetActualMinSize() const { return { ActualMinWidth, ActualMinHeight }; }
+        INDEX_Property(get = GetActualMinSize) Index::Size ActualMinSize;
+
+        Index::Size GetActualSize() const { return { ActualWidth, ActualHeight }; }
+        INDEX_Property(get = GetActualSize) Index::Size ActualSize;
+
+        Index::Size GetActualMaxSize() const { return { ActualMaxWidth, ActualMaxHeight }; }
+        INDEX_Property(get = GetActualMaxSize) Index::Size ActualMaxSize;
+
+        float GetActualMinWidth() const { return Min(MinWidth, MaxWidth); }
+        INDEX_Property(get = GetActualMinWidth) float ActualMinWidth;
+
+        float GetActualMinHeight() const { return Min(MinHeight, MaxHeight); }
+        INDEX_Property(get = GetActualMinHeight) float ActualMinHeight;
+
+        float GetActualWidth() const { return Limit(Width, AutoF_ValueOr_(ActualMinWidth, 0), ActualMaxWidth); }
+        INDEX_Property(get = GetActualWidth) float ActualWidth;
+
+        float GetActualHeight() const { return Limit(Height, AutoF_ValueOr_(ActualMinHeight, 0), ActualMaxHeight); }
+        INDEX_Property(get = GetActualHeight) float ActualHeight;
+
+        float GetActualMaxWidth() const { return MaxWidth; }
+        INDEX_Property(get = GetActualMaxWidth) float ActualMaxWidth;
+
+        float GetActualMaxHeight() const { return MaxHeight; }
+        INDEX_Property(get = GetActualMaxHeight) float ActualMaxHeight;
+
+        float ActualMinWidthOr(float value) { AutoF_ValueOr_(ActualMinWidth, value); }
+        float ActualMinHeightOr(float value) { AutoF_ValueOr_(ActualMinHeight, value); }
+        float ActualWidthOr(float value) { AutoF_ValueOr_(ActualWidth, value); }
+        float ActualHeightOr(float value) { AutoF_ValueOr_(ActualHeight, value); }
+        float ActualMaxWidthOr(float value) { AutoF_ValueOr_(ActualMaxWidth, value); }
+        float ActualMaxHeightOr(float value) { AutoF_ValueOr_(ActualMaxHeight, value); }
+        Index::Size ActualSizeOr(float value) { return { ActualWidthOr(value), ActualHeightOr(value) }; }
+        Index::Size ActualMinSizeOr(float value) { return { ActualMinWidthOr(value), ActualMinHeightOr(value) }; }
+        Index::Size ActualMaxSizeOr(float value) { return { ActualMaxWidthOr(value), ActualMaxHeightOr(value) }; }
 
         Vec4F& GetMargin() { return Margin_; }
         const Vec4F& GetMargin() const { return Margin_; }
@@ -448,7 +508,8 @@ namespace Index::UI
             else
                 return ComputedMinHeight;
         }
-        Index::Size ComputedMinSizeOr(float value) {
+        Index::Size ComputedMinSizeOr(float value)
+        {
             return { ComputedMinWidthOr(value), ComputedMinHeightOr(value) };
         }
 
@@ -616,8 +677,10 @@ namespace Index::UI
          */
         virtual void OnComputeLayout()
         {
-            Index::Size min = ApplyPadding_(FitRectToChildren_());
-            Index::Size max = { AutoF };
+            auto minChildren = ApplyPadding_(FitRectToChildren_());
+            auto min = Max_(minChildren, ActualMinSize);
+            auto max = Min_(ActualSize, ActualMaxSize);
+
             ComputedMinSize_ = ApplyMargin_(min);
             ComputedMaxSize_ = max;
 
@@ -892,8 +955,8 @@ namespace Index::UI
         }
         static Rect Rect_LimitVAlignRightTop_(Rect parent, Rect r)
         {
-            return { parent.Second.X - Min(r.Width, parent.Width), parent.Y,
-                Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
+                Min(r.Height, parent.Height) };
         }
         static Rect Rect_LimitHAlignTopCenter_(Rect parent, Rect r)
         {
@@ -965,8 +1028,8 @@ namespace Index::UI
         {
             Rect im = Rect_ShrinkOr_Margin_(i, 0);
             Rect r1 = Rect_LimitAlign_(im, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
-            Rect r2 = Rect_Align_(
-                r1, { 0, 0, Max(r1.Width, ComputedMinWidthOr(0)), Max(r1.Height, ComputedMinHeightOr(0)) }, Alignment_);
+            Rect r2 = Rect_Align_(r1,
+                { 0, 0, Max(r1.Width, ComputedMinWidthOr(0)), Max(r1.Height, ComputedMinHeightOr(0)) }, Alignment_);
             return r2;
         }
     };

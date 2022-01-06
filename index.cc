@@ -16,20 +16,20 @@ namespace Index::UI
         void OnComputeLayout() override
         {
             UIElement::OnComputeLayout();
-            Debug.Log("Computing layout");
+            Debug.Log("Computing layout: ", Name);
         }
 
         void OnComputeLayoutPosition(Rect i) override 
         { 
+            Debug.Log("Computing layout position: ", Name);
             UIElement::OnComputeLayoutPosition(i);
-            Debug.Log("Computing layout position");
         }
 
         void OnRender() override 
         { 
             var l = ComputedLayout;
             string s = fmt::format("Rect[{0:.2f},{1:.2f},{2:.2f},{3:.2f}]", l.X, l.Y, l.Width, l.Height);
-            Debug.Log("Rendering: ", s);
+            Debug.Log("Rendering: ", Name, " ", s);
         }
     };
 }
@@ -42,13 +42,16 @@ int main()
     ui_ref u1 = INew<TestElement>();
     u1->MinSize = Size { 11, 12 };
     u1->Alignment = Align::LeftTop;
+    u1->Name = "u1";
 
     IPtr<TestElement> u2 = INew<TestElement>();
     u2->AddChildren(u1);
     u2->Alignment = Align::Right;
+    u2->Name = "u2";
 
     IPtr<TestElement> u3 = INew<TestElement>();
     u3->AddChildren(u2);
+    u3->Name = "u3";
 
     ui_ref uroot = u3;
 

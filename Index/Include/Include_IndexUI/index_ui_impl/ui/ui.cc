@@ -22,7 +22,7 @@
 namespace Index::UI
 {
     struct UIElement;
-    //struct UIMapper;
+    // struct UIMapper;
 }
 
 // Variables
@@ -377,9 +377,9 @@ namespace Index::UI
         INDEX_Property(get = GetAlignment, put = SetAlignment) Align Alignment;
 
     protected:
-        bool LayoutDirty_ = false;
+        bool LayoutDirty_ = true;
         bool ComputedLayoutDirty_ = false;
-        bool ComputedLayoutPositionDirty_ = false;
+        bool ComputedLayoutPositionDirty_ = true;
 
     public:
         bool GetIsLayoutDirty() const { return LayoutDirty_; }
@@ -428,6 +428,30 @@ namespace Index::UI
         float GetComputedMinHeight() const { return ComputedMinSize_.Height; }
         INDEX_Property(get = GetComputedMinHeight) float ComputedMinHeight;
 
+        bool GetAutoComputedMinWidth() const { return ComputedMinSize_.Width == AutoF; }
+        INDEX_Property(get = GetAutoComputedMinWidth) bool AutoComputedMinWidth;
+
+        bool GetAutoComputedMinHeight() const { return ComputedMinSize_.Height == AutoF; }
+        INDEX_Property(get = GetAutoComputedMinHeight) bool AutoComputedMinHeight;
+
+        float ComputedMinWidthOr(float value)
+        {
+            if (AutoComputedMinWidth)
+                return value;
+            else
+                return ComputedMinWidth;
+        }
+        float ComputedMinHeightOr(float value)
+        {
+            if (AutoComputedMinHeight)
+                return value;
+            else
+                return ComputedMinHeight;
+        }
+        Index::Size ComputedMinSizeOr(float value) {
+            return { ComputedMinWidthOr(value), ComputedMinHeightOr(value) };
+        }
+
         Index::Size GetComputedMaxSize() const { return ComputedMaxSize_; }
         INDEX_Property(get = GetComputedMaxSize) Index::Size ComputedMaxSize;
 
@@ -436,6 +460,31 @@ namespace Index::UI
 
         float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
         INDEX_Property(get = GetComputedMaxHeight) float ComputedMaxHeight;
+
+        bool GetAutoComputedMaxWidth() const { return ComputedMaxSize_.Width == AutoF; }
+        INDEX_Property(get = GetAutoComputedMaxWidth) bool AutoComputedMaxWidth;
+
+        bool GetAutoComputedMaxHeight() const { return ComputedMaxSize_.Height == AutoF; }
+        INDEX_Property(get = GetAutoComputedMaxHeight) bool AutoComputedMaxHeight;
+
+        float ComputedMaxWidthOr(float value)
+        {
+            if (AutoComputedMaxWidth)
+                return value;
+            else
+                return ComputedMaxWidth;
+        }
+        float ComputedMaxHeightOr(float value)
+        {
+            if (AutoComputedMaxHeight == AutoF)
+                return value;
+            else
+                return ComputedMaxHeight;
+        }
+        Index::Size ComputedMaxSizeOr(float value)
+        {
+            return { ComputedMaxWidthOr(value), ComputedMaxHeightOr(value) };
+        }
 
         Rect GetComputedLayout() const { return ComputedLayout_; }
         INDEX_Property(get = GetComputedLayout) Rect ComputedLayout;
@@ -540,8 +589,7 @@ namespace Index::UI
 
         virtual void ComputeLayoutPosition(Rect i)
         {
-            OnComputeLayoutPosition(i);
-            PolishComputedLayoutPosition();
+            if (IsComputedLayoutPositionDirty) OnComputeLayoutPosition(i);
         }
 
     protected:
@@ -571,7 +619,7 @@ namespace Index::UI
             Index::Size min = ApplyPadding_(FitRectToChildren_());
             Index::Size max = { AutoF };
             ComputedMinSize_ = ApplyMargin_(min);
-            ComputedMaxSize_ = ApplyMargin_(max);
+            ComputedMaxSize_ = max;
 
             PolishLayout();
             PolishComputedLayout();
@@ -838,14 +886,14 @@ namespace Index::UI
                 Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_LimitVAlignLeftBottom_(Rect parent, Rect r)
+        static Rect Rect_LimitVAlignLeftTop_(Rect parent, Rect r)
         {
-            return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), r.Width, Min(r.Height, parent.Height) };
+            return { parent.X, parent.Y, r.Width, Min(r.Height, parent.Height) };
         }
-        static Rect Rect_LimitVAlignRightBottom_(Rect parent, Rect r)
+        static Rect Rect_LimitVAlignRightTop_(Rect parent, Rect r)
         {
-            return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - r.Height,
-                Min(r.Width, parent.Width), r.Height };
+            return { parent.Second.X - Min(r.Width, parent.Width), parent.Y,
+                Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
         static Rect Rect_LimitHAlignTopCenter_(Rect parent, Rect r)
         {
@@ -864,13 +912,13 @@ namespace Index::UI
             if (a.IsStretched) return parent;
 
             if (a.IsHLeft && a.IsVStretched)
-                return Rect_LimitVAlignLeftBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+                return Rect_LimitVAlignLeftTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
             if (a.IsHLeft && a.IsVCentered) return Rect_AlignLeftBottom_(parent, r);
             if (a.IsHLeft && a.IsVTop) return Rect_AlignLeftTop_(parent, r);
             if (a.IsHLeft && a.IsVBottom) return Rect_AlignLeftBottom_(parent, r);
 
             if (a.IsHRight && a.IsVStretched)
-                return Rect_LimitVAlignRightBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+                return Rect_LimitVAlignRightTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
             if (a.IsHRight && a.IsVCentered) return Rect_AlignRightBottom_(parent, r);
             if (a.IsHRight && a.IsVTop) return Rect_AlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_AlignRightBottom_(parent, r);
@@ -891,13 +939,13 @@ namespace Index::UI
             if (a.IsStretched) return parent;
 
             if (a.IsHLeft && a.IsVStretched)
-                return Rect_LimitAlignLeftBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+                return Rect_LimitAlignLeftTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
             if (a.IsHLeft && a.IsVCentered) return Rect_LimitAlignLeftBottom_(parent, r);
             if (a.IsHLeft && a.IsVTop) return Rect_LimitAlignLeftTop_(parent, r);
             if (a.IsHLeft && a.IsVBottom) return Rect_LimitAlignLeftBottom_(parent, r);
 
             if (a.IsHRight && a.IsVStretched)
-                return Rect_LimitAlignRightBottom_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+                return Rect_LimitAlignRightTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
             if (a.IsHRight && a.IsVCentered) return Rect_LimitAlignRightBottom_(parent, r);
             if (a.IsHRight && a.IsVTop) return Rect_LimitAlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_LimitAlignRightBottom_(parent, r);
@@ -916,8 +964,9 @@ namespace Index::UI
         Rect AlignToComputedLayout_(Rect i)
         {
             Rect im = Rect_ShrinkOr_Margin_(i, 0);
-            Rect r1 = Rect_Align_(im, { 0, 0, ComputedMinWidth, ComputedMinHeight }, Alignment_);
-            Rect r2 = Rect_LimitAlign_(r1, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
+            Rect r1 = Rect_LimitAlign_(im, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
+            Rect r2 = Rect_Align_(
+                r1, { 0, 0, Max(r1.Width, ComputedMinWidthOr(0)), Max(r1.Height, ComputedMinHeightOr(0)) }, Alignment_);
             return r2;
         }
     };

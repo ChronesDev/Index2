@@ -6,7 +6,7 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_executable(IndexTest index.cc)
 
-target_compile_options(IndexTest PUBLIC "-fdeclspec")
+target_compile_options(IndexTest PUBLIC "-fdeclspec" "-fms-extensions")
 
 # Include Dirs
 set(Index_IncludeDir "Index/Include/Include_Index/")

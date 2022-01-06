@@ -486,21 +486,22 @@ namespace Index::UI2
         INDEX_Property(get = GetComputedMinSize) Index::Size ComputedMinSize;
 
         float GetComputedMinWidth() const { return ComputedMinSize_.Width; }
-        INDEX_Property(get = GetComputedMinWidth, put = SetComputedMinWidth) float ComputedMinWidth;
+        INDEX_Property(get = GetComputedMinWidth) float ComputedMinWidth;
 
         float GetComputedMinHeight() const { return ComputedMinSize_.Height; }
-        INDEX_Property(get = GetComputedMinHeight, put = SetComputedMinHeight) float ComputedMinHeight;
+        INDEX_Property(get = GetComputedMinHeight) float ComputedMinHeight;
 
         Index::Size GetComputedMaxSize() const { return ComputedMaxSize_; }
         INDEX_Property(get = GetComputedMaxSize) Index::Size ComputedMaxSize;
 
         float GetComputedMaxWidth() const { return ComputedMaxSize_.Width; }
-        INDEX_Property(get = GetComputedMaxWidth, put = SetComputedMaxWidth) float ComputedMaxWidth;
+        INDEX_Property(get = GetComputedMaxWidth) float ComputedMaxWidth;
 
         float GetComputedMaxHeight() const { return ComputedMaxSize_.Height; }
-        INDEX_Property(get = GetComputedMaxHeight, put = SetComputedMaxHeight) float ComputedMaxHeight;
+        INDEX_Property(get = GetComputedMaxHeight) float ComputedMaxHeight;
 
         Rect GetComputedLayout() const { return ComputedLayout_; }
+        INDEX_Property(get = GetComputedLayout) Rect ComputedLayout;
 
     protected:
         virtual bool ShouldComputeSelf_() { return IsLayoutDirty; }
@@ -591,10 +592,7 @@ namespace Index::UI2
             OnComputeLayout();
         }
 
-        virtual void PositionLayout(Rect i)
-        {
-            OnPositionLayout(i);
-        }
+        virtual void PositionLayout(Rect i) { OnPositionLayout(i); }
 
     protected:
         virtual void ComputeChildrenLayout_(UInt64 frame)

@@ -142,14 +142,14 @@ namespace Index::UI2
         bool GetAutoWidth() const { return Size_.Width == AutoF; }
         void SetAutoWidth(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Size_.Width, value) if (value) Size_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Size_.Width, AutoF) if (value) Size_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoWidth, put = SetAutoWidth) bool AutoWidth;
 
         bool GetAutoHeight() const { return Size_.Height == AutoF; }
         void SetAutoHeight(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Size_.Height, value) if (value) Size_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Size_.Height, AutoF) if (value) Size_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoHeight, put = SetAutoHeight) bool AutoHeight;
 
@@ -167,14 +167,14 @@ namespace Index::UI2
         bool GetAutoMinWidth() const { return MinSize_.Width == AutoF; }
         void SetAutoMinWidth(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(MinSize_.Width, value) if (value) MinSize_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MinSize_.Width, AutoF) if (value) MinSize_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoMinWidth, put = SetAutoMinWidth) bool AutoMinWidth;
 
         bool GetAutoMinHeight() const { return MinSize_.Height == AutoF; }
         void SetAutoMinHeight(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, value) if (value) MinSize_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MinSize_.Height, AutoF) if (value) MinSize_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoMinHeight, put = SetAutoMinHeight) bool AutoMinHeight;
 
@@ -192,14 +192,14 @@ namespace Index::UI2
         bool GetAutoMaxWidth() const { return MaxSize_.Width == AutoF; }
         void SetAutoMaxWidth(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Width, value) if (value) MaxSize_.Width = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Width, AutoF) if (value) MaxSize_.Width = AutoF;
         }
         INDEX_Property(get = GetAutoMaxWidth, put = SetAutoMaxWidth) bool AutoMaxWidth;
 
         bool GetAutoMaxHeight() const { return MaxSize_.Height == AutoF; }
         void SetAutoMaxHeight(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, value) if (value) MaxSize_.Height = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(MaxSize_.Height, AutoF) if (value) MaxSize_.Height = AutoF;
         }
         INDEX_Property(get = GetAutoMaxHeight, put = SetAutoMaxHeight) bool AutoMaxHeight;
 
@@ -259,7 +259,7 @@ namespace Index::UI2
         bool GetAutoMarginLeft() const { return Margin_.X == AutoF; }
         void SetAutoMarginLeft(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Margin_.X, value) if (value) Margin_.X = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.X, AutoF) if (value) Margin_.X = AutoF;
         }
         INDEX_Property(get = GetAutoMarginLeft, put = SetAutoMarginLeft) bool AutoMarginLeft;
 
@@ -270,7 +270,7 @@ namespace Index::UI2
         bool GetAutoMarginTop() const { return Margin_.Y == AutoF; }
         void SetAutoMarginTop(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Margin_.Y, value) if (value) Margin_.Y = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.Y, AutoF) if (value) Margin_.Y = AutoF;
         }
         INDEX_Property(get = GetAutoMarginTop, put = SetAutoMarginTop) bool AutoMarginTop;
 
@@ -281,7 +281,7 @@ namespace Index::UI2
         bool GetAutoMarginRight() const { return Margin_.Z == AutoF; }
         void SetAutoMarginRight(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Margin_.Z, value) if (value) Margin_.Z = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.Z, AutoF) if (value) Margin_.Z = AutoF;
         }
         INDEX_Property(get = GetAutoMarginRight, put = SetAutoMarginRight) bool AutoMarginRight;
 
@@ -292,7 +292,7 @@ namespace Index::UI2
         bool GetAutoMarginBottom() const { return Margin_.W == AutoF; }
         void SetAutoMarginBottom(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Margin_.W, value) if (value) Margin_.W = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Margin_.W, AutoF) if (value) Margin_.W = AutoF;
         }
         INDEX_Property(get = GetAutoMarginBottom, put = SetAutoMarginBottom) bool AutoMarginBottom;
 
@@ -341,7 +341,7 @@ namespace Index::UI2
         bool GetAutoPaddingLeft() const { return Padding_.X == AutoF; }
         void SetAutoPaddingLeft(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Padding_.X, value) if (value) Padding_.X = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.X, AutoF) if (value) Padding_.X = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingLeft, put = SetAutoPaddingLeft) bool AutoPaddingLeft;
 
@@ -352,7 +352,7 @@ namespace Index::UI2
         bool GetAutoPaddingTop() const { return Padding_.Y == AutoF; }
         void SetAutoPaddingTop(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Padding_.Y, value) if (value) Padding_.Y = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.Y, AutoF) if (value) Padding_.Y = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingTop, put = SetAutoPaddingTop) bool AutoPaddingTop;
 
@@ -363,7 +363,7 @@ namespace Index::UI2
         bool GetAutoPaddingRight() const { return Padding_.Z == AutoF; }
         void SetAutoPaddingRight(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Padding_.Z, value) if (value) Padding_.Z = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.Z, AutoF) if (value) Padding_.Z = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingRight, put = SetAutoPaddingRight) bool AutoPaddingRight;
 
@@ -374,7 +374,7 @@ namespace Index::UI2
         bool GetAutoPaddingBottom() const { return Padding_.W == AutoF; }
         void SetAutoPaddingBottom(bool value)
         {
-            INDEX_UI_LayoutDirtyChecker_(Padding_.W, value) if (value) Padding_.W = AutoF;
+            INDEX_UI_LayoutDirtyChecker_(Padding_.W, AutoF) if (value) Padding_.W = AutoF;
         }
         INDEX_Property(get = GetAutoPaddingBottom, put = SetAutoPaddingBottom) bool AutoPaddingBottom;
 

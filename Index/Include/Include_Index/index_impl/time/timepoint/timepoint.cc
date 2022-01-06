@@ -69,7 +69,7 @@ namespace Index
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
 #ifdef INDEX_MSVC
-        os << "TimePoint {" <<  timePoint.StdTimePoint << "}";
+        os << "TimePoint {" << timePoint.StdTimePoint.time_since_epoch() << "}";
 #else
         auto t = std::chrono::high_resolution_clock::to_time_t(timePoint.StdTimePoint);
         os << "TimePoint {" << std::put_time(std::localtime(&t), "%F %T") << "}";

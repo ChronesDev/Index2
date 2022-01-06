@@ -540,7 +540,7 @@ namespace Index::UI2
             if (ShouldCompute)
             {
                 OnComputeLayout();
-                MakeLayoutDirty();
+                MakeComputedLayoutPositionDirty();
             }
         }
 
@@ -566,7 +566,7 @@ namespace Index::UI2
             if (ShouldCompute)
             {
                 OnComputeLayout();
-                MakeLayoutDirty();
+                MakeComputedLayoutPositionDirty();
             }
         }
 
@@ -578,9 +578,14 @@ namespace Index::UI2
         {
             ForceComputeChildrenLayout_();
             OnComputeLayout();
+            MakeComputedLayoutPositionDirty();
         }
 
-        virtual void ComputeLayoutPosition(Rect i) { OnComputeLayoutPosition(i); }
+        virtual void ComputeLayoutPosition(Rect i)
+        {
+            OnComputeLayoutPosition(i);
+            PolishComputedLayoutPosition();
+        }
 
     protected:
         virtual void ComputeChildrenLayout_(UInt64 frame)
@@ -588,6 +593,7 @@ namespace Index::UI2
             for (auto& c : Children_)
             {
                 c->SubComputeLayout(frame);
+                MakeComputedLayoutPositionDirtyIf(c->IsComputedLayoutPositionDirty);
             }
         }
 
@@ -622,6 +628,10 @@ namespace Index::UI2
         {
             // Position itself
 
+            for (auto& c : Children_)
+            {
+                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(i);
+            }
             // Position children
         }
 

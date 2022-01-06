@@ -23,3 +23,6 @@ target_include_directories(IndexTest PUBLIC ${Lib_IncludeDir})
 # Add Lib Folder
 add_subdirectory(Index/Lib/)
 target_link_libraries(IndexTest yogacore)
+
+find_package(fmt REQUIRED)
+target_link_libraries(IndexTest fmt::fmt)

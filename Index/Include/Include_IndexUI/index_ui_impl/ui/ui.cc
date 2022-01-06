@@ -19,63 +19,20 @@
     struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
-namespace Index::UI2
+namespace Index::UI
 {
     struct UIElement;
-    struct UIMapper;
+    //struct UIMapper;
 }
 
 // Variables
-namespace Index::UI2
+namespace Index::UI
 {
     constexpr float AutoF = Limits::FloatMax;
 }
 
-// UIElementAnimation
-namespace Index::UI2
-{
-    struct UIElementAnimation : IObj<UIElementAnimation>
-    {
-        WPtr<UIElement> Element;
-
-        virtual void Update() = 0;
-
-        virtual bool GetIsDone() = 0;
-        INDEX_Property(get = GetIsDone) bool IsDone;
-    };
-
-    template <class TAnimation, class TElement = UIElement> struct UIElementPropertyAnimation : UIElementAnimation
-    {
-    public:
-        UIElementPropertyAnimation() = default;
-        UIElementPropertyAnimation(WPtr<UIElement> element,
-            Func<void(TElement*, typename TAnimation::TType)> propertySetter, TAnimation animation)
-            : Animation_(animation)
-            , PropertySetter_(propertySetter)
-        {
-            Element = Move(element);
-        }
-
-    protected:
-        Func<void(TElement*, typename TAnimation::TType)> PropertySetter_;
-        Nullable<TAnimation> Animation_;
-
-    public:
-        void Update() override
-        {
-            if (IsDone) return;
-            if (auto element = Element.Lock) PropertySetter_(element.Ptr, Animation_.Value.Value);
-        }
-
-        bool GetIsDone() override { return !Animation_.HasValue || Animation_.Value.HasFinished; }
-
-        TAnimation& GetAnimation() const { return Animation_; }
-        INDEX_Property(get = GetAnimation) TAnimation& Animation;
-    };
-}
-
 // UIElement
-namespace Index::UI2
+namespace Index::UI
 {
     struct UIElement : IObj<UIElement>
     {

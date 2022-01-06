@@ -23,42 +23,12 @@ namespace Index::UI2
 {
     struct UIElement;
     struct UIMapper;
-
-    struct UIElementAnimation;
-    template <class T, class TElement> struct UIElementPropertyAnimation;
 }
 
 // Variables
 namespace Index::UI2
 {
     constexpr float AutoF = Limits::FloatMax;
-}
-
-// UIUnit
-namespace Index::UI2
-{
-    enum class UIUnit
-    {
-        Undefined,
-        Point,
-        Percent,
-        Auto
-    };
-
-    inline UIUnit UIUnitFromYGUnit(YGUnit unit)
-    {
-        switch (unit)
-        {
-        case YGUnitPoint:
-            return UIUnit::Point;
-        case YGUnitPercent:
-            return UIUnit::Percent;
-        case YGUnitAuto:
-            return UIUnit::Auto;
-        default:
-            return UIUnit::Undefined;
-        }
-    }
 }
 
 // UIElementAnimation
@@ -452,6 +422,7 @@ namespace Index::UI2
     protected:
         bool LayoutDirty_ = false;
         bool ComputedLayoutDirty_ = false;
+        bool ComputedLayoutPositionDirty_ = false;
 
     public:
         bool GetIsLayoutDirty() const { return LayoutDirty_; }
@@ -471,6 +442,15 @@ namespace Index::UI2
         }
         void PolishComputedLayout() { ComputedLayoutDirty_ = false; }
         INDEX_Property(get = GetIsComputedLayoutDirty) bool IsComputedLayoutDirty;
+
+        bool GetIsComputedLayoutPositionDirty() const { return ComputedLayoutPositionDirty_; }
+        void MakeComputedLayoutPositionDirty() { ComputedLayoutPositionDirty_ = true; }
+        constexpr void MakeComputedLayoutPositionDirtyIf(bool condition)
+        {
+            if (condition) MakeComputedLayoutPositionDirty();
+        }
+        void PolishComputedLayoutPosition() { ComputedLayoutPositionDirty_ = false; }
+        INDEX_Property(get = GetIsComputedLayoutPositionDirty) bool IsComputedLayoutPositionDirty;
 
     protected:
         UInt64 ComputeFrame_ = 0;
@@ -557,7 +537,11 @@ namespace Index::UI2
             ComputeFrame_ = frame;
 
             ComputeChildrenLayout_(frame);
-            if (ShouldCompute) OnComputeLayout();
+            if (ShouldCompute)
+            {
+                OnComputeLayout();
+                MakeLayoutDirty();
+            }
         }
 
         /**
@@ -579,7 +563,11 @@ namespace Index::UI2
             ComputeFrame_ = frame;
 
             ComputeChildrenLayout_(frame);
-            if (ShouldCompute) OnComputeLayout();
+            if (ShouldCompute)
+            {
+                OnComputeLayout();
+                MakeLayoutDirty();
+            }
         }
 
         /**
@@ -592,7 +580,7 @@ namespace Index::UI2
             OnComputeLayout();
         }
 
-        virtual void PositionLayout(Rect i) { OnPositionLayout(i); }
+        virtual void ComputeLayoutPosition(Rect i) { OnComputeLayoutPosition(i); }
 
     protected:
         virtual void ComputeChildrenLayout_(UInt64 frame)
@@ -630,7 +618,7 @@ namespace Index::UI2
          * @brief Computes its own layout position
          * @param i: The layout
          */
-        virtual void OnPositionLayout(Rect i)
+        virtual void OnComputeLayoutPosition(Rect i)
         {
             // Position itself
 

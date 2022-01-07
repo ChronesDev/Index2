@@ -23,6 +23,7 @@
 namespace Index::UI
 {
     constexpr float AutoF = Limits::FloatMax;
+    constexpr Size AutoS = { AutoF, AutoF };
 }
 
 // Math

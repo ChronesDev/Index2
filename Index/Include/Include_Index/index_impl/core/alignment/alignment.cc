@@ -7,7 +7,7 @@ namespace Index
     struct Align
     {
     private:
-        Align(short hAlignment, short vAlignment) noexcept(true)
+        constexpr Align(short hAlignment, short vAlignment) noexcept(true)
             : HorizontalAlignment_(hAlignment)
             , VerticalAlignment_(vAlignment)
         {

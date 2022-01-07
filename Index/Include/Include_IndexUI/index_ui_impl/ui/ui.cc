@@ -19,6 +19,14 @@
     struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
+
+// Prototypes
+namespace Index::UI
+{
+    struct UIMapper;
+    struct UIElement;
+}
+
 // Variables
 namespace Index::UI
 {
@@ -1051,45 +1059,57 @@ namespace Index::UI
             return r2;
         }
     };
+}
 
-    /*
-        template <class TThis, class T> struct UIMapper_SubMaker_
+// UIMapper
+namespace Index::UI
+{
+    template <class TThis, class T> struct UIMapper_SubMaker_
+    {
+    protected:
+        TThis* That;
+
+    public:
+        explicit UIMapper_SubMaker_(TThis* that)
+            : That(that)
         {
-        protected:
-            TThis* That;
+        }
 
-        public:
-            explicit UIMapper_SubMaker_(TThis* that)
-                : That(that)
-            {
-            }
-
-            void operator+=(Func<void(TThis&, typename T::Mapper&)> f)
-            {
-                auto mapper = INew<typename T::Mapper>();
-                f(*That, mapper.Value);
-                That->Content.Add(mapper.template DynamicAs<UIMapper>());
-            }
-        };
-
-        struct UIMapper : IObj<UIMapper>
+        void operator+=(Func<void(TThis&, typename T::Mapper&)> f)
         {
-        public:
-            string Name;
+            auto mapper = INew<typename T::Mapper>();
+            f(*That, mapper.Value);
+            That->Children.Add(mapper.template DynamicAs<UIMapper>());
+        }
+    };
 
-        public:
-            List<IPtr<UIMapper>> Content;
+    struct UIMapper : IObj<UIMapper>
+    {
+    public:
+        string Name = "";
+        string Id = "";
 
-            virtual void Add(IPtr<UIMapper> child) { Content.Add(child); }
-            virtual void Remove(IPtr<UIMapper> child) { Content.Remove(child); }
+        Index::Size Size = AutoS;
+        Index::Size MinSize = AutoS;
+        Index::Size MaxSize = AutoS;
 
-            template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+        Vec4F Margin = { 0 };
+        Vec4F Padding = { 0 };
 
-        protected:
-            virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
+        Align Alignment = Align::Stretch;
 
-        public:
-            virtual IPtr<UIElement> Make() = 0;
-        };
-        */
+    public:
+        List<IPtr<UIMapper>> Children;
+
+        virtual void Add(IPtr<UIMapper> child) { Children.Add(child); }
+        virtual void Remove(IPtr<UIMapper> child) { Children.Remove(child); }
+
+        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+
+    protected:
+        virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
+
+    public:
+        virtual IPtr<UIElement> Make() = 0;
+    };
 }

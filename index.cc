@@ -41,6 +41,7 @@ int main()
 
     ui_ref u1 = INew<TestElement>();
     u1->MinSize = Size { 11, 12 };
+    u1->MaxSize = Size { 70, 70 };
     u1->Alignment = Align::LeftTop;
     u1->Name = "u1";
 

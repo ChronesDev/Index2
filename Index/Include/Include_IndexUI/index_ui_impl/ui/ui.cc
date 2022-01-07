@@ -242,10 +242,22 @@ namespace Index::UI
         float GetActualMinHeight() const { return Min(MinHeight, MaxHeight); }
         INDEX_Property(get = GetActualMinHeight) float ActualMinHeight;
 
-        float GetActualWidth() const { return Limit(Width, AutoF_ValueOr_(ActualMinWidth, 0), ActualMaxWidth); }
+        float GetActualWidth() const
+        {
+            if (AutoWidth)
+                return Width;
+            else
+                return Clamp(Width, AutoF_ValueOr_(ActualMinWidth, 0), ActualMaxWidth);
+        }
         INDEX_Property(get = GetActualWidth) float ActualWidth;
 
-        float GetActualHeight() const { return Limit(Height, AutoF_ValueOr_(ActualMinHeight, 0), ActualMaxHeight); }
+        float GetActualHeight() const
+        {
+            if (AutoHeight)
+                return Height;
+            else
+                return Clamp(Height, AutoF_ValueOr_(ActualMinHeight, 0), ActualMaxHeight);
+        }
         INDEX_Property(get = GetActualHeight) float ActualHeight;
 
         float GetActualMaxWidth() const { return MaxWidth; }
@@ -254,15 +266,21 @@ namespace Index::UI
         float GetActualMaxHeight() const { return MaxHeight; }
         INDEX_Property(get = GetActualMaxHeight) float ActualMaxHeight;
 
-        float ActualMinWidthOr(float value) { AutoF_ValueOr_(ActualMinWidth, value); }
-        float ActualMinHeightOr(float value) { AutoF_ValueOr_(ActualMinHeight, value); }
-        float ActualWidthOr(float value) { AutoF_ValueOr_(ActualWidth, value); }
-        float ActualHeightOr(float value) { AutoF_ValueOr_(ActualHeight, value); }
-        float ActualMaxWidthOr(float value) { AutoF_ValueOr_(ActualMaxWidth, value); }
-        float ActualMaxHeightOr(float value) { AutoF_ValueOr_(ActualMaxHeight, value); }
+        float ActualMinWidthOr(float value) { return AutoF_ValueOr_(ActualMinWidth, value); }
+        float ActualMinHeightOr(float value) { return AutoF_ValueOr_(ActualMinHeight, value); }
+        float ActualWidthOr(float value) { return AutoF_ValueOr_(ActualWidth, value); }
+        float ActualHeightOr(float value) { return AutoF_ValueOr_(ActualHeight, value); }
+        float ActualMaxWidthOr(float value) { return AutoF_ValueOr_(ActualMaxWidth, value); }
+        float ActualMaxHeightOr(float value) { return AutoF_ValueOr_(ActualMaxHeight, value); }
         Index::Size ActualSizeOr(float value) { return { ActualWidthOr(value), ActualHeightOr(value) }; }
         Index::Size ActualMinSizeOr(float value) { return { ActualMinWidthOr(value), ActualMinHeightOr(value) }; }
         Index::Size ActualMaxSizeOr(float value) { return { ActualMaxWidthOr(value), ActualMaxHeightOr(value) }; }
+
+        Index::Size ClampSize(Index::Size value)
+        {
+            return { ActualWidthOr(Clamp(value.Width, ActualMinWidthOr(0), ActualMaxWidth)),
+                ActualHeightOr(Clamp(value.Height, ActualMinHeightOr(0), ActualMaxHeight)) };
+        }
 
         Vec4F& GetMargin() { return Margin_; }
         const Vec4F& GetMargin() const { return Margin_; }
@@ -678,8 +696,8 @@ namespace Index::UI
         virtual void OnComputeLayout()
         {
             auto minChildren = ApplyPadding_(FitRectToChildren_());
-            auto min = Max_(minChildren, ActualMinSize);
-            auto max = Min_(ActualSize, ActualMaxSize);
+            auto min = ClampSize(minChildren);
+            auto max = ActualMaxSize;
 
             ComputedMinSize_ = ApplyMargin_(min);
             ComputedMaxSize_ = max;
@@ -1028,8 +1046,7 @@ namespace Index::UI
         {
             Rect im = Rect_ShrinkOr_Margin_(i, 0);
             Rect r1 = Rect_LimitAlign_(im, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
-            Rect r2 = Rect_Align_(r1,
-                { 0, 0, Max(r1.Width, ComputedMinWidthOr(0)), Max(r1.Height, ComputedMinHeightOr(0)) }, Alignment_);
+            Rect r2 = Rect_Align_(r1, { 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) }, Alignment_);
             return r2;
         }
     };

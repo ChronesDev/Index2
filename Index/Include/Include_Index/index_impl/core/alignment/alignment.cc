@@ -27,7 +27,7 @@ namespace Index
         }
         [[nodiscard]] constexpr bool GetIsCentered() const
         {
-            return HorizontalAlignment_ == Stretch_ && VerticalAlignment_ == Stretch_;
+            return HorizontalAlignment_ == Center_ && VerticalAlignment_ == Center_;
         }
 
         INDEX_Property(get = GetIsStretched) bool IsStretched;

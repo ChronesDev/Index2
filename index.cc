@@ -53,7 +53,7 @@ int main()
 
     while (true)
     {
-        u->ComputeLayout(counter);
+        u->ComputeLayout(counter.Next());
         u->ComputeLayoutPosition(screen);
 
         u->Render();

@@ -1,30 +1,28 @@
 #pragma once
 
-#include "../container/container.cc"
 #include "../ui.cc"
+#include "../container/container.cc"
 
 namespace Index::UI
 {
-    INDEX_UI_Declare(VStack);
-
-    struct VStack : virtual UIContainer
-    {
-        INDEX_UI_UseMapper(VStackMapper);
+	struct HStack : virtual UIContainer
+	{
+        INDEX_UI_UseMapper(HStackMapper);
 
         void OnComputeLayoutPosition(Rect i) override
         {
             Rect r = GetSubrect_(i);
             ComputedLayout_ = r;
 
-            float height = 0;
+            float width = 0;
             for (auto& c : Children_)
             {
                 Rect r2 = r;
-                r2.Y += height;
-                r2.Height = c->ComputedMinWidthOr(AutoF);
+                r2.X += width;
+                r2.Width = c->ComputedMinWidthOr(AutoF);
                 c->ComputeLayoutPosition(r2);
 
-                height += c->ComputedMinHeight;
+                width += c->ComputedMinWidth;
             }
 
             PolishComputedLayoutPosition();
@@ -35,10 +33,10 @@ namespace Index::UI
             Index::Size minChildren;
             for (auto& c : Children_)
             {
-                float width = c->ComputedMinWidth;
-                if (minChildren.Width < width) minChildren.Width = width;
+                float height = c->ComputedMinHeight;
+                if (minChildren.Height < height) minChildren.Height = height;
 
-                minChildren.Height += c->ComputedMinHeight;
+                minChildren.Width += c->ComputedMinWidth;
             }
 
             auto min = ClampSize(ApplyPadding_(minChildren));
@@ -50,14 +48,14 @@ namespace Index::UI
             PolishLayout();
             PolishComputedLayout();
         }
-    };
+	};
 
-    struct VStackMapper : virtual UIContainerMapper
+    struct HStackMapper : virtual UIContainerMapper
     {
         INDEX_UI_Ref Make()
         {
-            IPtr<VStackMapper> e_ref = INew<VStackMapper>();
-            VStackMapper& e = e_ref.Value;
+            IPtr<HStackMapper> e_ref = INew<HStackMapper>();
+            HStackMapper& e = e_ref.Value;
 
             Impl_(e);
             Impl_Children_(e);

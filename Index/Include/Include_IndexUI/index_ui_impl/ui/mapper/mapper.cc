@@ -53,12 +53,29 @@ namespace Index::UI
         virtual void Add(IPtr<UIMapper> child) { Children.Add(child); }
         virtual void Remove(IPtr<UIMapper> child) { Children.Remove(child); }
 
-        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+    protected:
+        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub_() { return UIMapper_SubMaker_<UIMapper, T>(this); }
 
     protected:
         virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
 
     public:
         virtual IPtr<UIElement> Make() = 0;
+
+    protected:
+        template<class T> void Impl_(T& e)
+        {
+            e.Name = Name;
+            e.Id = Id;
+
+            e.Size = Size;
+            e.MinSize = MinSize;
+            e.MaxSize = MaxSize;
+
+            e.Margin = Margin;
+            e.Padding = Padding;
+
+            e.Alignment = Alignment;
+        }
     };
 }

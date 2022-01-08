@@ -762,7 +762,6 @@ namespace Index::UI
         virtual void OnComputeLayoutPosition(Rect i)
         {
             Rect r = GetSubrect_(i);
-
             ComputedLayout_ = r;
 
             for (auto& c : Children_)

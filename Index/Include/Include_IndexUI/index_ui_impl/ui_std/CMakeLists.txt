@@ -4,4 +4,5 @@ target_sources(IndexUIInclude PRIVATE
         
         container/conatiner.cc
         hstack/hstack.cc
+        stack/stack.cc
         vstack/vstack.cc)

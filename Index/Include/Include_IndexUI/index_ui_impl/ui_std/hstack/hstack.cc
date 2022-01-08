@@ -5,6 +5,8 @@
 
 namespace Index::UI
 {
+    INDEX_UI_Declare(HStack);
+
 	struct HStack : virtual UIContainer
 	{
         INDEX_UI_UseMapper(HStackMapper);
@@ -54,8 +56,8 @@ namespace Index::UI
     {
         INDEX_UI_Ref Make()
         {
-            IPtr<HStackMapper> e_ref = INew<HStackMapper>();
-            HStackMapper& e = e_ref.Value;
+            IPtr<HStack> e_ref = INew<HStack>();
+            HStack& e = e_ref.Value;
 
             Impl_(e);
             Impl_Children_(e);

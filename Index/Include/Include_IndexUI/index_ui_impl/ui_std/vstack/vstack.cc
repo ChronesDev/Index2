@@ -56,8 +56,8 @@ namespace Index::UI
     {
         INDEX_UI_Ref Make()
         {
-            IPtr<VStackMapper> e_ref = INew<VStackMapper>();
-            VStackMapper& e = e_ref.Value;
+            IPtr<VStack> e_ref = INew<VStack>();
+            VStack& e = e_ref.Value;
 
             Impl_(e);
             Impl_Children_(e);

@@ -32,7 +32,7 @@ namespace Index::UI
 
         void OnComputeLayout() override
         {
-            auto minChildren ApplyPadding_(FitRectToChildren_());
+            auto minChildren = ApplyPadding_(FitRectToChildren_());
             auto min = ClampSize(minChildren);
             auto max = ActualMaxSize;
 
@@ -48,8 +48,8 @@ namespace Index::UI
     {
         INDEX_UI_Ref Make()
         {
-            IPtr<UStackMapper> e_ref = INew<UStackMapper>();
-            UStackMapper& e = e_ref.Value;
+            IPtr<UStack> e_ref = INew<UStack>();
+            UStack& e = e_ref.Value;
 
             Impl_(e);
             Impl_Children_(e);

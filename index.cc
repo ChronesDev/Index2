@@ -87,12 +87,6 @@ int main()
     UIFrameCounter counter;
     Rect screen = { 0, 0, 1920, 1080 };
 
-    std::thread t([=] {
-        u->Update();
-        Time.Delay(TimeSpan::FromSec(0.2));
-    });
-    t.detach();
-
     while (true)
     {
         u->ComputeLayout(counter);

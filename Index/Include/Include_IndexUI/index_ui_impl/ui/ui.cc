@@ -19,12 +19,12 @@
     struct mapper_name
 #define INDEX_UI_UseMapper(name) using Mapper = name
 
-
 // Prototypes
 namespace Index::UI
 {
     struct UIMapper;
     struct UIElement;
+    struct UIFrameCounter;
 }
 
 // Variables
@@ -55,10 +55,23 @@ namespace Index::UI
     }
 }
 
+// UIFrameCounter
 namespace Index::UI
 {
-    struct UIElement;
-    // struct UIMapper;
+    struct UIFrameCounter
+    {
+        ulong Frame = 0;
+
+        ulong Next()
+        {
+            Frame = (Frame % (Limits::MaxValueOf<ulong>() - 1)) + 1;
+            return Frame;
+        }
+
+        ulong Begin() { Frame = 0; return Frame; }
+
+        operator ulong() { return Frame; }
+    };
 }
 
 // UIElement
@@ -66,6 +79,11 @@ namespace Index::UI
 {
     struct UIElement : IObj<UIElement>
     {
+    public:
+        UIElement() = default;
+
+        virtual ~UIElement() { DetachAllChildren_(); }
+
     protected:
         string Name_;
         string Id_;
@@ -90,10 +108,88 @@ namespace Index::UI
         const List<IPtr<UIElement>>& GetChildren() const { return Children_; }
         INDEX_Property(get = GetChildren) const List<IPtr<UIElement>>& Children;
 
+        bool GetHasChildren() const { return Children.Length != 0; }
+        INDEX_Property(get = GetHasChildren) bool HasChildren;
+
+        bool GetIsAttached() const { return !Parent_.IsNull; }
+        INDEX_Property(get = GetIsAttached) bool IsAttached;
+
     protected:
         void Children_Add_(const IPtr<UIElement>& child) { Children_.Add(child); }
         void Children_Remove_(const IPtr<UIElement>& child) { Children_.Remove(child); }
         bool Children_Contains_(const IPtr<UIElement>& child) { return Children_.Contains(child); }
+
+        virtual void Parent_AttachTo_(const WPtr<UIElement>& parent)
+        {
+            if (IsAttached) INDEX_THROW("Already attached to parent.");
+            if (parent.IsNull) INDEX_THROW("parent was null.");
+
+            Parent_ = parent;
+
+            OnAttachedTo_(parent.Lock);
+        }
+        virtual void Parent_DetachFrom_(const WPtr<UIElement>& parent)
+        {
+            if (!IsAttached) INDEX_THROW("Is not attached to any parent.");
+            if (parent.IsNull) INDEX_THROW("parent was null.");
+
+            auto ps = Parent_.Lock;
+            auto p = parent.Lock;
+            if (ps.Ptr != p.Ptr) INDEX_THROW("parent does not match.");
+
+            Parent_ = WPtr<UIElement>();
+
+            OnDetachedFrom_(parent.Lock);
+        }
+
+        virtual void AttachChild_(const IPtr<UIElement>& child)
+        {
+            if (child.IsNull) INDEX_THROW("child was null.");
+            if (Children_Contains_(child)) INDEX_THROW("child is already attached.");
+            if (child->IsAttached) INDEX_THROW("child already has a parent.");
+
+            try
+            {
+                child->Parent_AttachTo_(WSelf());
+            }
+            catch (std::exception ex)
+            {
+                INDEX_THROW("Failed at trying to attach child.");
+            }
+
+            Children_Add_(child);
+        }
+        virtual void DetachChild_(const IPtr<UIElement>& child)
+        {
+            if (child.IsNull) INDEX_THROW("child was null.");
+            if (!Children_Contains_(child)) INDEX_THROW("child does not exist.");
+            if (!child->IsAttached) INDEX_THROW("child does not have a parent.");
+            if (auto p = child->Parent_.Lock; p.Ptr != this) INDEX_THROW("parent of child is not this.");
+
+            try
+            {
+                child->Parent_DetachFrom_(WSelf());
+            }
+            catch (std::exception ex)
+            {
+                Children_Remove_(child);
+                INDEX_THROW("Failed at trying to attach child.");
+            }
+        }
+
+        /**
+         * @brief Detaches all Children from this element. Should be used in the destructor.
+         */
+        void DetachAllChildren_()
+        {
+            for (auto& c : Children_)
+            {
+                DetachChild_(c);
+            }
+        }
+
+        virtual void OnAttachedTo_(const IPtr<UIElement>& parent) { }
+        virtual void OnDetachedFrom_(const IPtr<UIElement>& parent) { }
 
     protected:
         Index::Size Size_ = { AutoF, AutoF };
@@ -759,6 +855,33 @@ namespace Index::UI
          * @brief OnRender
          */
         virtual void OnRender() { }
+
+    public:
+        /**
+         * @brief Updates the element.
+         * @note Can be async
+         */
+        virtual void Update()
+        {
+            OnUpdate();
+
+            for (auto& c : Children_)
+            {
+                c->Update();
+            }
+
+            OnPostUpdate();
+        }
+
+        /**
+         * @brief OnUpdate
+         */
+        virtual void OnUpdate() { }
+
+        /**
+         * @brief OnPostUpdate
+         */
+        virtual void OnPostUpdate() { }
 
     protected:
         Index::Size ApplyMargin_(Index::Size s) { return Rect_ResizeExpand_Margin_({ 0, 0, s.Width, s.Height }).Size; }

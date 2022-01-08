@@ -8,18 +8,21 @@ namespace Index::UI
 {
     INDEX_UI_Declare(MyElement);
 
-    struct MyElement : UIElement
+    struct MyElement : virtual UIElement
     {
         INDEX_UI_UseMapper(MyElementMapper);
+
+        void AttachChild(const ui_ref& child) { AttachChild_(child); }
+        void DetachChild(const ui_ref& child) { DetachChild_(child); }
     };
 
-    struct MyElementMapper : UIMapper
+    struct MyElementMapper : virtual UIMapper
     {
         MyElementMapper() = default;
 
         ui_ref Make()
         {
-            Debug.Log("Making :)");
+            Debug.Log("Making :) ", Name);
 
             IPtr<MyElement> e_ref = INew<MyElement>();
             MyElement& e = e_ref.Value;
@@ -28,6 +31,11 @@ namespace Index::UI
             e.Id = Id;
             e.Size = Size;
             e.MinSize = MinSize;
+
+            for (auto& c : Children)
+            {
+                e.AttachChild(c->Make());
+            }
 
             return e_ref;
         }
@@ -39,7 +47,7 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
-    MyElementMapper parent;
+    MyElementMapper mapper;
 
     /**
      * Using Macros + Lambdas to create this UI abstraction style.
@@ -48,21 +56,50 @@ int main()
     // Root
     sub MyElement mapn
     {
+        Debug.Log("Executed 1");
+
         // Properties
         set Size = { 10.f, 10.f };
-        set Name = "MyElement :D";
+        set Name = "1";
         set Id = "8495678249568203458690";
 
         // Child
         sub MyElement mapn
         {
-            // Property
-            set Name = ":D";
+            Debug.Log("Executed 2");
 
-            // Child
-            sub MyElement mapmn;
+            set Name = "2";
+            set Alignment = Align::LeftTop;
+            set Margin = { 10, 13, 3, 0 };
+
+            sub MyElement mapn
+            {
+                Debug.Log("Executed 3");
+
+                set Name = "3";
+                sub MyElement mapmn;
+            };
         };
     };
+
+    ui_ref u = mapper.Make();
+
+    UIFrameCounter counter;
+    Rect screen = { 0, 0, 1920, 1080 };
+
+    std::thread t([=] {
+        u->Update();
+        Time.Delay(TimeSpan::FromSec(0.2));
+    });
+    t.detach();
+
+    while (true)
+    {
+        u->ComputeLayout(counter);
+        u->ComputeLayoutPosition(screen);
+
+        u->Render();
+    }
 
     return 0;
 }

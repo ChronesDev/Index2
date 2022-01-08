@@ -6,15 +6,15 @@
 #define ui_map_ref Index::IPtr<Index::UI::UIMapper>
 #define ui_map_ptr Index::UI::UIMapper*
 
-#define sub parent.template Sub <
+#define sub mapper.template Sub <
 
-#define map > () += [this](auto& parent, auto mapper)
-#define mapn > () += [](auto& parent, auto mapper)
-#define mapc(capture) > () += [capture](auto& parent, auto mapper)
+#define map > () += [this](auto& parent, auto& mapper)
+#define mapn > () += [](auto& parent, auto& mapper)
+#define mapc(capture) > () += [capture](auto& parent, auto& mapper)
 
-#define mapm > () += [this](auto& parent, auto mapper) {}
-#define mapmn > () += [](auto& parent, auto mapper) {}
-#define mapmc(capture) > () += [capture](auto& parent, auto mapper) {}
+#define mapm > () += [this](auto& parent, auto& mapper) {}
+#define mapmn > () += [](auto& parent, auto& mapper) {}
+#define mapmc(capture) > () += [capture](auto& parent, auto& mapper) {}
 
 #define set mapper.
 #define get mapper.

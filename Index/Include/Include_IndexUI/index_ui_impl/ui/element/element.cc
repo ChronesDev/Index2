@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ui.cc"
+#include "../touchelement/touchelement.cc"
 
 /**
  * @param field: The internal field
@@ -14,7 +15,7 @@
 // UIElement
 namespace Index::UI
 {
-    struct UIElement : IObj<UIElement>
+    struct UIElement : IObj<UIElement>, virtual UITouchElement
     {
     public:
         UIElement() = default;

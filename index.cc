@@ -8,12 +8,9 @@ namespace Index::UI
 {
     INDEX_UI_Declare(MyElement);
 
-    struct MyElement : virtual UIElement
+    struct MyElement : UIContainer
     {
         INDEX_UI_UseMapper(MyElementMapper);
-
-        void AttachChild(const ui_ref& child) { AttachChild_(child); }
-        void DetachChild(const ui_ref& child) { DetachChild_(child); }
     };
 
     struct MyElementMapper : virtual UIMapper
@@ -34,7 +31,7 @@ namespace Index::UI
 
             for (auto& c : Children)
             {
-                e.AttachChild(c->Make());
+                e.Attach(c->Make());
             }
 
             return e_ref;

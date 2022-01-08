@@ -9,6 +9,8 @@
 #define INDEX_UI_LayoutDirtyChecker_(field, value)                                                                    \
     if (this->field != value) this->MakeLayoutDirty();
 
+#define INDEX_UI_Ref ::Index::IPtr<::Index::UI::UIElement>
+
 // UIElement
 namespace Index::UI
 {
@@ -759,14 +761,13 @@ namespace Index::UI
          */
         virtual void OnComputeLayoutPosition(Rect i)
         {
-            Rect r = AlignToComputedLayout_(i);
-            Rect rp = Rect_ResizeShrinkOr_Padding_(r, 0);
+            Rect r = GetSubrect_(i);
 
-            ComputedLayout_ = rp;
+            ComputedLayout_ = r;
 
             for (auto& c : Children_)
             {
-                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(rp);
+                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(r);
             }
 
             PolishComputedLayoutPosition();
@@ -1116,12 +1117,27 @@ namespace Index::UI
             return parent;
         }
 
+        /**
+         * Calculates and aligns layout.
+         * Uses: Constraints, Alignment
+         */
         Rect AlignToComputedLayout_(Rect i)
         {
-            Rect im = Rect_ShrinkOr_Margin_(i, 0);
-            Rect r1 = Rect_LimitAlign_(im, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
+            Rect r1 = Rect_LimitAlign_(i, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
             Rect r2 = Rect_Align_(r1, { 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) }, Alignment_);
             return r2;
+        }
+
+        /**
+         * Calculates and aligns layout.
+         * Uses: Constraints, Alignment, Margin, Padding
+         */
+        Rect GetSubrect_(Rect i)
+        {
+            Rect im = Rect_ShrinkOr_Margin_(i, 0);
+            Rect ima = AlignToComputedLayout_(im);
+            Rect imap = Rect_ResizeShrinkOr_Padding_(ima, 0);
+            return imap;
         }
     };
 }

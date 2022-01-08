@@ -6,6 +6,8 @@
 #undef ui_map_ref // Index::IPtr<Index::UI::UIMapper>
 #undef ui_map_ptr // Index::UI::UIMapper*
 
+#undef ui_sync // std::lock_guard<std::recursive_mutex>
+
 #undef sub // mapper.template Sub <
 
 #undef map // > () += [this](auto& parent, auto& mapper)

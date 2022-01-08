@@ -101,6 +101,8 @@ int main()
         u->Render();
     }
 
+    Console.ReadLine();
+
     return 0;
 }
 

@@ -68,7 +68,11 @@ namespace Index::UI
             return Frame;
         }
 
-        ulong Begin() { Frame = 0; return Frame; }
+        ulong Begin()
+        {
+            Frame = 0;
+            return Frame;
+        }
 
         operator ulong() { return Frame; }
     };
@@ -83,6 +87,13 @@ namespace Index::UI
         UIElement() = default;
 
         virtual ~UIElement() { DetachAllChildren_(); }
+
+    protected:
+        std::recursive_mutex Sync_;
+
+    public:
+        decltype(Sync_)& GetSync() { return Sync_; }
+        INDEX_Property(get = GetSync) decltype(Sync_)& Sync;
 
     protected:
         string Name_;

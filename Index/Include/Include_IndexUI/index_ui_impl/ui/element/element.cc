@@ -915,25 +915,25 @@ namespace Index::UI
          */
         virtual void Render()
         {
-            OnPreRender();
+            OnRender();
 
             for (auto& c : Children_)
             {
                 c->Render();
             }
 
-            OnRender();
+            OnPostRender();
         }
-
-        /**
-         * @brief OnPreRender
-         */
-        virtual void OnPreRender() { }
 
         /**
          * @brief OnRender
          */
         virtual void OnRender() { }
+
+        /**
+         * @brief OnPostRender
+         */
+        virtual void OnPostRender() { }
 
     public:
         /**

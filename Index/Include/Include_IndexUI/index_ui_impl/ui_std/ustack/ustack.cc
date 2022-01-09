@@ -46,7 +46,7 @@ namespace Index::UI
 
     struct UStackMapper : virtual UIContainerMapper
     {
-        INDEX_UI_Ref Make()
+        INDEX_UI_Ref Make() override
         {
             IPtr<UStack> e_ref = INew<UStack>();
             UStack& e = e_ref.Value;

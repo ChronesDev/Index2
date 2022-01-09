@@ -13,7 +13,7 @@ namespace Index::UI
         virtual void Detach(const INDEX_UI_Ref& child) { DetachChild_(child); }
     };
 
-    struct UIContainerMapper : virtual UIMapper
+    struct UIContainerMapper : virtual UIElementMapper
     {
     public:
         template <class T> auto Sub() { return Sub_<T>(); }
@@ -73,7 +73,7 @@ namespace Index::UI
 
     struct ContainerMapper : virtual UIContainerMapper
     {
-        INDEX_UI_Ref Make()
+        INDEX_UI_Ref Make() override
         {
             IPtr<Container> e_ref = INew<Container>();
             Container& e = e_ref.Value;

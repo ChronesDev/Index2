@@ -34,6 +34,40 @@ namespace Index::UI
 
     struct UIMapper : IObj<UIMapper>
     {
+        UIMapper() = default;
+
+    public:
+        List<IPtr<UIMapper>> Children;
+
+        virtual void Add(IPtr<UIMapper> child)
+        {
+            Children.Add(child);
+            OnAdd_(child);
+        }
+        virtual void Remove(IPtr<UIMapper> child)
+        {
+            Children.Remove(child);
+            OnRemove_(child);
+        }
+
+    protected:
+        virtual void OnAdd_(const IPtr<UIMapper>& child) { }
+        virtual void OnRemove_(const IPtr<UIMapper>& child) { }
+
+    protected:
+        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub_() { return UIMapper_SubMaker_<UIMapper, T>(this); }
+
+    public:
+        virtual IPtr<UIElement> Make() = 0;
+
+    protected:
+        virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); }
+    };
+
+    struct UIElementMapper : virtual UIMapper
+    {
+        UIElementMapper() = default;
+
     public:
         string Name = "";
         string Id = "";
@@ -47,23 +81,8 @@ namespace Index::UI
 
         Align Alignment = Align::Stretch;
 
-    public:
-        List<IPtr<UIMapper>> Children;
-
-        virtual void Add(IPtr<UIMapper> child) { Children.Add(child); }
-        virtual void Remove(IPtr<UIMapper> child) { Children.Remove(child); }
-
     protected:
-        template <class T> UIMapper_SubMaker_<UIMapper, T> Sub_() { return UIMapper_SubMaker_<UIMapper, T>(this); }
-
-    protected:
-        virtual IPtr<UIElement> MakeSelf() { INDEX_THROW("Not implemented."); };
-
-    public:
-        virtual IPtr<UIElement> Make() = 0;
-
-    protected:
-        template<class T> void Impl_(T& e)
+        template <class T> void Impl_(T& e)
         {
             e.Name = Name;
             e.Id = Id;

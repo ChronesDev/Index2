@@ -54,7 +54,7 @@ int main()
     UIFrameCounter counter;
     Rect screen = { 0, 0, 1920, 1080 };
 
-    /*while (true)
+    while (true)
     {
         u->ComputeLayout(counter.Next());
         u->ComputeLayoutPosition(screen);
@@ -62,30 +62,7 @@ int main()
         u->Render();
 
         u->Update();
-    }*/
-
-    List<int> l;
-    l.Add(10);
-    l.Add(9);
-    l.Add(10);
-    l.Add(7);
-    l.Add(10);
-
-    auto printList = [&]
-    {
-        for (auto a : l) Console.Write(a, " ");
-        Console.WriteLine();
-    };
-
-    //printList();
-    //
-    //Console.Write(l.Remove(10), " ");
-    //printList();
-    //
-    //Console.Write(l.RemoveAll(10), " ");
-    //printList();
-
-    Console.WriteLine(Console.ReadLine());
+    }
 
     return 0;
 }

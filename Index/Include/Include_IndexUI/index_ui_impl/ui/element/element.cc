@@ -13,6 +13,12 @@
 
 #define INDEX_UI_Ref ::Index::IPtr<::Index::UI::UIElement>
 
+// Prototypes
+namespace Index::UI
+{
+    struct UIElement;
+}
+
 // UIElement
 namespace Index::UI
 {
@@ -21,7 +27,11 @@ namespace Index::UI
     public:
         UIElement() = default;
 
-        virtual ~UIElement() { DetachAllChildren_(); }
+        virtual ~UIElement()
+        {
+            DetachAllChildren_();
+            DisconnectFromAll_();
+        }
 
     protected:
         std::recursive_mutex Sync_;
@@ -63,7 +73,7 @@ namespace Index::UI
     protected:
         void Children_Add_(const IPtr<UIElement>& child) { Children_.Add(child); }
         void Children_Remove_(const IPtr<UIElement>& child) { Children_.Remove(child); }
-        bool Children_Contains_(const IPtr<UIElement>& child) { return Children_.Contains(child); }
+        bool Children_Contains_(const IPtr<UIElement>& child) const { return Children_.Contains(child); }
 
         virtual void Parent_AttachTo_(const WPtr<UIElement>& parent)
         {
@@ -118,9 +128,10 @@ namespace Index::UI
             }
             catch (std::exception ex)
             {
-                Children_Remove_(child);
                 INDEX_THROW("Failed at trying to attach child.");
             }
+
+            Children_Remove_(child);
         }
 
         /**
@@ -128,7 +139,8 @@ namespace Index::UI
          */
         void DetachAllChildren_()
         {
-            for (auto& c : Children_)
+            auto children = Children_;
+            for (auto& c : children)
             {
                 DetachChild_(c);
             }
@@ -147,27 +159,37 @@ namespace Index::UI
 
         virtual bool CanConnectTo(WPtr<IUIProvider> provider) const { return false; }
 
+    public:
+        /**
+         * @brief Uses the provider to connect
+        */
+        virtual void ConnectTo(IPtr<IUIProvider> provider)
+        {
+            if (provider.IsNull) INDEX_THROW("provider was null.");
+            provider->Connect(ISelf());
+        }
+
+        /**
+         * @brief Uses the provider to disconnect
+        */
+        virtual void DisconnectFrom(IPtr<IUIProvider> provider)
+        {
+            if (provider.IsNull) INDEX_THROW("provider was null.");
+            provider->Disconnect(ISelf());
+        }
+
     protected:
-        void Connections_Add_(const WPtr<IUIProvider>& provider)
-        {
-            Connections_.Add(provider);
-        }
-        void Connections_Remove_(const WPtr<IUIProvider>& provider)
-        {
-            Connections_.Remove(provider);
-        }
-        bool Connections_Contains_(const WPtr<IUIProvider>& provider)
-        {
-            return Connections_.Contains(provider);
-        }
+        void Connections_Add_(const WPtr<IUIProvider>& provider) { Connections_.Add(provider); }
+        void Connections_Remove_(const WPtr<IUIProvider>& provider) { Connections_.Remove(provider); }
+        bool Connections_Contains_(const WPtr<IUIProvider>& provider) const { return Connections_.Contains(provider); }
 
     public:
-        virtual bool IsConnectedTo(WPtr<IUIProvider> provider)
-        {
-            return Connections_Contains_(provider);
-        }
+        virtual bool IsConnectedTo(WPtr<IUIProvider> provider) { return Connections_Contains_(provider); }
 
-        virtual void ConntectTo(WPtr<IUIProvider> provider)
+        /**
+         * @brief Connects to provider.
+         */
+        virtual void CreateConnectionWith(WPtr<IUIProvider> provider)
         {
             if (!CanConnect) INDEX_THROW("Cannot connect.");
             if (provider.IsNull) INDEX_THROW("provider was null.");
@@ -176,7 +198,8 @@ namespace Index::UI
 
             try
             {
-                if (!ConntectTo_(provider.Lock)) INDEX_THROW();
+                if (!ConntectTo_(provider.Lock))
+                    INDEX_THROW();
                 else
                 {
                     Connections_Add_(provider);
@@ -187,31 +210,55 @@ namespace Index::UI
                 INDEX_THROW("Failed at trying to connect with provider.");
             }
         }
-        virtual void DisconnectFrom(WPtr<IUIProvider> provider)
+
+        /**
+         * @brief Disconnects from provider.
+         */
+        virtual void DestroyConnectionWith(WPtr<IUIProvider> provider)
         {
             if (provider.IsNull) INDEX_THROW("provider was null.");
             if (!IsConnectedTo(provider)) INDEX_THROW("Is not connected to provider.");
 
             try
             {
-                if (!DisconnectFrom_(provider.Lock)) INDEX_THROW();
-                else
-                {
-                    Connections_Remove_(provider);
-                }
+                if (!DisconnectFrom_(provider.Lock))
+                    INDEX_THROW();
+                Connections_Remove_(provider);
             }
             catch (std::exception ex)
             {
+                Connections_Remove_(provider);
                 INDEX_THROW("Failed at trying to disconnect with provider.");
             }
         }
 
     protected:
-        virtual bool ConntectTo_(IPtr<IUIProvider> provider) { }
-        virtual bool DisconnectFrom_(IPtr<IUIProvider> provider) { }
+        virtual void DestroyAllConnections()
+        {
+            auto connections = Connections_;
+            for (auto& c : connections)
+            {
+                DestroyConnectionWith(c);
+            }
+        }
+
+        virtual bool ConntectTo_(IPtr<IUIProvider> provider) { return false; }
+        virtual bool DisconnectFrom_(IPtr<IUIProvider> provider) { return false; }
 
         virtual void OnConnectedTo_(const IPtr<UIElement>& parent) { }
         virtual void OnDisconnectedFrom_(const IPtr<UIElement>& parent) { }
+
+        void DisconnectFromAll_()
+        {
+            auto connections = Connections_;
+            for (auto& c : connections)
+            {
+                auto p = c.Lock;
+                p->Disconnect(ISelf());
+            }
+
+            DestroyAllConnections();
+        }
 
     protected:
         Index::Size Size_ = { AutoF, AutoF };
@@ -936,7 +983,7 @@ namespace Index::UI
         bool HitTest(HitTestResult& e, Vec2F& p) override
         {
             if (!IsHitTestVisible_) return false;
-            
+
             if (ComputedLayout.IsPointInside(p))
             {
                 e.HasSucceeded = true;
@@ -956,7 +1003,7 @@ namespace Index::UI
 
             UITouchElement::HitTestRecursive(e, p);
         }
-        
+
         virtual bool SubHitTestRecursive(HitTestResult& e, Vec2F& p)
         {
             for (auto& c : Children_)

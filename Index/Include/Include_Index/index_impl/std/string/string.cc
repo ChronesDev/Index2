@@ -73,7 +73,7 @@ namespace Index
             first = value;
         }
 
-        explicit operator const char*() { return this->c_str(); }
+        explicit operator const char*() const { return this->c_str(); }
 
     public:
         [[nodiscard]] String ToLower() const

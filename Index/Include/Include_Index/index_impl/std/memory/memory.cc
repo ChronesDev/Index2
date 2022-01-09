@@ -99,6 +99,14 @@ namespace Index
         template <class TTo> IPtr<TTo> LockReinterpretAs() const { return std::reinterpret_pointer_cast<TTo>(this->lock()); }
 
     public:
+        bool operator==(const WPtr& other)
+        {
+            auto l1 = this->Lock;
+            auto l2 = other.Lock;
+            return l1 == l2;
+        }
+
+    public:
         static __forceinline IPtr<T> Null() { return {}; }
 
         INDEX_Property(get = GetIsNull) bool IsNull;

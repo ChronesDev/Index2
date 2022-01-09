@@ -15,10 +15,10 @@ namespace Index::UI
     {
         virtual ~IUIProvider() = 0;
 
-        virtual void Conntect(UIElement* e) = 0;
-        virtual void Disconnect(UIElement* e) = 0;
-        virtual void DisconnectAll() = 0;
+        virtual bool IsConnectedTo(const IPtr<UIElement>& e) = 0;
 
-        virtual bool IsConnectedTo(UIElement* e) = 0;
+        virtual void Connect(IPtr<UIElement> e) = 0;
+        virtual void Disconnect(IPtr<UIElement> e) = 0;
+
     };
 }

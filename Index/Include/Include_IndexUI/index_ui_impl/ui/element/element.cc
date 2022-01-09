@@ -1020,7 +1020,7 @@ namespace Index::UI
         {
             for (auto& c : Children_)
             {
-                HitTestRecursive(e, p);
+                c->HitTestRecursive(e, p);
                 if (e.HasSucceeded) return true;
             }
             return false;

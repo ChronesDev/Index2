@@ -107,6 +107,7 @@ namespace Index::UI
             try
             {
                 child->Parent_AttachTo_(WSelf());
+                OnAttached_(child);
             }
             catch (std::exception ex)
             {
@@ -125,9 +126,11 @@ namespace Index::UI
             try
             {
                 child->Parent_DetachFrom_(WSelf());
+                OnDetached_(child);
             }
             catch (std::exception ex)
             {
+                Children_Remove_(child);
                 INDEX_THROW("Failed at trying to attach child.");
             }
 
@@ -149,6 +152,9 @@ namespace Index::UI
         virtual void OnAttachedTo_(const IPtr<UIElement>& parent) { }
         virtual void OnDetachedFrom_(const IPtr<UIElement>& parent) { }
 
+        virtual void OnAttached_(IPtr<UIElement> child) { }
+        virtual void OnDetached_(IPtr<UIElement> child) { }
+
     protected:
         bool CanConnect_ = false;
         List<WPtr<IUIProvider>> Connections_;
@@ -162,7 +168,7 @@ namespace Index::UI
     public:
         /**
          * @brief Uses the provider to connect
-        */
+         */
         virtual void ConnectTo(IPtr<IUIProvider> provider)
         {
             if (provider.IsNull) INDEX_THROW("provider was null.");
@@ -171,7 +177,7 @@ namespace Index::UI
 
         /**
          * @brief Uses the provider to disconnect
-        */
+         */
         virtual void DisconnectFrom(IPtr<IUIProvider> provider)
         {
             if (provider.IsNull) INDEX_THROW("provider was null.");
@@ -181,7 +187,14 @@ namespace Index::UI
     protected:
         void Connections_Add_(const WPtr<IUIProvider>& provider) { Connections_.Add(provider); }
         void Connections_Remove_(const WPtr<IUIProvider>& provider) { Connections_.Remove(provider); }
-        bool Connections_Contains_(const WPtr<IUIProvider>& provider) const { return Connections_.Contains(provider); }
+        bool Connections_Contains_(const WPtr<IUIProvider>& provider) const
+        {
+            for (auto& c : Connections_)
+            {
+                if (c == provider) return true;
+            }
+            return false;
+        }
 
     public:
         virtual bool IsConnectedTo(WPtr<IUIProvider> provider) { return Connections_Contains_(provider); }
@@ -221,8 +234,7 @@ namespace Index::UI
 
             try
             {
-                if (!DisconnectFrom_(provider.Lock))
-                    INDEX_THROW();
+                if (!DisconnectFrom_(provider.Lock)) INDEX_THROW();
                 Connections_Remove_(provider);
             }
             catch (std::exception ex)

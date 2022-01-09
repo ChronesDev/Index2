@@ -14,12 +14,31 @@ namespace Index::UI
         List<WPtr<UIElement>> Connections_;
 
     public:
-        bool IsConnectedTo(const IPtr<UIElement>& e) override { return Connections_.Contains(e); }
+        const decltype(Connections_)& GetConnections() const { return Connections_; }
+        INDEX_Property(get = GetConnections) const decltype(Connections_)& Connections;
+
+    protected:
+        void Connections_Add_(const WPtr<UIElement>& provider) { Connections_.Add(provider); }
+        void Connections_Remove_(const WPtr<UIElement>& provider) { Connections_.Remove(provider); }
+        bool Connections_Contains_(const WPtr<UIElement>& provider) const
+        {
+            for (auto& c : Connections_)
+            {
+                if (c == provider) return true;
+            }
+            return false;
+        }
+
+    public:
+        bool IsConnectedTo(const IPtr<UIElement>& e) override
+        {
+            return Connections_Contains_(e);
+        }
 
         void Connect(IPtr<UIElement> e) override
         {
             if (e.IsNull) INDEX_THROW("element was null.");
-            if (Connections_.Contains(e)) INDEX_THROW("Already connected with element.");
+            if (Connections_Contains_(e)) INDEX_THROW("Already connected with element.");
 
             try
             {
@@ -35,7 +54,7 @@ namespace Index::UI
         void Disconnect(IPtr<UIElement> e) override
         {
             if (e.IsNull) INDEX_THROW("element was null.");
-            if (!Connections_.Contains(e)) INDEX_THROW("element is not connected.");
+            if (!Connections_Contains_(e)) INDEX_THROW("element is not connected.");
 
             try
             {
@@ -45,8 +64,8 @@ namespace Index::UI
             {
                 INDEX_THROW("Failed at trying to disconnect element.");
             }
-
-            Connections_.Remove(e);
+            
+            Connections_Remove_(e);
         }
 
     protected:

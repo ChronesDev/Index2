@@ -1,10 +1,10 @@
 #pragma once
 
-#define ui_ref Index::IPtr<Index::UI::UIElement>
-#define ui_ptr Index::UI::UIElement*
+#define ui_ref ::Index::IPtr<::Index::UI::UIElement>
+#define ui_ptr ::Index::UI::UIElement*
 
-#define ui_map_ref Index::IPtr<Index::UI::UIMapper>
-#define ui_map_ptr Index::UI::UIMapper*
+#define ui_map_ref ::Index::IPtr<::Index::UI::UIMapper>
+#define ui_map_ptr ::Index::UI::UIMapper*
 
 #define ui_sync std::lock_guard<std::recursive_mutex>
 

@@ -44,9 +44,12 @@ int main()
         set Name = "";
         set Alignment = Align::RightBottom;
         sub HStack mapn { set Name = "S"; };
+        set Id = "982409-566890-23458609";
     };
 
     ui_ref u = mapper.Make();
+
+    var result = u->PerformHitTest({ 10, 10 });
 
     UIFrameCounter counter;
     Rect screen = { 0, 0, 1920, 1080 };

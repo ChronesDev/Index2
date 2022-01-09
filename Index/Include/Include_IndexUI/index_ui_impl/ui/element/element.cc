@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../ui.cc"
+#include "../provider/iprovider.cc"
 #include "../touchelement/touchelement.cc"
+#include "../ui.cc"
 
 /**
  * @param field: The internal field
@@ -135,6 +136,82 @@ namespace Index::UI
 
         virtual void OnAttachedTo_(const IPtr<UIElement>& parent) { }
         virtual void OnDetachedFrom_(const IPtr<UIElement>& parent) { }
+
+    protected:
+        bool CanConnect_ = false;
+        List<WPtr<IUIProvider>> Connections_;
+
+    public:
+        bool GetCanConnect() const { return CanConnect_; }
+        INDEX_Property(get = GetCanConnect) bool CanConnect;
+
+        virtual bool CanConnectTo(WPtr<IUIProvider> provider) const { return false; }
+
+    protected:
+        void Connections_Add_(const WPtr<IUIProvider>& provider)
+        {
+            Connections_.Add(provider);
+        }
+        void Connections_Remove_(const WPtr<IUIProvider>& provider)
+        {
+            Connections_.Remove(provider);
+        }
+        bool Connections_Contains_(const WPtr<IUIProvider>& provider)
+        {
+            return Connections_.Contains(provider);
+        }
+
+    public:
+        virtual bool IsConnectedTo(WPtr<IUIProvider> provider)
+        {
+            return Connections_Contains_(provider);
+        }
+
+        virtual void ConntectTo(WPtr<IUIProvider> provider)
+        {
+            if (!CanConnect) INDEX_THROW("Cannot connect.");
+            if (provider.IsNull) INDEX_THROW("provider was null.");
+            if (!CanConnectTo(provider)) INDEX_THROW("Cannot connect to provider.");
+            if (IsConnectedTo(provider)) INDEX_THROW("Already connected to provider.");
+
+            try
+            {
+                if (!ConntectTo_(provider.Lock)) INDEX_THROW();
+                else
+                {
+                    Connections_Add_(provider);
+                }
+            }
+            catch (std::exception ex)
+            {
+                INDEX_THROW("Failed at trying to connect with provider.");
+            }
+        }
+        virtual void DisconnectFrom(WPtr<IUIProvider> provider)
+        {
+            if (provider.IsNull) INDEX_THROW("provider was null.");
+            if (!IsConnectedTo(provider)) INDEX_THROW("Is not connected to provider.");
+
+            try
+            {
+                if (!DisconnectFrom_(provider.Lock)) INDEX_THROW();
+                else
+                {
+                    Connections_Remove_(provider);
+                }
+            }
+            catch (std::exception ex)
+            {
+                INDEX_THROW("Failed at trying to disconnect with provider.");
+            }
+        }
+
+    protected:
+        virtual bool ConntectTo_(IPtr<IUIProvider> provider) { }
+        virtual bool DisconnectFrom_(IPtr<IUIProvider> provider) { }
+
+        virtual void OnConnectedTo_(const IPtr<UIElement>& parent) { }
+        virtual void OnDisconnectedFrom_(const IPtr<UIElement>& parent) { }
 
     protected:
         Index::Size Size_ = { AutoF, AutoF };
@@ -846,6 +923,48 @@ namespace Index::UI
                 if (s.Height < height) s.Height = height;
             }
             return s;
+        }
+
+    protected:
+        bool IsHitTestRecursiveVisible_ = true;
+
+    public:
+        bool GetIsHitTestRecursiveVisible() const { return IsHitTestRecursiveVisible_; }
+        INDEX_Property(get = GetIsHitTestRecursiveVisible) bool IsHitTestRecursiveVisible;
+
+    public:
+        bool HitTest(HitTestResult& e, Vec2F& p) override
+        {
+            if (!IsHitTestVisible_) return false;
+            
+            if (ComputedLayout.IsPointInside(p))
+            {
+                e.HasSucceeded = true;
+                e.HitTarget = this;
+                return true;
+            }
+
+            return false;
+        }
+
+        void HitTestRecursive(HitTestResult& e, Vec2F& p) override
+        {
+            if (IsHitTestRecursiveVisible_)
+            {
+                if (SubHitTestRecursive(e, p)) return;
+            }
+
+            UITouchElement::HitTestRecursive(e, p);
+        }
+        
+        virtual bool SubHitTestRecursive(HitTestResult& e, Vec2F& p)
+        {
+            for (auto& c : Children_)
+            {
+                HitTestRecursive(e, p);
+                if (e.HasSucceeded) return true;
+            }
+            return false;
         }
 
     protected:

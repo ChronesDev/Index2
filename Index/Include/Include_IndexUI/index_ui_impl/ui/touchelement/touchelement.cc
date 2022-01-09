@@ -22,22 +22,29 @@ namespace Index::UI
 {
 	struct UITouchElement
 	{
+	protected:
+		bool IsHitTestVisible_ = false;
+
 	public:
-		virtual bool GetIsHitTestVisible() const { return false; }
+	    bool GetIsHitTestVisible() const { return IsHitTestVisible_; }
 		INDEX_Property(get = GetIsHitTestVisible) bool IsHitTestVisible;
 
 	public:
-		virtual bool BoxHitTest() const
+		virtual bool HitTest(HitTestResult& e, Vec2F& p)
 		{
 			return false;
 		}
 
-		virtual bool PerformHitTest() const
+		virtual void HitTestRecursive(HitTestResult& e, Vec2F& p)
 		{
-			// Children
+			if (HitTest(e, p)) return;
+		}
 
-			if (BoxHitTest()) return true;
-			return false;
+		virtual HitTestResult PerformHitTest(Vec2F p)
+		{
+			HitTestResult result;
+			HitTestRecursive(result, p);
+			return result;
 		}
 	};
 }

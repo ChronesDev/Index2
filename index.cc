@@ -52,11 +52,16 @@ int main()
 
             sub Container, 1 mapn
             {
-                Debug.Log("Hi");
+                set Name = "1";
+            };
 
-                sub Switcher mapn{ set Name = "hmmm"; };
+            sub Container, 1 mapn
+            {
+                set Name = "2";
             };
         };
+
+
     };
 
     ui_ref u = mapper.Make();

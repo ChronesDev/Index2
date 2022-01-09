@@ -28,7 +28,7 @@ namespace Index::UI
         {
             auto mapper = INew<typename T::Mapper>();
             f(*That, mapper.Value);
-            That->Children.Add(mapper.template DynamicAs<UIMapper>());
+            That->Add(mapper.template DynamicAs<UIMapper>());
         }
     };
 

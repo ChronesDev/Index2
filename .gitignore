@@ -33,6 +33,7 @@
 
 # VS
 .vs/
+cpp.hint
 
 # CLion
 .idea/

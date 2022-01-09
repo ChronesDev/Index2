@@ -45,6 +45,18 @@ int main()
         set Alignment = Align::RightBottom;
         sub HStack mapn { set Name = "S"; };
         set Id = "982409-566890-23458609";
+
+        sub Switcher mapn
+        {
+            set Name = "Hi";
+
+            sub Container, 1 mapn
+            {
+                Debug.Log("Hi");
+
+                sub Switcher mapn{ set Name = "hmmm"; };
+            };
+        };
     };
 
     ui_ref u = mapper.Make();

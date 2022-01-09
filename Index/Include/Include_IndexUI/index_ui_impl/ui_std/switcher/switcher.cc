@@ -118,8 +118,11 @@ namespace Index::UI
 
     struct SwitcherMapper : virtual UIElementMapper
     {
+        SwitcherMapper() = default;
+
     public:
-        int Index;
+        int Index = 0;
+        int NextIndex = 0;
 
     protected:
         std::multimap<int, IPtr<UIMapper>> Children_Map_;
@@ -133,13 +136,15 @@ namespace Index::UI
             Impl_(e);
             Impl_Children_(e);
 
+            e.Index = Index;
+
             return e_ref.DynamicAs<UIElement>();
         }
 
     protected:
         void OnAdd_(const IPtr<UIMapper>& child) override
         {
-            Children_Map_.insert({ Index, child });
+            Children_Map_.insert({ NextIndex, child });
         }
 
         void OnRemove_(const IPtr<UIMapper>& child) override
@@ -150,9 +155,9 @@ namespace Index::UI
 
     public:
         template <class T> auto Sub() { return Sub_<T>(); }
-        template <class T, int TIndex> auto Sub()
+        template <class T, int TNextIndex> auto Sub()
         {
-            Index = TIndex;
+            NextIndex = TNextIndex;
             return Sub_<T>();
         }
 

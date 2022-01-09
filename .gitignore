@@ -33,6 +33,7 @@
 
 # VS
 .vs/
+cpp.hint
 
 # CLion
 .idea/
@@ -44,6 +45,8 @@ cmake-build-debug-msvc/
 cmake-build-release-msvc/
 cmake-build-debug-clang/
 cmake-build-release-clang/
+cmake-build-debug-gcc/
+cmake-build-release-gcc/
 
 build/
 out/
@@ -60,3 +63,6 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+# Cache
+.cache

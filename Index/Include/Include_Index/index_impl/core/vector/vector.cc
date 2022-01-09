@@ -6,81 +6,62 @@ namespace Index
     {
         T X = 0;
 
-        Vec1() = default;
-
-        Vec1(T x)
+        constexpr Vec1() = default;
+        constexpr Vec1(T x)
             : X(x)
         {
         }
 
         bool operator==(const Vec1& other) const = default;
-
         bool operator!=(const Vec1& other) const = default;
-
         Vec1<T> operator+(Vec1<T>& other) const { return Vec1<T>(this->X + other.X); }
-
         Vec1<T> operator-(Vec1<T>& other) const { return Vec1<T>(this->X - other.X); }
-
         Vec1<T> operator*(Vec1<T>& other) const { return Vec1<T>(this->X * other.X); }
-
         Vec1<T> operator/(Vec1<T>& other) const { return Vec1<T>(this->X / other.X); }
-
         Vec1<T>& operator+=(Vec1<T>& other)
         {
             this->X += other.X;
             return *this;
         }
-
         Vec1<T>& operator-=(Vec1<T>& other)
         {
             this->X -= other.X;
             return *this;
         }
-
         Vec1<T>& operator*=(Vec1<T>& other)
         {
             this->X *= other.X;
             return *this;
         }
-
         Vec1<T>& operator/=(Vec1<T>& other)
         {
             this->X /= other.X;
             return *this;
         }
-
         Vec1<T> operator+(T other) const { return Vec1<T>(this->X + other); }
-
         Vec1<T> operator-(T other) const { return Vec1<T>(this->X - other); }
-
         Vec1<T> operator*(T other) const { return Vec1<T>(this->X * other); }
-
         Vec1<T> operator/(T other) const { return Vec1<T>(this->X / other); }
-
         Vec1<T>& operator+=(T other)
         {
             this->X += other;
             return *this;
         }
-
         Vec1<T>& operator-=(T other)
         {
             this->X -= other;
             return *this;
         }
-
         Vec1<T>& operator*=(T other)
         {
             this->X *= other;
             return *this;
         }
-
         Vec1<T>& operator/=(T other)
         {
             this->X /= other;
             return *this;
         }
-
         T& operator[](int index) { return ((T*)(this))[index]; }
     };
 
@@ -88,96 +69,76 @@ namespace Index
     {
         T Y = 0;
 
-        Vec2() = default;
-
-        Vec2(T x, T y)
+        constexpr Vec2() = default;
+        constexpr Vec2(T x, T y)
             : Vec1<T>(x)
             , Y(y)
         {
         }
-
-        Vec2(T v)
+        constexpr Vec2(T v)
             : Vec1<T>(v)
             , Y(v)
         {
         }
 
         bool operator==(const Vec2& other) const = default;
-
         bool operator!=(const Vec2& other) const = default;
-
         Vec2<T> operator+(Vec2<T>& other) const { return Vec2<T>(this->X + other.X, this->Y + other.Y); }
-
         Vec2<T> operator-(Vec2<T>& other) const { return Vec2<T>(this->X - other.X, this->Y - other.Y); }
-
         Vec2<T> operator*(Vec2<T>& other) const { return Vec2<T>(this->X * other.X, this->Y * other.Y); }
-
         Vec2<T> operator/(Vec2<T>& other) const { return Vec2<T>(this->X / other.X, this->Y / other.Y); }
-
         Vec2<T>& operator+=(Vec2<T>& other)
         {
             this->X += other.X;
             this->Y += other.Y;
             return *this;
         }
-
         Vec2<T>& operator-=(Vec2<T>& other)
         {
             this->X -= other.X;
             this->Y -= other.Y;
             return *this;
         }
-
         Vec2<T>& operator*=(Vec2<T>& other)
         {
             this->X *= other.X;
             this->Y *= other.Y;
             return *this;
         }
-
         Vec2<T>& operator/=(Vec2<T>& other)
         {
             this->X /= other.X;
             this->Y /= other.Y;
             return *this;
         }
-
         Vec2<T> operator+(T other) const { return Vec2<T>(this->X + other, this->Y + other); }
-
         Vec2<T> operator-(T other) const { return Vec2<T>(this->X - other, this->Y - other); }
-
         Vec2<T> operator*(T other) const { return Vec2<T>(this->X * other, this->Y * other); }
-
         Vec2<T> operator/(T other) const { return Vec2<T>(this->X / other, this->Y / other); }
-
         Vec2<T>& operator+=(T other)
         {
             this->X += other;
             this->Y += other;
             return *this;
         }
-
         Vec2<T>& operator-=(T other)
         {
             this->X -= other;
             this->Y -= other;
             return *this;
         }
-
         Vec2<T>& operator*=(T other)
         {
             this->X *= other;
             this->Y *= other;
             return *this;
         }
-
         Vec2<T>& operator/=(T other)
         {
             this->X /= other;
             this->Y /= other;
             return *this;
         }
-
         T& operator[](int index) { return ((T*)(this))[index]; }
     };
 
@@ -185,44 +146,37 @@ namespace Index
     {
         T Z = 0;
 
-        Vec3() = default;
-
-        Vec3(T x, T y, T z)
+        constexpr Vec3() = default;
+        constexpr Vec3(T x, T y, T z)
             : Vec2<T>(x, y)
             , Z(z)
         {
         }
-
-        Vec3(T v)
+        constexpr Vec3(T v)
             : Vec2<T>(v, v)
             , Z(v)
         {
         }
 
         bool operator==(const Vec3& other) const = default;
-
         bool operator!=(const Vec3& other) const = default;
 
         Vec3<T> operator+(Vec3<T>& other) const
         {
             return Vec3<T>(this->X + other.X, this->Y + other.Y, this->Z + other.Z);
         }
-
         Vec3<T> operator-(Vec3<T>& other) const
         {
             return Vec3<T>(this->X - other.X, this->Y - other.Y, this->Z - other.Z);
         }
-
         Vec3<T> operator*(Vec3<T>& other) const
         {
             return Vec3<T>(this->X * other.X, this->Y * other.Y, this->Z * other.Z);
         }
-
         Vec3<T> operator/(Vec3<T>& other) const
         {
             return Vec3<T>(this->X / other.X, this->Y / other.Y, this->Z / other.Z);
         }
-
         Vec3<T>& operator+=(Vec3<T>& other)
         {
             this->X += other.X;
@@ -230,7 +184,6 @@ namespace Index
             this->Z += other.Z;
             return *this;
         }
-
         Vec3<T>& operator-=(Vec3<T>& other)
         {
             this->X -= other.X;
@@ -238,7 +191,6 @@ namespace Index
             this->Z -= other.Z;
             return *this;
         }
-
         Vec3<T>& operator*=(Vec3<T>& other)
         {
             this->X *= other.X;
@@ -246,7 +198,6 @@ namespace Index
             this->Z *= other.Z;
             return *this;
         }
-
         Vec3<T>& operator/=(Vec3<T>& other)
         {
             this->X /= other.X;
@@ -254,15 +205,10 @@ namespace Index
             this->Z /= other.Z;
             return *this;
         }
-
         Vec3<T> operator+(T other) const { return Vec3<T>(this->X + other, this->Y + other, this->Z + other); }
-
         Vec3<T> operator-(T other) const { return Vec3<T>(this->X - other, this->Y - other, this->Z - other); }
-
         Vec3<T> operator*(T other) const { return Vec3<T>(this->X * other, this->Y * other, this->Z * other); }
-
         Vec3<T> operator/(T other) const { return Vec3<T>(this->X / other, this->Y / other, this->Z / other); }
-
         Vec3<T>& operator+=(T other)
         {
             this->X += other;
@@ -270,7 +216,6 @@ namespace Index
             this->Z += other;
             return *this;
         }
-
         Vec3<T>& operator-=(T other)
         {
             this->X -= other;
@@ -278,7 +223,6 @@ namespace Index
             this->Z -= other;
             return *this;
         }
-
         Vec3<T>& operator*=(T other)
         {
             this->X *= other;
@@ -286,7 +230,6 @@ namespace Index
             this->Z *= other;
             return *this;
         }
-
         Vec3<T>& operator/=(T other)
         {
             this->X /= other;
@@ -294,7 +237,6 @@ namespace Index
             this->Z /= other;
             return *this;
         }
-
         T& operator[](int index) { return ((T*)(this))[index]; }
     };
 
@@ -302,50 +244,42 @@ namespace Index
     {
         T W = 0;
 
-        Vec4() = default;
-
-        Vec4(T x, T y, T z, T w)
+        constexpr Vec4() = default;
+        constexpr Vec4(T x, T y, T z, T w)
             : Vec3<T>(x, y, z)
             , W(w)
         {
         }
-
-        Vec4(T v)
+        constexpr Vec4(T v)
             : Vec3<T>(v, v, v)
             , W(v)
         {
         }
-
-        Vec4(T h, T v)
+        constexpr Vec4(T h, T v)
             : Vec3<T>(h, v, h)
             , W(v)
         {
         }
 
         bool operator==(const Vec4& other) const = default;
-
         bool operator!=(const Vec4& other) const = default;
 
         Vec4<T> operator+(Vec4<T>& other) const
         {
             return Vec4(this->X + other.X, this->Y + other.Y, this->Z + other.Z, this->W + other.W);
         }
-
         Vec4<T> operator-(Vec4<T>& other) const
         {
             return Vec4(this->X - other.X, this->Y - other.Y, this->Z - other.Z, this->W - other.W);
         }
-
         Vec4<T> operator*(Vec4<T>& other) const
         {
             return Vec4(this->X * other.X, this->Y * other.Y, this->Z * other.Z, this->W * other.W);
         }
-
         Vec4<T> operator/(Vec4<T>& other) const
         {
             return Vec4(this->X / other.X, this->Y / other.Y, this->Z / other.Z, this->W / other.W);
         }
-
         Vec4<T>& operator+=(Vec4<T>& other)
         {
             this->X += other.X;
@@ -354,7 +288,6 @@ namespace Index
             this->W += other.W;
             return *this;
         }
-
         Vec4<T>& operator-=(Vec4<T>& other)
         {
             this->X -= other.X;
@@ -363,7 +296,6 @@ namespace Index
             this->W -= other.W;
             return *this;
         }
-
         Vec4<T>& operator*=(Vec4<T>& other)
         {
             this->X *= other.X;
@@ -372,7 +304,6 @@ namespace Index
             this->W *= other.W;
             return *this;
         }
-
         Vec4<T>& operator/=(Vec4<T>& other)
         {
             this->X /= other.X;
@@ -381,27 +312,22 @@ namespace Index
             this->W /= other.W;
             return *this;
         }
-
         Vec4<T> operator+(T other) const
         {
             return Vec4<T>(this->X + other, this->Y + other, this->Z + other, this->W + other);
         }
-
         Vec4<T> operator-(T other) const
         {
             return Vec4<T>(this->X - other, this->Y - other, this->Z - other, this->W - other);
         }
-
         Vec4<T> operator*(T other) const
         {
             return Vec4<T>(this->X * other, this->Y * other, this->Z * other, this->W * other);
         }
-
         Vec4<T> operator/(T other) const
         {
             return Vec4<T>(this->X / other, this->Y / other, this->Z / other, this->W / other);
         }
-
         Vec4<T>& operator+=(T other)
         {
             this->X += other;
@@ -410,7 +336,6 @@ namespace Index
             this->W += other;
             return *this;
         }
-
         Vec4<T>& operator-=(T other)
         {
             this->X -= other;
@@ -419,7 +344,6 @@ namespace Index
             this->W -= other;
             return *this;
         }
-
         Vec4<T>& operator*=(T other)
         {
             this->X *= other;
@@ -428,7 +352,6 @@ namespace Index
             this->W *= other;
             return *this;
         }
-
         Vec4<T>& operator/=(T other)
         {
             this->X /= other;
@@ -437,7 +360,6 @@ namespace Index
             this->W /= other;
             return *this;
         }
-
         T& operator[](int index) { return ((T*)(this))[index]; }
     };
 

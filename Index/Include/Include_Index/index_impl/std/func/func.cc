@@ -35,7 +35,7 @@ namespace Index
         }
 
     public:
-        INDEX_Property(get = target_type) type_info& Type;
+        INDEX_Property(get = target_type) std::type_info& Type;
 
     public:
         ALIAS_RECLASS_FUNCTION(void, Swap, swap);
@@ -46,7 +46,7 @@ namespace Index
 
 namespace Index
 {
-    template <class T, class... TArgs> constexpr std::_Binder<std::_Unforced, T, TArgs...> Bind(T&& f, TArgs&&... args)
+    template <class T, class... TArgs> constexpr decltype(std::bind<T, TArgs...>) Bind(T&& f, TArgs&&... args)
     {
         return std::bind(std::forward<T>(f), std::forward<TArgs>(args)...);
     }

@@ -15,6 +15,6 @@ namespace Index::Limits
 {
     constexpr float FloatMax = MaxValueOf<float>();
     constexpr float FloatMin = MinValueOf<float>();
-    constexpr double DoubleMax = MaxValueOf<float>();
-    constexpr double DoubleMin = MinValueOf<float>();
+    constexpr double DoubleMax = MaxValueOf<double>();
+    constexpr double DoubleMin = MinValueOf<double>();
 }

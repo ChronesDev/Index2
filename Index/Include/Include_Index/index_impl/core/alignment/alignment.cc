@@ -7,60 +7,67 @@ namespace Index
     struct Align
     {
     private:
-        Align(__int8 hAlignment, __int8 vAlignment) noexcept(true)
-            : _HorizontalAlignment(hAlignment)
-            , _VerticalAlignment(vAlignment)
+        constexpr Align(short hAlignment, short vAlignment) noexcept(true)
+            : HorizontalAlignment_(hAlignment)
+            , VerticalAlignment_(vAlignment)
         {
         }
 
-        __int8 _HorizontalAlignment = 0;
-        __int8 _VerticalAlignment = 0;
+        short HorizontalAlignment_ = 0;
+        short VerticalAlignment_ = 0;
 
     private:
-        static constexpr __int8 _Stretch = 0;
-        static constexpr __int8 _Center = 2;
+        static constexpr short Stretch_ = 0;
+        static constexpr short Center_ = 2;
 
     public:
         [[nodiscard]] constexpr bool GetIsStretched() const
         {
-            return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
+            return HorizontalAlignment_ == Stretch_ && VerticalAlignment_ == Stretch_;
         }
-
         [[nodiscard]] constexpr bool GetIsCentered() const
         {
-            return _HorizontalAlignment == _Stretch && _VerticalAlignment == _Stretch;
+            return HorizontalAlignment_ == Center_ && VerticalAlignment_ == Center_;
         }
 
         INDEX_Property(get = GetIsStretched) bool IsStretched;
         INDEX_Property(get = GetIsCentered) bool IsCentered;
 
-        [[nodiscard]] constexpr bool GetIsHStretched() const { return _HorizontalAlignment == _Stretch; }
-
-        [[nodiscard]] constexpr bool GetIsVStretched() const { return _VerticalAlignment == _Stretch; }
+        [[nodiscard]] constexpr bool GetIsHStretched() const { return HorizontalAlignment_ == Stretch_; }
+        [[nodiscard]] constexpr bool GetIsVStretched() const { return VerticalAlignment_ == Stretch_; }
 
         INDEX_Property(get = GetIsHStretched) bool IsHStretched;
         INDEX_Property(get = GetIsVStretched) bool IsVStretched;
 
-        [[nodiscard]] constexpr bool GetIsHCentered() const { return _HorizontalAlignment == _Center; }
-
-        [[nodiscard]] constexpr bool GetIsVCentered() const { return _VerticalAlignment == _Center; }
+        [[nodiscard]] constexpr bool GetIsHCentered() const { return HorizontalAlignment_ == Center_; }
+        [[nodiscard]] constexpr bool GetIsVCentered() const { return VerticalAlignment_ == Center_; }
 
         INDEX_Property(get = GetIsHCentered) bool IsHCentered;
         INDEX_Property(get = GetIsVCentered) bool IsVCentered;
 
-        [[nodiscard]] constexpr bool GetIsHLeft() const { return _HorizontalAlignment == -1; }
-
-        [[nodiscard]] constexpr bool GetIsVTop() const { return _VerticalAlignment == -1; }
+        [[nodiscard]] constexpr bool GetIsHLeft() const { return HorizontalAlignment_ == -1; }
+        [[nodiscard]] constexpr bool GetIsVTop() const { return VerticalAlignment_ == -1; }
 
         INDEX_Property(get = GetIsHLeft) bool IsHLeft;
         INDEX_Property(get = GetIsVTop) bool IsVTop;
 
-        [[nodiscard]] constexpr bool GetIsHRight() const { return _HorizontalAlignment == 1; }
-
-        [[nodiscard]] constexpr bool GetIsVBottom() const { return _VerticalAlignment == 1; }
+        [[nodiscard]] constexpr bool GetIsHRight() const { return HorizontalAlignment_ == 1; }
+        [[nodiscard]] constexpr bool GetIsVBottom() const { return VerticalAlignment_ == 1; }
 
         INDEX_Property(get = GetIsHRight) bool IsHRight;
         INDEX_Property(get = GetIsVBottom) bool IsVBottom;
+
+    public:
+        bool operator==(const Align& other) const
+        {
+            return (HorizontalAlignment_ == other.HorizontalAlignment_)
+                && (VerticalAlignment_ == other.VerticalAlignment_);
+        }
+        bool operator!=(const Align& other) const
+        {
+            return (HorizontalAlignment_ != other.HorizontalAlignment_)
+                && (VerticalAlignment_ != other.VerticalAlignment_);
+        }
 
     public:
         static const Align Stretch;
@@ -81,18 +88,18 @@ namespace Index
         static const Align RightBottom;
     };
 
-    inline const Align Align::Stretch { _Stretch, _Stretch };
-    inline const Align Align::Center { _Center, _Center };
-    inline const Align Align::StretchCenter { _Stretch, _Center };
-    inline const Align Align::CenterStretch { _Center, _Stretch };
-    inline const Align Align::Left { -1, _Stretch };
-    inline const Align Align::Right { 1, _Stretch };
-    inline const Align Align::Top { _Stretch, -1 };
-    inline const Align Align::Bottom { _Stretch, 1 };
-    inline const Align Align::LeftCenter { -1, _Center };
-    inline const Align Align::RightCenter { 1, _Center };
-    inline const Align Align::TopCenter { _Center, -1 };
-    inline const Align Align::BottomCenter { _Center, 1 };
+    inline const Align Align::Stretch { Stretch_, Stretch_ };
+    inline const Align Align::Center { Center_, Center_ };
+    inline const Align Align::StretchCenter { Stretch_, Center_ };
+    inline const Align Align::CenterStretch { Center_, Stretch_ };
+    inline const Align Align::Left { -1, Stretch_ };
+    inline const Align Align::Right { 1, Stretch_ };
+    inline const Align Align::Top { Stretch_, -1 };
+    inline const Align Align::Bottom { Stretch_, 1 };
+    inline const Align Align::LeftCenter { -1, Center_ };
+    inline const Align Align::RightCenter { 1, Center_ };
+    inline const Align Align::TopCenter { Center_, -1 };
+    inline const Align Align::BottomCenter { Center_, 1 };
     inline const Align Align::LeftTop { -1, -1 };
     inline const Align Align::LeftBottom { -1, 1 };
     inline const Align Align::RightTop { 1, -1 };

@@ -145,7 +145,7 @@ namespace Index::UI
             {
                 cache.X = X.template Get<int>();
             }
-            else if (X.Has<DynamicFunc>())
+            else if (X.template Has<DynamicFunc>())
             {
                 auto& func = X.template Get<DynamicFunc>();
                 if (func)

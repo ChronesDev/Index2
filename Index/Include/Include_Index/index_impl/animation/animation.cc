@@ -53,7 +53,7 @@ namespace Index
         {
             auto now = Time.Now;
             if (HasFinished) return this->To;
-            if (!IsPlaying) throw std::exception("Cannot get Value while Animation is not playing.");
+            if (!IsPlaying) INDEX_THROW("Cannot get Value while Animation is not playing.");
             if (Duration.RawDuration == 0) return this->To;
             TTransition::operator()(Index::Clamp((now - StartPoint_.Value).RawDuration / Duration.RawDuration, 0.0, 1.0));
         }
@@ -86,7 +86,7 @@ namespace Index
         void Start()
         {
             auto now = Time.Now;
-            if (IsPlaying) throw std::exception("Animation is already playing.");
+            if (IsPlaying) INDEX_THROW("Animation is already playing.");
             HasFinished_ = false;
             StartPoint_ = now;
         }

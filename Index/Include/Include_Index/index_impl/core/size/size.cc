@@ -8,15 +8,13 @@ namespace Index
     {
         float Width = 0, Height = 0;
 
-        Size() = default;
-
-        Size(float width, float height)
+        constexpr Size() = default;
+        constexpr Size(float width, float height)
             : Width(width)
             , Height(height)
         {
         }
-
-        Size(Vec2F vec)
+        constexpr Size(Vec2F vec)
             : Width(vec.X)
             , Height(vec.Y)
         {

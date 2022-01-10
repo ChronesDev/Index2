@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../animation/ianimatable.cc"
+#include "../animation/ianimation.cc"
 #include "../provider/iprovider.cc"
 #include "../touchelement/touchelement.cc"
 #include "../ui.cc"
@@ -22,7 +24,7 @@ namespace Index::UI
 // UIElement
 namespace Index::UI
 {
-    struct UIElement : IObj<UIElement>, virtual UITouchElement
+    struct UIElement : IObj<UIElement>, virtual IUIAnimatable, virtual UITouchElement
     {
     public:
         UIElement() = default;
@@ -648,7 +650,7 @@ namespace Index::UI
     public:
         bool GetIsLayoutDirty() const { return LayoutDirty_; }
         void MakeLayoutDirty() { LayoutDirty_ = true; }
-        constexpr void MakeLayoutDirtyIf(bool condition)
+        void MakeLayoutDirtyIf(bool condition)
         {
             if (condition) MakeLayoutDirty();
         }
@@ -657,7 +659,7 @@ namespace Index::UI
 
         bool GetIsComputedLayoutDirty() const { return ComputedLayoutDirty_; }
         void MakeComputedLayoutDirty() { ComputedLayoutDirty_ = true; }
-        constexpr void MakeComputedLayoutDirtyIf(bool condition)
+        void MakeComputedLayoutDirtyIf(bool condition)
         {
             if (condition) MakeComputedLayoutDirty();
         }
@@ -666,7 +668,7 @@ namespace Index::UI
 
         bool GetIsComputedLayoutPositionDirty() const { return ComputedLayoutPositionDirty_; }
         void MakeComputedLayoutPositionDirty() { ComputedLayoutPositionDirty_ = true; }
-        constexpr void MakeComputedLayoutPositionDirtyIf(bool condition)
+        void MakeComputedLayoutPositionDirtyIf(bool condition)
         {
             if (condition) MakeComputedLayoutPositionDirty();
         }
@@ -915,14 +917,25 @@ namespace Index::UI
          */
         virtual void Render()
         {
+            // Handle Animations
+            AnimationTick();
+
+            // Render
             OnRender();
 
+            // Render children
+            SubRender();
+
+            // Post Render
+            OnPostRender();
+        }
+
+        virtual void SubRender()
+        {
             for (auto& c : Children_)
             {
                 c->Render();
             }
-
-            OnPostRender();
         }
 
         /**
@@ -1024,6 +1037,15 @@ namespace Index::UI
                 if (e.HasSucceeded) return true;
             }
             return false;
+        }
+
+    protected:
+        IPtr<>
+
+    public:
+        void AnimationTick() override
+        {
+
         }
 
     protected:

@@ -4,11 +4,7 @@
 
 namespace Index::UI
 {
-    template <
-        class TAnimation,
-        class TElement,
-        class TType,
-        void (TElement::*TSetter)(TType),
+    template <class TTransition, class TElement, class TType, void (TElement::*TSetter)(TType),
         TType (TElement::*TGetter)()>
     struct UIAnimation : virtual IUIAnimation
     {
@@ -16,7 +12,7 @@ namespace Index::UI
         TElement* Element_ = nullptr;
 
     protected:
-        TType CachedValue_ = { };
+        TType CachedValue_ = {};
 
         void Tick() override
         {
@@ -29,11 +25,12 @@ namespace Index::UI
                 Stop();
                 return;
             }
-
-
         }
 
     protected:
+        TTransition Transition_;
+        TimeSpan Duration_;
+
         bool HasBegun_ = false;
         bool HasStopped_ = false;
         bool HasFinished_ = false;
@@ -43,7 +40,13 @@ namespace Index::UI
 
         float Progress_ = 0;
 
+        TimePoint StartPoint_ = Time.Now;
+
     public:
+        TTransition GetTransition() const { return Transition_; }
+        void SetTransition(TTransition value) { Transition_ = value; }
+        INDEX_Property(get = GetTransition, put = SetTransition) TTransition Transition;
+
         bool GetHasBegun() const override { return HasBegun_; }
         bool GetHasStopped() const override { return HasStopped_; }
         bool GetHasFinished() const override { return HasFinished_; }
@@ -52,10 +55,50 @@ namespace Index::UI
         bool GetIsPaused() const override { return IsPaused_; }
 
         float GetProgress() const override { return Progress_; }
+        float GetRealProgress() const override
+        {
+            if (!IsPlaying) return 0;
+            if (Duration_.Sec == 0) return 1;
+            return Clamp<float>((Time.Now - StartPoint_).Sec / Duration_.Sec, 0, 1);
+        }
 
         void Play() override { }
         void Pause() override { }
-        void Stop() override { }
-        void Replay() override { }
+        void Stop() override
+        {
+            HasBegun_ = false;
+            HasStopped_ = true;
+            HasFinished_ = false;
+            IsPlaying_ = false;
+        }
+        void Replay() override
+        {
+            Stop();
+            Play();
+        }
+
+    protected:
+        void Reset_()
+        {
+            HasBegun_ = false;
+            HasStopped_ = false;
+            HasFinished_ = false;
+
+            IsPlaying_ = false;
+            IsPaused_ = false;
+
+            Progress_ = 0;
+        }
+
+        void Play_()
+        {
+            if (IsPlaying) return;
+            Reset_();
+
+            HasBegun_ = true;
+            IsPlaying_ = true;
+
+            StartPoint_ = Time.Now;
+        }
     };
 }

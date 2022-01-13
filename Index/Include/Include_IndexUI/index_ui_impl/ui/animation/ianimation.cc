@@ -24,6 +24,9 @@ namespace Index::UI
         virtual float GetProgress() const = 0;
         INDEX_Property(get = GetProgress) float Progress;
 
+        virtual float GetRealProgress() const = 0;
+        INDEX_Property(get = GetRealProgress) float RealProgress;
+
         virtual void Play() = 0;
         virtual void Pause() = 0;
         virtual void Stop() = 0;

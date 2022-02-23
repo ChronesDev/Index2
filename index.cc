@@ -9,7 +9,19 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
+    ContainerMapper mapper;
+    sub Container mapn
+    {
+        sub Container mapn
+        {
+            // :)
+            Debug.Log("My UI Stuff!");
+        };
 
+        sub Container mapmn;
+    };
+
+    mapper.Make();
 
     return 0;
 }

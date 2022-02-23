@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mutex>
+
 #include "../animation/ianimatable.cc"
 #include "../animation/ianimation.cc"
 #include "../provider/iprovider.cc"
@@ -1040,7 +1042,7 @@ namespace Index::UI
         }
 
     protected:
-        IPtr<>
+        //IPtr<> TODO: Complete HERE
 
     public:
         void AnimationTick() override

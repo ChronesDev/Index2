@@ -1,4 +1,5 @@
 add_subdirectory(ui)
+add_subdirectory(ui_input)
 add_subdirectory(ui_std)
 
 target_sources(IndexUIInclude PRIVATE

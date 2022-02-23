@@ -1,9 +1,11 @@
 target_sources(IndexUIInclude PRIVATE
         include.cc
         ui.cc
-        
+
+        animation/ianimatable.cc
+        animation/ianimation.cc
+        animation/animation.cc
         element/element.cc
-        inputelement/inputelement.cc
         mapper/mapper.cc
         provider/iprovider.cc
         provider/provider.cc

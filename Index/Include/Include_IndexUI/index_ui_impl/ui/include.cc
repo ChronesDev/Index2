@@ -2,8 +2,11 @@
 
 #include "ui.cc"
 
+#include "animation/ianimatable.cc"
+#include "animation/ianimation.cc"
+#include "animation/animation.cc"
 #include "element/element.cc"
-#include "inputelement/inputelement.cc"
 #include "mapper/mapper.cc"
+#include "provider/iprovider.cc"
 #include "provider/provider.cc"
 #include "touchelement/touchelement.cc"

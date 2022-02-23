@@ -71,18 +71,14 @@ namespace Index::UI
         }
 
     public:
-        void Render() override
+        void SubRender() override
         {
-            OnRender();
-
             for (auto& p : Switchables_)
             {
                 if (p.first != Index) continue;
                 auto& c = p.second;
                 c->Render();
             }
-
-            OnPostRender();
         }
 
     protected:

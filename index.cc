@@ -9,19 +9,20 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
-    ContainerMapper mapper;
-    sub Container mapn
     {
-        sub Container mapn
+        IPtr<Container> u1 = INew<Container>();
         {
-            // :)
-            Debug.Log("My UI Stuff!");
-        };
+            IPtr<Container> u2 = INew<Container>();
+            IPtr<Container> u3 = INew<Container>();
+            IPtr<Container> u4 = INew<Container>();
 
-        sub Container mapmn;
-    };
+            u1->Attach(u2);
+            u2->Attach(u3);
+            u3->Attach(u4);
 
-    mapper.Make();
+            u1->Detach(u2);
+        }
+    }
 
     return 0;
 }

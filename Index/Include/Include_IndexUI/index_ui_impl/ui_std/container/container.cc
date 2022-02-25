@@ -10,7 +10,9 @@ namespace Index::UI
     struct UIContainer : virtual UIElement
     {
         virtual void Attach(const INDEX_UI_Ref& child) { AttachChild_(child); }
+        virtual void Attach(const INDEX_UI_Ref&& child) { AttachChild_(child); }
         virtual void Detach(const INDEX_UI_Ref& child) { DetachChild_(child); }
+        virtual void Detach(const INDEX_UI_Ref&& child) { DetachChild_(child); }
     };
 
     struct UIContainerMapper : virtual UIElementMapper

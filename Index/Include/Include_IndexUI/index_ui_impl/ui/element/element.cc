@@ -44,6 +44,13 @@ namespace Index::UI
         decltype(Sync_)& GetSync() { return Sync_; }
         INDEX_Property(get = GetSync) decltype(Sync_)& Sync;
 
+    public:
+        bool GetIsAlive() { return !WSelf().Expired; }
+        INDEX_Property(get = GetIsAlive) bool IsAlive;
+
+        bool GetIsDieng() { return WSelf().Expired; }
+        INDEX_Property(get = GetIsDieng) bool IsDieng;
+
     protected:
         string Name_;
         string Id_;
@@ -90,7 +97,7 @@ namespace Index::UI
         }
         virtual void Parent_DetachFrom_(const WPtr<UIElement>& parent)
         {
-            // * No need to do this...
+            // TODO: Fix this
             // if (!IsAttached) INDEX_THROW("Is not attached to any parent.");
             // if (parent.IsNull) INDEX_THROW("parent was null.");
             //
@@ -125,8 +132,11 @@ namespace Index::UI
         {
             if (child.IsNull) INDEX_THROW("child was null.");
             if (!Children_Contains_(child)) INDEX_THROW("child does not exist.");
-            // if (!child->Parent_.) INDEX_THROW("child does not have a parent.");
-            // if (auto p = child->Parent_.Lock; p.Ptr != this) INDEX_THROW("parent of child is not this.");
+            if (IsAlive)
+            {
+                if (child->Parent_.IsNull) INDEX_THROW("child does not have a parent.");
+                if (auto p = child->Parent_.Lock; p.Ptr != this) INDEX_THROW("parent of child is not this.");
+            }
 
             try
             {

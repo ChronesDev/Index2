@@ -9,16 +9,52 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
+    struct TestElement : virtual UIContainer
     {
-        IPtr<Container> u1 = INew<Container>();
+        TestElement()
         {
-            IPtr<Container> u2 = INew<Container>();
-            IPtr<Container> u3 = INew<Container>();
-            IPtr<Container> u4 = INew<Container>();
+            Debug.Log("Creating.");
+        }
+
+        ~TestElement()
+        {
+            Debug.Log("[", Id, "] Deleting.");
+        }
+    protected:
+        void OnAttachedTo_(const IPtr<UIElement>& parent) override
+        {
+            UIElement::OnAttachedTo_(parent);
+            Debug.Log("[", Id, "] Attaching", parent->Id == "." ? "" : " to (" + parent->Id + ").");
+        }
+        void OnDetachedFrom_(const IPtr<UIElement>& parent) override
+        {
+            UIElement::OnAttachedTo_(parent);
+            Debug.Log("[", Id, "] Detaching", parent->Id == "." ? "" : " to " + parent->Id + ".");
+        }
+
+        void OnAttached_(IPtr<UIElement> child) override
+        {
+            UIElement::OnAttached_(child);
+            Debug.Log("[", Id, "] Adding Child", child->Id == "." ? "" : " (" + child->Id + ").");
+        }
+        void OnDetached_(IPtr<UIElement> child) override
+        {
+            UIElement::OnAttached_(child);
+            Debug.Log("[", Id, "] Removing Child", child->Id == "." ? "" : " (" + child->Id + ").");
+        }
+    };
+
+    {
+        IPtr<TestElement> u1 = INew<TestElement>();
+        u1->Id = "U1";
+        {
+            IPtr<TestElement> u2 = INew<TestElement>();
+            IPtr<TestElement> u3 = INew<TestElement>();
+            u2->Id = "U2";
+            u3->Id = "U3";
 
             u1->Attach(u2);
             u2->Attach(u3);
-            u3->Attach(u4);
 
             u1->Detach(u2);
         }

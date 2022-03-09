@@ -95,19 +95,10 @@ namespace Index::UI
 
             OnAttachedTo_(parent.Lock);
         }
-        virtual void Parent_DetachFrom_(const WPtr<UIElement>& parent)
+        virtual void Parent_DetachFrom_()
         {
-            // TODO: Fix this
-            // if (!IsAttached) INDEX_THROW("Is not attached to any parent.");
-            // if (parent.IsNull) INDEX_THROW("parent was null.");
-            //
-            // auto ps = Parent_.Lock;
-            // auto p = parent.Lock;
-            // if (ps.Ptr != p.Ptr) INDEX_THROW("parent does not match.");
-            //
-            // Parent_ = WPtr<UIElement>();
-            //
-            // OnDetachedFrom_(parent.Lock);
+            if (IsAttached) Parent_ = IPtr<UIElement>(nullptr);
+            OnDetachedFrom_();
         }
 
         virtual void AttachChild_(const IPtr<UIElement>& child)
@@ -140,7 +131,7 @@ namespace Index::UI
 
             try
             {
-                child->Parent_DetachFrom_(WSelf());
+                child->Parent_DetachFrom_();
                 OnDetached_(child);
             }
             catch (std::exception ex)
@@ -165,7 +156,7 @@ namespace Index::UI
         }
 
         virtual void OnAttachedTo_(const IPtr<UIElement>& parent) { }
-        virtual void OnDetachedFrom_(const IPtr<UIElement>& parent) { }
+        virtual void OnDetachedFrom_() { }
 
         virtual void OnAttached_(IPtr<UIElement> child) { }
         virtual void OnDetached_(IPtr<UIElement> child) { }
@@ -1016,6 +1007,23 @@ namespace Index::UI
     public:
         bool GetIsHitTestRecursiveVisible() const { return IsHitTestRecursiveVisible_; }
         INDEX_Property(get = GetIsHitTestRecursiveVisible) bool IsHitTestRecursiveVisible;
+
+    public:
+        /**
+         * Performs a hit-test to elements.
+         * @param p The target point
+         * @return Returns IPtr<UIElement>(nullptr) if not succeeded.
+         */
+        virtual IPtr<UIElement> PerformElementHitTest(Vec2F p)
+        {
+            auto result = PerformHitTest(p);
+            if (!result.HasSucceeded) return IPtr<UIElement>(nullptr);
+
+            auto element = dynamic_cast<UIElement*>(result.HitTarget);
+            if (element == nullptr) return IPtr<UIElement>(nullptr);
+
+            return element->ISelf();
+        }
 
     public:
         bool HitTest(HitTestResult& e, Vec2F& p) override

@@ -21,7 +21,7 @@ namespace Index::UI
             {
                 Rect r2 = r;
                 r2.Y += height;
-                r2.Height = c->ComputedMinWidthOr(AutoF);
+                r2.Height = c->ComputedMinHeightOr(AutoF);
                 c->ComputeLayoutPosition(r2);
 
                 height += c->ComputedMinHeight;

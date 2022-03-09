@@ -9,55 +9,57 @@ int main()
     using namespace Index;
     using namespace Index::UI;
 
+    struct TestElementMapper;
     struct TestElement : virtual UIContainer
     {
-        TestElement()
-        {
-            Debug.Log("Creating.");
-        }
+        INDEX_UI_UseMapper(TestElementMapper);
 
-        ~TestElement()
-        {
-            Debug.Log("[", Id, "] Deleting.");
-        }
-    protected:
-        void OnAttachedTo_(const IPtr<UIElement>& parent) override
-        {
-            UIElement::OnAttachedTo_(parent);
-            Debug.Log("[", Id, "] Attaching", parent->Id == "." ? "" : " to (" + parent->Id + ").");
-        }
-        void OnDetachedFrom_(const IPtr<UIElement>& parent) override
-        {
-            UIElement::OnAttachedTo_(parent);
-            Debug.Log("[", Id, "] Detaching", parent->Id == "." ? "" : " to " + parent->Id + ".");
-        }
+        TestElement() : UITouchElement(true) { }
+        ~TestElement() { }
+    };
 
-        void OnAttached_(IPtr<UIElement> child) override
-        {
-            UIElement::OnAttached_(child);
-            Debug.Log("[", Id, "] Adding Child", child->Id == "." ? "" : " (" + child->Id + ").");
-        }
-        void OnDetached_(IPtr<UIElement> child) override
-        {
-            UIElement::OnAttached_(child);
-            Debug.Log("[", Id, "] Removing Child", child->Id == "." ? "" : " (" + child->Id + ").");
+    struct TestElementMapper : virtual UIElementMapper
+    {
+        IPtr<UIElement> Make() override {
+            IPtr<TestElement> e_ref = INew<TestElement>();
+            TestElement& e = e_ref.Value;
+
+            Impl_(e);
+
+            return e_ref.DynamicAs<UIElement>();
         }
     };
 
+    var mapper = ContainerMapper();
+    sub VStack mapn
     {
-        IPtr<TestElement> u1 = INew<TestElement>();
-        u1->Id = "U1";
-        {
-            IPtr<TestElement> u2 = INew<TestElement>();
-            IPtr<TestElement> u3 = INew<TestElement>();
-            u2->Id = "U2";
-            u3->Id = "U3";
+        m Id = ":DDD";
+        sub TestElement mapn {
+            m Name = "My cool element";
+            m Height = 11;
+        };
+        sub Container mapn {
+            m Size = { 10, 10 };
+            sub TestElement mapn {
+                m Name = "2";
+            };
 
-            u1->Attach(u2);
-            u2->Attach(u3);
+            sub Switcher mapn {
+                m Name = "Switcher";
+                sub TestElement, 1 mapn {
 
-            u1->Detach(u2);
-        }
+                };
+            };
+        };
+    };
+    var ui = mapper.Make();
+    ui->ComputeLayout(0);
+    ui->ComputeLayoutPosition({ 0, 0, 100, 100 });
+
+    var target = ui->PerformElementHitTest({ 1, 1 });
+    if (target.IsNull)
+    {
+        target->Update();
     }
 
     return 0;

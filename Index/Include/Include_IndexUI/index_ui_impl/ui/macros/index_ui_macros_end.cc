@@ -18,5 +18,4 @@
 #undef mapmn // > () += [](auto& parent, auto& mapper) {}
 #undef mapmc // (capture) > () += [capture](auto& parent, auto& mapper) {}
 
-#undef set // mapper.
-#undef get // mapper.
+#undef m // mapper.

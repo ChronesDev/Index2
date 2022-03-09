@@ -43,6 +43,13 @@ int main()
             sub TestElement mapn {
                 m Name = "2";
             };
+
+            sub Switcher mapn {
+                m Name = "Switcher";
+                sub TestElement, 1 mapn {
+
+                };
+            };
         };
     };
     var ui = mapper.Make();

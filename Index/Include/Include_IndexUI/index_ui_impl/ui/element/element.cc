@@ -1009,6 +1009,23 @@ namespace Index::UI
         INDEX_Property(get = GetIsHitTestRecursiveVisible) bool IsHitTestRecursiveVisible;
 
     public:
+        /**
+         * Performs a hit-test to elements.
+         * @param p The target point
+         * @return Returns IPtr<UIElement>(nullptr) if not succeeded.
+         */
+        virtual IPtr<UIElement> PerformElementHitTest(Vec2F p)
+        {
+            auto result = PerformHitTest(p);
+            if (!result.HasSucceeded) return IPtr<UIElement>(nullptr);
+
+            auto element = dynamic_cast<UIElement*>(result.HitTarget);
+            if (element == nullptr) return IPtr<UIElement>(nullptr);
+
+            return element->ISelf();
+        }
+
+    public:
         bool HitTest(HitTestResult& e, Vec2F& p) override
         {
             if (!IsHitTestVisible_) return false;

@@ -49,15 +49,11 @@ int main()
     ui->ComputeLayout(0);
     ui->ComputeLayoutPosition({ 0, 0, 100, 100 });
 
-    HitTestResult hitTestResult = ui->PerformHitTest({ 1, 1 });
-
-    if (hitTestResult.HasSucceeded) {
-        var rawTarget = hitTestResult.HitTarget;
-        var target = dynamic_cast<UIElement*>(rawTarget);
-        if (target)
-        Debug.Log("Succeeded. ", target->Name);
+    var target = ui->PerformElementHitTest({ 1, 1 });
+    if (target.IsNull)
+    {
+        target->Update();
     }
-    else Debug.Log("Failed.");
 
     return 0;
 }

@@ -68,8 +68,10 @@ namespace Index
 
     inline std::ostream& operator<<(std::ostream& os, const TimePoint& timePoint)
     {
-#ifdef INDEX_MSVC
+#if defined(INDEX_MSVC)
         os << "TimePoint {" << timePoint.StdTimePoint.time_since_epoch() << "}";
+#elif defined(INDEX_Clang)
+        os << "[Clang unsupported]";
 #else
         auto t = std::chrono::high_resolution_clock::to_time_t(timePoint.StdTimePoint);
         os << "TimePoint {" << std::put_time(std::localtime(&t), "%F %T") << "}";

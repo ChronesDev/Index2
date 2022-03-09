@@ -18,5 +18,4 @@
 #define mapmn > () += [](auto& parent, auto& mapper) {}
 #define mapmc(capture) > () += [capture](auto& parent, auto& mapper) {}
 
-#define set mapper.
-#define get mapper.
+#define m mapper.

@@ -23,23 +23,19 @@ int main()
     protected:
         void OnAttachedTo_(const IPtr<UIElement>& parent) override
         {
-            UIElement::OnAttachedTo_(parent);
             Debug.Log("[", Id, "] Attaching", parent->Id == "." ? "" : " to (" + parent->Id + ").");
         }
-        void OnDetachedFrom_(const IPtr<UIElement>& parent) override
+        void OnDetachedFrom_() override
         {
-            UIElement::OnAttachedTo_(parent);
-            Debug.Log("[", Id, "] Detaching", parent->Id == "." ? "" : " to " + parent->Id + ".");
+            Debug.Log("[", Id, "] Detaching.");
         }
 
         void OnAttached_(IPtr<UIElement> child) override
         {
-            UIElement::OnAttached_(child);
             Debug.Log("[", Id, "] Adding Child", child->Id == "." ? "" : " (" + child->Id + ").");
         }
         void OnDetached_(IPtr<UIElement> child) override
         {
-            UIElement::OnAttached_(child);
             Debug.Log("[", Id, "] Removing Child", child->Id == "." ? "" : " (" + child->Id + ").");
         }
     };

@@ -14,12 +14,3 @@ set(IndexUI_IncludeDir "Index/Include/Include_IndexUI/")
 
 target_include_directories(IndexTest PUBLIC ${Index_IncludeDir})
 target_include_directories(IndexTest PUBLIC ${IndexUI_IncludeDir})
-
-# Library Include Dirs
-set(Lib_IncludeDir "Index/Lib/")
-
-target_include_directories(IndexTest PUBLIC ${Lib_IncludeDir})
-
-# Add Lib Folder
-add_subdirectory(Index/Lib/)
-target_link_libraries(IndexTest yogacore)

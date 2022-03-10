@@ -55,6 +55,13 @@ int main()
                 sub TestElement, 1 mapn {
 
                 };
+                sub TestElement, 2 mapn {
+                    m Name = ":)";
+                    m Id = "24235345";
+                };
+                sub Container mapn {
+
+                };
             };
         };
     };

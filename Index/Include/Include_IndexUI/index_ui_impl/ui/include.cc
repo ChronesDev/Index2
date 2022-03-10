@@ -11,4 +11,6 @@
 #include "provider/provider.cc"
 #include "root/iroot.cc"
 #include "root/root.cc"
+#include "scope/iscope.cc"
+#include "scope/scope.cc"
 #include "touchelement/touchelement.cc"

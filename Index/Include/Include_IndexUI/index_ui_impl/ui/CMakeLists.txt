@@ -11,6 +11,8 @@ target_sources(IndexUIInclude PRIVATE
         provider/provider.cc
         root/iroot.cc
         root/root.cc
+        scope/iscope.cc
+        scope/scope.cc
         touchelement/touchelement.cc
 
         macros/index_ui_macros.cc

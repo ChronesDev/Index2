@@ -366,6 +366,8 @@ namespace Index::UI
             DestroyAllConnections();
         }
 
+    public:
+
     protected:
         Index::Size Size_ = { AutoF, AutoF };
         Index::Size MinSize_ = { AutoF, AutoF };

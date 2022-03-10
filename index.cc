@@ -59,6 +59,7 @@ int main()
         };
     };
     var ui = mapper.Make();
+
     ui_root->AttachRootElement(ui);
     ui_root->Compute(0, { 0, 0, 200, 100 });
 
@@ -67,6 +68,8 @@ int main()
     {
         ui_root->Update();
     }
+
+    ui_root->DetachRootElement();
 
     return 0;
 }

@@ -95,8 +95,8 @@ namespace Index::UI
             Parent_ = parent;
             auto l = parent.Lock;
 
-            if (l->IsAttachedToUIRoot) AttachToUIRoot_(parent.Lock->UIRoot);
-            DetachFromUIRoot_();
+            if (l->IsAttachedToUIRoot) AttachToUIRootUpdate_(parent.Lock->UIRoot);
+            DetachFromUIRootUpdate_();
 
             OnAttachedTo_(parent.Lock);
         }
@@ -104,7 +104,7 @@ namespace Index::UI
         {
             if (IsAttached) Parent_ = IPtr<UIElement>(nullptr);
 
-            DetachFromUIRoot_();
+            DetachFromUIRootUpdate_();
             OnDetachedFrom_();
         }
 
@@ -190,7 +190,10 @@ namespace Index::UI
         virtual void ForceAttachToUIRoot_(IPtr<IUIRoot> root)
         {
             if (UIRoot.Ptr == root.Ptr) return;
-            AttachToUIRoot_(root);
+            if (!UIRoot_.Expired) DetachFromUIRoot_();
+
+            UIRoot_ = root;
+            if (!root.IsNull) OnAttachedToUIRoot_(root);
         }
         virtual void AttachToUIRoot_(IPtr<IUIRoot> root)
         {

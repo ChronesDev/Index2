@@ -26,7 +26,6 @@ namespace Index::UI
             RootElement_ = r;
             if (!r.IsNull) OnAttachedRootElement_(r);
         }
-
         virtual void DetachRootElement()
         {
             if (RootElement_.IsNull) return;
@@ -44,7 +43,6 @@ namespace Index::UI
             if (RootElement_.IsNull) return;
             RootElement_->Render();
         }
-
         void Update() override
         {
             if (RootElement_.IsNull) return;
@@ -57,17 +55,27 @@ namespace Index::UI
             RootElement_->ComputeLayout(frame);
             RootElement_->ComputeLayoutPosition(i);
         }
-
         void ComputeLayout(UInt64 frame) override
         {
             if (RootElement_.IsNull) return;
             RootElement_->ComputeLayout(frame);
         }
-
         void ComputeLayoutPosition(Rect i) override
         {
             if (RootElement_.IsNull) return;
             RootElement_->ComputeLayoutPosition(i);
+        }
+
+        IPtr<UIElement> ElementHitTest(Vec2F p) override
+        {
+            if (RootElement_.IsNull) return IPtr<UIElement>(nullptr);
+            return RootElement_->PerformElementHitTest(p);
+        }
+
+        HitTestResult HitTest(Vec2F p) override
+        {
+            if (RootElement_.IsNull) return HitTestResult();
+            return RootElement_->PerformHitTest(p);
         }
     };
 }

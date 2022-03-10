@@ -2,6 +2,8 @@
 
 #include "../../index.cc"
 
+#include "../touchelement/touchelement.cc"
+
 namespace Index::UI
 {
     struct UIElement;
@@ -18,5 +20,8 @@ namespace Index::UI
         virtual void Compute(UInt64 frame, Rect i) = 0;
         virtual void ComputeLayout(UInt64 frame) = 0;
         virtual void ComputeLayoutPosition(Rect i) = 0;
+
+        virtual IPtr<UIElement> ElementHitTest(Vec2F p) = 0;
+        virtual HitTestResult HitTest(Vec2F p) = 0;
     };
 }

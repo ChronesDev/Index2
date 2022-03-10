@@ -63,7 +63,7 @@ int main()
     ui_root->AttachRootElement(ui);
     ui_root->Compute(0, { 0, 0, 200, 100 });
 
-    var target = ui->PerformElementHitTest({ 1, 1 });
+    var target = ui_root->ElementHitTest({ 1, 1 });
     if (!target.IsNull)
     {
         ui_root->Update();

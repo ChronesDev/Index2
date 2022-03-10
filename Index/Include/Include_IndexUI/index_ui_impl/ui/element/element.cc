@@ -100,6 +100,8 @@ namespace Index::UI
         virtual void Parent_DetachFrom_()
         {
             if (IsAttached) Parent_ = IPtr<UIElement>(nullptr);
+
+            DetachFromUIRoot();
             OnDetachedFrom_();
         }
 
@@ -184,6 +186,7 @@ namespace Index::UI
     public:
         virtual void ForceAttachToUIRoot(IPtr<IUIRoot> root)
         {
+            if (UIRoot.Ptr == root.Ptr) return;
             if (IsAttachedToUIRoot) DetachFromUIRoot();
             UIRoot_ = root;
             OnAttachedToUIRoot_(root);
@@ -191,6 +194,7 @@ namespace Index::UI
         virtual void AttachToUIRoot(IPtr<IUIRoot> root)
         {
             if (root.IsNull) INDEX_THROW("root was null.");
+            if (UIRoot.Ptr == root.Ptr) return;
             if (!UIRoot_.Expired) INDEX_THROW("Already attached to UIRoot.");
 
             UIRoot_ = root;

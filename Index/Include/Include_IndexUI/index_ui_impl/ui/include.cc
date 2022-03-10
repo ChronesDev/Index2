@@ -9,4 +9,5 @@
 #include "mapper/mapper.cc"
 #include "provider/iprovider.cc"
 #include "provider/provider.cc"
+#include "root/root.cc"
 #include "touchelement/touchelement.cc"

@@ -9,6 +9,8 @@ target_sources(IndexUIInclude PRIVATE
         mapper/mapper.cc
         provider/iprovider.cc
         provider/provider.cc
+        root/iroot.cc
+        root/root.cc
         touchelement/touchelement.cc
 
         macros/index_ui_macros.cc

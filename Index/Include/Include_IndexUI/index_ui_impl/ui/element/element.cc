@@ -5,6 +5,7 @@
 #include "../animation/ianimatable.cc"
 #include "../animation/ianimation.cc"
 #include "../provider/iprovider.cc"
+#include "../root/iroot.cc"
 #include "../touchelement/touchelement.cc"
 #include "../ui.cc"
 
@@ -93,6 +94,7 @@ namespace Index::UI
 
             Parent_ = parent;
 
+            AttachToUIRoot(parent.Lock->UIRoot);
             OnAttachedTo_(parent.Lock);
         }
         virtual void Parent_DetachFrom_()
@@ -160,6 +162,72 @@ namespace Index::UI
 
         virtual void OnAttached_(IPtr<UIElement> child) { }
         virtual void OnDetached_(IPtr<UIElement> child) { }
+
+    protected:
+        WPtr<IUIRoot> UIRoot_;
+
+    public:
+        /* May be nullptr */
+        IPtr<IUIRoot> GetUIRoot() const
+        {
+            if (!UIRoot_.Expired) return UIRoot_.Lock;
+            return IPtr<IUIRoot>(nullptr);
+        }
+        INDEX_Property(get = GetUIRoot) IPtr<IUIRoot> UIRoot;
+
+        bool GetIsUIRootNull() const { return UIRoot_.Expired; }
+        INDEX_Property(get = GetIsUIRootNull) bool IsUIRootNull;
+
+        bool GetIsAttachedToUIRoot() const { return !UIRoot_.Expired; }
+        INDEX_Property(get = GetIsAttachedToUIRoot) bool IsAttachedToUIRoot;
+
+    public:
+        virtual void ForceAttachToUIRoot(IPtr<IUIRoot> root)
+        {
+            if (IsAttachedToUIRoot) DetachFromUIRoot();
+            UIRoot_ = root;
+            OnAttachedToUIRoot_(root);
+        }
+        virtual void AttachToUIRoot(IPtr<IUIRoot> root)
+        {
+            if (root.IsNull) INDEX_THROW("root was null.");
+            if (!UIRoot_.Expired) INDEX_THROW("Already attached to UIRoot.");
+
+            UIRoot_ = root;
+            OnAttachedToUIRoot_(root);
+        }
+
+        virtual void DetachFromUIRoot()
+        {
+            if (IsUIRootNull) return;
+            UIRoot_ = IPtr<IUIRoot>(nullptr);
+            OnDetachedFromUIRoot_();
+        }
+
+        virtual void UpdateUIRoot()
+        {
+            UpdateThisUIRoot();
+            UpdateChildrenUIRoot();
+        }
+
+        virtual void UpdateThisUIRoot()
+        {
+            if (Parent.IsNull) return;
+            auto parent = Parent.Lock;
+            ForceAttachToUIRoot(parent->UIRoot);
+        }
+
+        virtual void UpdateChildrenUIRoot()
+        {
+            for (auto& c : Children_)
+            {
+                c->UpdateUIRoot();
+            }
+        }
+
+    protected:
+        virtual void OnAttachedToUIRoot_(IPtr<IUIRoot> root) { }
+        virtual void OnDetachedFromUIRoot_() { }
 
     protected:
         bool CanConnect_ = false;

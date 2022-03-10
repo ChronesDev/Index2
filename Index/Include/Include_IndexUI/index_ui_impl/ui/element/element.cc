@@ -93,15 +93,18 @@ namespace Index::UI
             if (parent.IsNull) INDEX_THROW("parent was null.");
 
             Parent_ = parent;
+            auto l = parent.Lock;
 
-            AttachToUIRoot(parent.Lock->UIRoot);
+            if (l->IsAttachedToUIRoot) AttachToUIRoot_(parent.Lock->UIRoot);
+            DetachFromUIRoot_();
+
             OnAttachedTo_(parent.Lock);
         }
         virtual void Parent_DetachFrom_()
         {
             if (IsAttached) Parent_ = IPtr<UIElement>(nullptr);
 
-            DetachFromUIRoot();
+            DetachFromUIRoot_();
             OnDetachedFrom_();
         }
 
@@ -184,24 +187,22 @@ namespace Index::UI
         INDEX_Property(get = GetIsAttachedToUIRoot) bool IsAttachedToUIRoot;
 
     public:
-        virtual void ForceAttachToUIRoot(IPtr<IUIRoot> root)
+        virtual void ForceAttachToUIRoot_(IPtr<IUIRoot> root)
         {
             if (UIRoot.Ptr == root.Ptr) return;
-            if (IsAttachedToUIRoot) DetachFromUIRoot();
-            UIRoot_ = root;
-            OnAttachedToUIRoot_(root);
+            AttachToUIRoot_(root);
         }
-        virtual void AttachToUIRoot(IPtr<IUIRoot> root)
+        virtual void AttachToUIRoot_(IPtr<IUIRoot> root)
         {
             if (root.IsNull) INDEX_THROW("root was null.");
             if (UIRoot.Ptr == root.Ptr) return;
-            if (!UIRoot_.Expired) INDEX_THROW("Already attached to UIRoot.");
+            if (!UIRoot_.Expired) DetachFromUIRoot_();
 
             UIRoot_ = root;
             OnAttachedToUIRoot_(root);
         }
 
-        virtual void DetachFromUIRoot()
+        virtual void DetachFromUIRoot_()
         {
             if (IsUIRootNull) return;
             UIRoot_ = IPtr<IUIRoot>(nullptr);
@@ -218,7 +219,7 @@ namespace Index::UI
         {
             if (Parent.IsNull) return;
             auto parent = Parent.Lock;
-            ForceAttachToUIRoot(parent->UIRoot);
+            ForceAttachToUIRoot_(parent->UIRoot);
         }
 
         virtual void UpdateChildrenUIRoot()
@@ -227,6 +228,18 @@ namespace Index::UI
             {
                 c->UpdateUIRoot();
             }
+        }
+
+        virtual void AttachToUIRootUpdate_(IPtr<IUIRoot> root)
+        {
+            AttachToUIRoot_(root);
+            UpdateChildrenUIRoot();
+        }
+
+        virtual void DetachFromUIRootUpdate_()
+        {
+            DetachFromUIRoot_();
+            UpdateChildrenUIRoot();
         }
 
     protected:

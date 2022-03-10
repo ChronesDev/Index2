@@ -16,6 +16,10 @@ int main()
 
         TestElement() : UITouchElement(true) { }
         ~TestElement() { }
+
+        void OnUpdate() override {
+            Debug.Log("Root: ", this->UIRoot.Ptr);
+        }
     };
 
     struct TestElementMapper : virtual UIElementMapper
@@ -29,6 +33,8 @@ int main()
             return e_ref.DynamicAs<UIElement>();
         }
     };
+
+    IPtr<UIRoot> ui_root = INew<UIRoot>();
 
     var mapper = ContainerMapper();
     sub VStack mapn
@@ -53,13 +59,13 @@ int main()
         };
     };
     var ui = mapper.Make();
-    ui->ComputeLayout(0);
-    ui->ComputeLayoutPosition({ 0, 0, 100, 100 });
+    ui_root->AttachRootElement(ui);
+    ui_root->Compute(0, { 0, 0, 200, 100 });
 
     var target = ui->PerformElementHitTest({ 1, 1 });
-    if (target.IsNull)
+    if (!target.IsNull)
     {
-        target->Update();
+        ui_root->Update();
     }
 
     return 0;

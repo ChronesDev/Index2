@@ -40,24 +40,26 @@ namespace Index::UI
             Func<UIElement*(UIScope*)> Search_ = [&path, &Search_](UIScope* s) -> UIElement*
             {
                 jmp_begin:
-                    if (path->IsCurrentTargetElement) { return s->SearchElement_(path); }
+                    if (path->TargetsElement) { return s->SearchElement_(path); }
 
-                    if (path->IsCurrentTargetScopeStay)
+                    if (path->TargetsScopeStay)
                     {
                         path->Next();
                         goto jmp_begin;
                     }
 
-                    if (path->IsCurrentTargetScopeOut)
+                    if (path->TargetsScopeOut)
                     {
                         auto result = s->SearchParentScope_();
+                        if (result == nullptr) goto jmp_ret;
                         path->Next();
                         return Search_(result);
                     }
 
-                    if (path->IsCurrentTargetScope)
+                    if (path->TargetsScope)
                     {
                         auto result = s->SearchScope_(path);
+                        if (result == nullptr) goto jmp_ret;
                         path->Next();
                         return Search_(result);
                     }
@@ -70,9 +72,9 @@ namespace Index::UI
 
         UIElement* SearchElement_(UIPath* path)
         {
-            if (path->CurrentTargetsName)
+            if (path->TargetsName)
                 return SearchElementByName_(path->Target);
-            else if (path->CurrentTargetsId)
+            else if (path->TargetsId)
                 return SearchElementById_(path->Target);
             return nullptr;
         }
@@ -92,7 +94,13 @@ namespace Index::UI
                 }
                 return nullptr;
             };
-            return Search_(static_cast<UIElement*>(this));
+
+            for (auto& c : Children)
+            {
+                auto result = Search_(static_cast<UIElement*>(c.Ptr));
+                if (result) return result;
+            }
+            return nullptr;
         }
         UIElement* SearchElementById_(string id)
         {
@@ -110,13 +118,19 @@ namespace Index::UI
                 }
                 return nullptr;
             };
-            return Search_(static_cast<UIElement*>(this));
+
+            for (auto& c : Children)
+            {
+                auto result = Search_(static_cast<UIElement*>(c.Ptr));
+                if (result) return result;
+            }
+            return nullptr;
         }
         UIScope* SearchScope_(UIPath* path)
         {
-            if (path->CurrentTargetsName)
+            if (path->TargetsName)
                 return SearchScopeByName_(path->Target);
-            else if (path->CurrentTargetsId)
+            else if (path->TargetsId)
                 return SearchScopeById_(path->Target);
             return nullptr;
         }
@@ -138,7 +152,13 @@ namespace Index::UI
             jmp_ret:
                 return nullptr;
             };
-            return Search_(static_cast<UIElement*>(this));
+
+            for (auto& c : Children)
+            {
+                auto result = Search_(static_cast<UIElement*>(c.Ptr));
+                if (result) return result;
+            }
+            return nullptr;
         }
         UIScope* SearchScopeById_(string id)
         {
@@ -158,7 +178,13 @@ namespace Index::UI
             jmp_ret:
                 return nullptr;
             };
-            return Search_(static_cast<UIElement*>(this));
+
+            for (auto& c : Children)
+            {
+                auto result = Search_(static_cast<UIElement*>(c.Ptr));
+                if (result) return result;
+            }
+            return nullptr;
         }
         UIScope* SearchParentScope_()
         {

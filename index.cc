@@ -40,15 +40,16 @@ int main()
     sub VStack mapn
     {
         m Name = "SSSS";
-        m Id = ":DDD";
+        m Id = "#:DDD";
         sub TestElement mapn {
             m Name = "My cool element";
             m Height = 11;
         };
-        sub Container mapn {
+        sub ScopedContainer mapn {
+            m Name = "Mu";
             m Size = { 10, 10 };
             sub TestElement mapn {
-                m Name = "2";
+                m Name = "Mu";
             };
 
             sub Switcher mapn {
@@ -58,10 +59,13 @@ int main()
                 };
                 sub TestElement, 2 mapn {
                     m Name = ":)";
-                    m Id = "24235345";
+                    m Id = "#24235345";
                 };
-                sub Container mapn {
-
+                sub ScopedContainer mapn {
+                    m Name = "E";
+                    sub ScopedContainer mapn {
+                        m Name = "E2";
+                    };
                 };
             };
         };
@@ -77,9 +81,8 @@ int main()
         ui_root->Update();
     }
 
-    auto e1 = ui_root->Search({ { "SSSS" } });
-    auto e2 = ui_root->Search({ { "Switcher" } });
-    auto e3 = ui_root->Search({ { "#24235345" } });
+    auto e2 = ui_root->Search(UIPath::From("Mu/#24235345"));
+    auto e3 = ui_root->Search(UIPath::From("Mu/E/E2/../../#24235345"));
 
     ui_root->DetachRootElement();
 

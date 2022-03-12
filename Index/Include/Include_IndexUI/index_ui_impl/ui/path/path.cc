@@ -10,13 +10,17 @@ namespace Index::UI
         UIPath(List<string> path) : Path(path) { }
 
     public:
+        static UIPath From(List<string> p) { return { p }; }
+        static UIPath From(string s) { return { s.Split("/") }; }
+
+    public:
         List<string> Path;
 
     public:
         bool GetIsEmpty() const { return Path.Length == 0; }
         INDEX_Property(get = GetIsEmpty) bool IsEmpty;
 
-        string GetTarget() const { return Path.Last; }
+        string GetTarget() const { return Path.First; }
         INDEX_Property(get = GetTarget) string Target;
         string TargetOr(string other)
         {
@@ -26,28 +30,38 @@ namespace Index::UI
                 return Target;
         }
 
-        bool GetCurrentTargetsName() { return IsName(Path.First); }
-        INDEX_Property(get = GetCurrentTargetsName) bool CurrentTargetsName;
+        string GetElement() const { return Path.Last; }
+        INDEX_Property(get = GetElement) string Element;
+        string ElementOr(string other)
+        {
+            if (IsEmpty)
+                return other;
+            else
+                return Element;
+        }
 
-        bool GetCurrentTargetsId() { return IsId(Path.First); }
-        INDEX_Property(get = GetCurrentTargetsId) bool CurrentTargetsId;
+        bool GetTargetsName() { return IsName(Path.First); }
+        INDEX_Property(get = GetTargetsName) bool TargetsName;
 
-        bool GetIsCurrentTargetScope() { return Path.Length > 1; }
-        INDEX_Property(get = GetIsCurrentTargetScope) bool IsCurrentTargetScope;
+        bool GetTargetsId() { return IsId(Path.First); }
+        INDEX_Property(get = GetTargetsId) bool TargetsId;
 
-        bool GetIsCurrentTargetScopeOut() { return IsCurrentTargetScope && IsScopeOut(Target); }
-        INDEX_Property(get = GetIsCurrentTargetScopeOut) bool IsCurrentTargetScopeOut;
+        bool GetTargetsScope() { return Path.Length > 1; }
+        INDEX_Property(get = GetTargetsScope) bool TargetsScope;
 
-        bool GetIsCurrentTargetScopeStay() { return IsCurrentTargetScope && IsScopeStay(Target); }
-        INDEX_Property(get = GetIsCurrentTargetScopeStay) bool IsCurrentTargetScopeStay;
+        bool GetTargetsScopeOut() { return TargetsScope && IsScopeOut(Target); }
+        INDEX_Property(get = GetTargetsScopeOut) bool TargetsScopeOut;
 
-        bool GetIsCurrentTargetElement() { return Path.Length == 1; }
-        INDEX_Property(get = GetIsCurrentTargetElement) bool IsCurrentTargetElement;
+        bool GetTargetsScopeStay() { return TargetsScope && IsScopeStay(Target); }
+        INDEX_Property(get = GetTargetsScopeStay) bool TargetsScopeStay;
+
+        bool GetTargetsElement() { return Path.Length == 1; }
+        INDEX_Property(get = GetTargetsElement) bool TargetsElement;
 
     public:
         void Next()
         {
-            if (Path.Length >= 1) INDEX_THROW("Cannot go further.");
+            if (Path.Length <= 1) INDEX_THROW("Cannot go further.");
             Path.erase(Path.begin());
         }
 

@@ -28,6 +28,7 @@ namespace Index::UI
         virtual IPtr<UIElement> ElementHitTest(Vec2F p) = 0;
         virtual HitTestResult HitTest(Vec2F p) = 0;
 
+    public:
         virtual IPtr<UIElement> Search(UIPath path) = 0;
         virtual IPtr<UIElement> TrySearch(UIPath path) = 0;
     };

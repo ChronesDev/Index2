@@ -81,7 +81,7 @@ int main()
         ui_root->Update();
     }
 
-    auto e2 = ui_root->Search(UIPath::From("!/Mu/#24235345"));
+    auto e2 = ui_root->SearchT<TestElement>(UIPath::From("!/Mu/#24235345"));
     auto e3 = e2->Search(UIPath::From("!/Mu/E/E2/../../#24235345"));
 
     ui_root->DetachRootElement();

@@ -4,8 +4,8 @@
 
 #include "../animation/ianimatable.cc"
 #include "../animation/ianimation.cc"
-#include "../provider/iprovider.cc"
 #include "../path/path.cc"
+#include "../provider/iprovider.cc"
 #include "../root/iroot.cc"
 #include "../scope/iscope.cc"
 #include "../touchelement/touchelement.cc"
@@ -375,13 +375,20 @@ namespace Index::UI
             if (result == nullptr) INDEX_THROW("Could not find the current scope.");
             return result->Scope_Search(path);
         }
-
         virtual IPtr<UIElement> TrySearch(UIPath path)
         {
             auto result = Element_SearchParentIScope_();
             if (result == nullptr) return IPtr<UIElement>(nullptr);
             return result->Scope_TrySearch(path);
         }
+
+        template <class T> IPtr<T> SearchT(UIPath path)
+        {
+            auto result = Search(path).template DynamicAs<T>();
+            if (result == nullptr) INDEX_THROW("Type mismatched.");
+            return result;
+        }
+        template <class T> IPtr<T> TrySearchT(UIPath path) { TrySearch(path).template DynamicAs<T>(); }
 
     protected:
         IUIScope* Element_SearchParentIScope_()

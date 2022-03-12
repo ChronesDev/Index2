@@ -15,7 +15,7 @@ namespace Index::UI
 
     public:
         IPtr<UIElement> GetRootElement() const override { return RootElement_; }
-        //INDEX_Property(get = GetRootElement) IPtr<UIElement> RootElement;
+        // INDEX_Property(get = GetRootElement) IPtr<UIElement> RootElement;
 
     public:
         virtual void AttachRootElement(IPtr<UIElement> r)
@@ -88,5 +88,13 @@ namespace Index::UI
             if (RootElement_.IsNull) return IPtr<UIElement>(nullptr);
             return RootElement_->TrySearch(path);
         }
+
+        template <class T> IPtr<T> SearchT(UIPath path)
+        {
+            auto result = Search(path).template DynamicAs<T>();
+            if (result == nullptr) INDEX_THROW("Type mismatched.");
+            return result;
+        }
+        template <class T> IPtr<T> TrySearchT(UIPath path) { return TrySearch(path).template DynamicAs<T>(); }
     };
 }

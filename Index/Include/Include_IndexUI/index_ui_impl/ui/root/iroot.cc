@@ -14,6 +14,10 @@ namespace Index::UI
         virtual ~IUIRoot() = default;
 
     public:
+        virtual IPtr<UIElement> GetRootElement() const = 0;
+        INDEX_Property(get = GetRootElement) IPtr<UIElement> RootElement;
+
+    public:
         virtual void Render() = 0;
         virtual void Update() = 0;
 

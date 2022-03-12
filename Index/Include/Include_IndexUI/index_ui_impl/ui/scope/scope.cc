@@ -40,6 +40,19 @@ namespace Index::UI
             Func<UIElement*(UIScope*)> Search_ = [&path, &Search_](UIScope* s) -> UIElement*
             {
                 jmp_begin:
+                    if (path->TargetsRoot)
+                    {
+                        auto root = s->UIRoot.Ptr;
+                        auto keep_ = root->RootElement;
+
+                        if (path->TargetsElement) return root->RootElement.Ptr;
+
+                        auto result = dynamic_cast<UIScope*>(keep_.Ptr);
+                        if (result == nullptr) goto jmp_ret;
+                        path->Next();
+                        return Search_(result);
+                    }
+
                     if (path->TargetsElement) { return s->SearchElement_(path); }
 
                     if (path->TargetsScopeStay)

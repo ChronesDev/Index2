@@ -14,8 +14,8 @@ namespace Index::UI
         IPtr<UIElement> RootElement_;
 
     public:
-        IPtr<UIElement> GetRootElement() const { return RootElement_; }
-        INDEX_Property(get = GetRootElement) IPtr<UIElement> RootElement;
+        IPtr<UIElement> GetRootElement() const override { return RootElement_; }
+        //INDEX_Property(get = GetRootElement) IPtr<UIElement> RootElement;
 
     public:
         virtual void AttachRootElement(IPtr<UIElement> r)

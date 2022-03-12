@@ -55,6 +55,9 @@ namespace Index::UI
         bool GetTargetsScopeStay() { return TargetsScope && IsScopeStay(Target); }
         INDEX_Property(get = GetTargetsScopeStay) bool TargetsScopeStay;
 
+        bool GetTargetsRoot() { return IsRoot(Target); }
+        INDEX_Property(get = GetTargetsRoot) bool TargetsRoot;
+
         bool GetTargetsElement() { return Path.Length == 1; }
         INDEX_Property(get = GetTargetsElement) bool TargetsElement;
 
@@ -70,5 +73,6 @@ namespace Index::UI
         static bool IsScopeOut(string s) { return s == ".."; }
         static bool IsName(string s) { return !s.StarsWith("#"); }
         static bool IsId(string s) { return s.StarsWith("#"); }
+        static bool IsRoot(string s) { return s == "!"; }
     };
 }

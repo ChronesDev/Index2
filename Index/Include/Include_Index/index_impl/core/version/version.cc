@@ -72,7 +72,7 @@ namespace Index
         if (ss.Length < 3) goto jmp_ret;
         ret.Build = std::stoi(ss[2]);
 
-        if (ss.Length < 3) goto jmp_ret;
+        if (ss.Length < 4) goto jmp_ret;
         ret.Revision = std::stoi(ss[3]);
 
     jmp_ret:

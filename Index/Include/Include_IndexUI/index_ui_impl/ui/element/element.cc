@@ -4,7 +4,10 @@
 
 #include "../animation/ianimatable.cc"
 #include "../animation/ianimation.cc"
+#include "../path/path.cc"
 #include "../provider/iprovider.cc"
+#include "../root/iroot.cc"
+#include "../scope/iscope.cc"
 #include "../touchelement/touchelement.cc"
 #include "../ui.cc"
 
@@ -92,12 +95,18 @@ namespace Index::UI
             if (parent.IsNull) INDEX_THROW("parent was null.");
 
             Parent_ = parent;
+            auto l = parent.Lock;
+
+            if (l->IsAttachedToUIRoot) AttachToUIRootUpdate_(parent.Lock->UIRoot);
+            DetachFromUIRootUpdate_();
 
             OnAttachedTo_(parent.Lock);
         }
         virtual void Parent_DetachFrom_()
         {
             if (IsAttached) Parent_ = IPtr<UIElement>(nullptr);
+
+            DetachFromUIRootUpdate_();
             OnDetachedFrom_();
         }
 
@@ -160,6 +169,87 @@ namespace Index::UI
 
         virtual void OnAttached_(IPtr<UIElement> child) { }
         virtual void OnDetached_(IPtr<UIElement> child) { }
+
+    protected:
+        WPtr<IUIRoot> UIRoot_;
+
+    public:
+        /* May be nullptr */
+        IPtr<IUIRoot> GetUIRoot() const
+        {
+            if (!UIRoot_.Expired) return UIRoot_.Lock;
+            return IPtr<IUIRoot>(nullptr);
+        }
+        INDEX_Property(get = GetUIRoot) IPtr<IUIRoot> UIRoot;
+
+        bool GetIsUIRootNull() const { return UIRoot_.Expired; }
+        INDEX_Property(get = GetIsUIRootNull) bool IsUIRootNull;
+
+        bool GetIsAttachedToUIRoot() const { return !UIRoot_.Expired; }
+        INDEX_Property(get = GetIsAttachedToUIRoot) bool IsAttachedToUIRoot;
+
+    public:
+        virtual void ForceAttachToUIRoot_(IPtr<IUIRoot> root)
+        {
+            if (UIRoot.Ptr == root.Ptr) return;
+            if (!UIRoot_.Expired) DetachFromUIRoot_();
+
+            UIRoot_ = root;
+            if (!root.IsNull) OnAttachedToUIRoot_(root);
+        }
+        virtual void AttachToUIRoot_(IPtr<IUIRoot> root)
+        {
+            if (root.IsNull) INDEX_THROW("root was null.");
+            if (UIRoot.Ptr == root.Ptr) return;
+            if (!UIRoot_.Expired) DetachFromUIRoot_();
+
+            UIRoot_ = root;
+            OnAttachedToUIRoot_(root);
+        }
+
+        virtual void DetachFromUIRoot_()
+        {
+            if (IsUIRootNull) return;
+            UIRoot_ = IPtr<IUIRoot>(nullptr);
+            OnDetachedFromUIRoot_();
+        }
+
+        virtual void UpdateUIRoot()
+        {
+            UpdateThisUIRoot();
+            UpdateChildrenUIRoot();
+        }
+
+        virtual void UpdateThisUIRoot()
+        {
+            if (Parent.IsNull) return;
+            auto parent = Parent.Lock;
+            ForceAttachToUIRoot_(parent->UIRoot);
+        }
+
+        virtual void UpdateChildrenUIRoot()
+        {
+            for (auto& c : Children_)
+            {
+                c->UpdateUIRoot();
+            }
+        }
+
+        virtual void AttachToUIRootUpdate_(IPtr<IUIRoot> root)
+        {
+            AttachToUIRoot_(root);
+            UpdateChildrenUIRoot();
+        }
+
+        virtual void DetachFromUIRootUpdate_()
+        {
+            DetachFromUIRoot_();
+            UpdateChildrenUIRoot();
+        }
+
+    protected:
+        virtual void OnAttachedToUIRoot_(IPtr<IUIRoot> root) { }
+        virtual void OnDetachedFromUIRoot_() { }
 
     protected:
         bool CanConnect_ = false;
@@ -276,6 +366,46 @@ namespace Index::UI
             }
 
             DestroyAllConnections();
+        }
+
+    public:
+        virtual IPtr<UIElement> Search(UIPath path)
+        {
+            auto result = Element_SearchParentIScope_();
+            if (result == nullptr) INDEX_THROW("Could not find the current scope.");
+            return result->Scope_Search(path);
+        }
+        virtual IPtr<UIElement> TrySearch(UIPath path)
+        {
+            auto result = Element_SearchParentIScope_();
+            if (result == nullptr) return IPtr<UIElement>(nullptr);
+            return result->Scope_TrySearch(path);
+        }
+
+        template <class T> IPtr<T> SearchT(UIPath path)
+        {
+            auto result = Search(path).template DynamicAs<T>();
+            if (result == nullptr) INDEX_THROW("Type mismatched.");
+            return result;
+        }
+        template <class T> IPtr<T> TrySearchT(UIPath path) { TrySearch(path).template DynamicAs<T>(); }
+
+    protected:
+        IUIScope* Element_SearchParentIScope_()
+        {
+            Func<IUIScope*(UIElement*)> Search_ = [&Search_](UIElement* p) -> IUIScope*
+            {
+                auto p2 = p->Parent;
+                if (p2.Expired) return nullptr;
+                auto p3 = p2.Lock;
+                auto ptr = p3.Ptr;
+
+                auto cs = dynamic_cast<IUIScope*>(ptr);
+                if (cs) return cs;
+
+                return Search_(ptr);
+            };
+            return Search_(this);
         }
 
     protected:

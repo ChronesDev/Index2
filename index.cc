@@ -16,6 +16,10 @@ int main()
 
         TestElement() : UITouchElement(true) { }
         ~TestElement() { }
+
+        void OnUpdate() override {
+            Debug.Log("Root: ", this->UIRoot.Ptr);
+        }
     };
 
     struct TestElementMapper : virtual UIElementMapper
@@ -30,18 +34,22 @@ int main()
         }
     };
 
-    var mapper = ContainerMapper();
+    IPtr<UIRoot> ui_root = INew<UIRoot>();
+
+    var mapper = ScopedContainerMapper();
     sub VStack mapn
     {
-        m Id = ":DDD";
+        m Name = "SSSS";
+        m Id = "#:DDD";
         sub TestElement mapn {
             m Name = "My cool element";
             m Height = 11;
         };
-        sub Container mapn {
+        sub ScopedContainer mapn {
+            m Name = "Mu";
             m Size = { 10, 10 };
             sub TestElement mapn {
-                m Name = "2";
+                m Name = "Mu";
             };
 
             sub Switcher mapn {
@@ -49,18 +57,34 @@ int main()
                 sub TestElement, 1 mapn {
 
                 };
+                sub TestElement, 2 mapn {
+                    m Name = ":)";
+                    m Id = "#24235345";
+                };
+                sub ScopedContainer mapn {
+                    m Name = "E";
+                    sub ScopedContainer mapn {
+                        m Name = "E2";
+                    };
+                };
             };
         };
     };
     var ui = mapper.Make();
-    ui->ComputeLayout(0);
-    ui->ComputeLayoutPosition({ 0, 0, 100, 100 });
 
-    var target = ui->PerformElementHitTest({ 1, 1 });
-    if (target.IsNull)
+    ui_root->AttachRootElement(ui);
+    ui_root->Compute(0, { 0, 0, 200, 100 });
+
+    var target = ui_root->ElementHitTest({ 1, 1 });
+    if (!target.IsNull)
     {
-        target->Update();
+        ui_root->Update();
     }
+
+    auto e2 = ui_root->SearchT<TestElement>(UIPath::From("!/Mu/#24235345"));
+    auto e3 = e2->Search(UIPath::From("!/Mu/E/E2/../../#24235345"));
+
+    ui_root->DetachRootElement();
 
     return 0;
 }

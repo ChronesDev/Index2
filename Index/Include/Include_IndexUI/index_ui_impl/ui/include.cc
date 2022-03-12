@@ -7,6 +7,7 @@
 #include "animation/animation.cc"
 #include "element/element.cc"
 #include "mapper/mapper.cc"
+#include "path/path.cc"
 #include "provider/iprovider.cc"
 #include "provider/provider.cc"
 #include "root/iroot.cc"

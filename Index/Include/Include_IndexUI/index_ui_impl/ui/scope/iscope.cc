@@ -8,5 +8,9 @@ namespace Index::UI
     {
     public:
         ~IUIScope() = default;
+
+    public:
+        virtual IPtr<UIElement> Scope_Search(UIPath path) = 0;
+        virtual IPtr<UIElement> Scope_TrySearch(UIPath path) = 0;
     };
 }

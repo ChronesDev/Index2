@@ -36,9 +36,10 @@ int main()
 
     IPtr<UIRoot> ui_root = INew<UIRoot>();
 
-    var mapper = ContainerMapper();
+    var mapper = ScopedContainerMapper();
     sub VStack mapn
     {
+        m Name = "SSSS";
         m Id = ":DDD";
         sub TestElement mapn {
             m Name = "My cool element";
@@ -75,6 +76,10 @@ int main()
     {
         ui_root->Update();
     }
+
+    auto e1 = ui_root->Search({ { "SSSS" } });
+    auto e2 = ui_root->Search({ { "Switcher" } });
+    auto e3 = ui_root->Search({ { "#24235345" } });
 
     ui_root->DetachRootElement();
 

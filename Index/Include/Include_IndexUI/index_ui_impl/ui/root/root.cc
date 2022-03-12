@@ -77,5 +77,16 @@ namespace Index::UI
             if (RootElement_.IsNull) return HitTestResult();
             return RootElement_->PerformHitTest(p);
         }
+
+        IPtr<UIElement> Search(UIPath path) override
+        {
+            if (RootElement_.IsNull) INDEX_THROW("RootElement was null.");
+            return RootElement_->Search(path);
+        }
+        IPtr<UIElement> TrySearch(UIPath path) override
+        {
+            if (RootElement_.IsNull) return IPtr<UIElement>(nullptr);
+            return RootElement_->TrySearch(path);
+        }
     };
 }

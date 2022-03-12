@@ -5,7 +5,9 @@
 #include "../animation/ianimatable.cc"
 #include "../animation/ianimation.cc"
 #include "../provider/iprovider.cc"
+#include "../path/path.cc"
 #include "../root/iroot.cc"
+#include "../scope/iscope.cc"
 #include "../touchelement/touchelement.cc"
 #include "../ui.cc"
 
@@ -367,6 +369,37 @@ namespace Index::UI
         }
 
     public:
+        virtual IPtr<UIElement> Search(UIPath path)
+        {
+            auto result = Element_SearchParentIScope_();
+            if (result == nullptr) INDEX_THROW("Could not find the current scope.");
+            return result->Scope_Search(path);
+        }
+
+        virtual IPtr<UIElement> TrySearch(UIPath path)
+        {
+            auto result = Element_SearchParentIScope_();
+            if (result == nullptr) return IPtr<UIElement>(nullptr);
+            return result->Scope_TrySearch(path);
+        }
+
+    protected:
+        IUIScope* Element_SearchParentIScope_()
+        {
+            Func<IUIScope*(UIElement*)> Search_ = [&Search_](UIElement* p) -> IUIScope*
+            {
+                auto p2 = p->Parent;
+                if (p2.Expired) return nullptr;
+                auto p3 = p2.Lock;
+                auto ptr = p3.Ptr;
+
+                auto cs = dynamic_cast<IUIScope*>(ptr);
+                if (cs) return cs;
+
+                return Search_(ptr);
+            };
+            return Search_(this);
+        }
 
     protected:
         Index::Size Size_ = { AutoF, AutoF };

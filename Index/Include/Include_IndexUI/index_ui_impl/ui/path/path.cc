@@ -7,6 +7,9 @@ namespace Index::UI
     struct UIPath
     {
     public:
+        UIPath(List<string> path) : Path(path) { }
+
+    public:
         List<string> Path;
 
     public:
@@ -32,10 +35,25 @@ namespace Index::UI
         bool GetIsCurrentTargetScope() { return Path.Length > 1; }
         INDEX_Property(get = GetIsCurrentTargetScope) bool IsCurrentTargetScope;
 
+        bool GetIsCurrentTargetScopeOut() { return IsCurrentTargetScope && IsScopeOut(Target); }
+        INDEX_Property(get = GetIsCurrentTargetScopeOut) bool IsCurrentTargetScopeOut;
+
+        bool GetIsCurrentTargetScopeStay() { return IsCurrentTargetScope && IsScopeStay(Target); }
+        INDEX_Property(get = GetIsCurrentTargetScopeStay) bool IsCurrentTargetScopeStay;
+
         bool GetIsCurrentTargetElement() { return Path.Length == 1; }
         INDEX_Property(get = GetIsCurrentTargetElement) bool IsCurrentTargetElement;
 
     public:
+        void Next()
+        {
+            if (Path.Length >= 1) INDEX_THROW("Cannot go further.");
+            Path.erase(Path.begin());
+        }
+
+    public:
+        static bool IsScopeStay(string s) { return s == "."; }
+        static bool IsScopeOut(string s) { return s == ".."; }
         static bool IsName(string s) { return !s.StarsWith("#"); }
         static bool IsId(string s) { return s.StarsWith("#"); }
     };

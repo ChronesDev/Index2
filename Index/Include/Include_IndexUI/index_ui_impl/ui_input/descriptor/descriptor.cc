@@ -6,6 +6,8 @@ namespace Index::UI
 {
     struct UIInputDescriptor
     {
-
+        /**
+         * * TKey       - KeyType
+         */
     };
 }

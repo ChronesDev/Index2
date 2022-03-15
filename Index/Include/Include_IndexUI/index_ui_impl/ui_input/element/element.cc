@@ -52,17 +52,44 @@ namespace Index::UI
         bool IsFocused_ = false;
 
     public:
+        virtual bool GetIsFocusable() const { return false; }
+        INDEX_Property(get = GetIsFocusable) bool IsFocusable;
+
         bool GetIsFocused() const { return IsFocused_; }
         INDEX_Property(get = GetIsFocused) bool IsFocused;
 
     public:
         // TODO: Finish that
-        virtual void ForceFocus() { }
-        virtual void TryFocus() { }
-        virtual void Focus() {
+        virtual void ForceFocus()
+        {
             if (!HasIInputContext) INDEX_THROW("Missing IInputContext.");
-            if (IsFocused) return;
+            if (!IsFocusable) INDEX_THROW("Element cannot be focused.");
+
+            OnFocused();
         }
-        virtual void Unfocus() { }
+        virtual void TryFocus()
+        {
+            if (!HasIInputContext) return;
+            if (!IsFocusable) return;
+
+            OnFocused();
+        }
+        virtual void Focus()
+        {
+            if (!HasIInputContext) INDEX_THROW("Missing IInputContext.");
+            if (!IsFocusable) INDEX_THROW("Element cannot be focused.");
+            if (IsFocused) return;
+
+            OnFocused();
+        }
+        virtual void Unfocus() {
+            if (!IsFocused) return;
+
+            OnUnfocused();
+        }
+
+    protected:
+        virtual void OnFocused() { }
+        virtual void OnUnfocused() { }
     };
 }

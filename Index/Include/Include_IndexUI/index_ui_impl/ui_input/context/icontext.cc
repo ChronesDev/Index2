@@ -4,7 +4,7 @@
 
 namespace Index::UI
 {
-    template <class T> class IUIInputContext : virtual UIRoot
+    template <class T> struct IUIInputContext : virtual UIRoot
     {
     protected:
         IPtr<UIElement> FocusedElement_;

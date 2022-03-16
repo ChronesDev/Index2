@@ -1,14 +1,14 @@
 #pragma once
 
-#include "../ui.cc"
 #include "../container/container.cc"
+#include "../ui.cc"
 
 namespace Index::UI
 {
     INDEX_UI_Declare(HStack);
 
-	struct HStack : virtual UIContainer
-	{
+    struct HStack : virtual UIContainer
+    {
         INDEX_UI_UseMapper(HStackMapper);
 
         void OnComputeLayoutPosition(Rect i) override
@@ -50,7 +50,7 @@ namespace Index::UI
             PolishLayout();
             PolishComputedLayout();
         }
-	};
+    };
 
     struct HStackMapper : virtual UIContainerMapper
     {

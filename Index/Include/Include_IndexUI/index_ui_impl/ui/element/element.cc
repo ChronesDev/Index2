@@ -1245,8 +1245,8 @@ namespace Index::UI
         }
         Rect Rect_ShrinkOr_Margin_(Rect r, float value)
         {
-            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value),
-                r.Height - MarginBottomOr(value) };
+            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value) - MarginLeftOr(value),
+                r.Height - MarginBottomOr(value) - MarginTopOr(value) };
         }
         Rect Rect_ResizeShrinkOr_Margin_(Rect r, float value)
         {

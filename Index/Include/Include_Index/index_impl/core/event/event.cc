@@ -41,10 +41,18 @@ namespace Index
         }
         void RemoveAll(const Func<T>& f)
         {
-            auto end = std::remove_if(Subscribers_.begin(), Subscribers_.end(), [&](Func<T>& e) { return e.IsIdentical(f); });
+            auto end = std::remove_if(
+                Subscribers_.begin(), Subscribers_.end(), [&](Func<T>& e) { return e.IsIdentical(f); });
             Subscribers_.Erase(end, Subscribers_.end());
         }
-        bool Contains(const Func<T>& f) { return Subscribers_.Contains(f); }
+        bool Contains(const Func<T>& f)
+        {
+            for (auto it = Subscribers_.begin(); it != Subscribers_.end(); it++)
+            {
+                if (it->IsIdentical(f)) { return true; }
+            }
+            return false;
+        }
         void Clear() { Subscribers_.Clear(); }
 
         template <class... TArgs> void Invoke(TArgs&&... args)

@@ -28,7 +28,7 @@ namespace Index
         ALIAS_RECLASS_CONSTRUCTOR(Func, std::function<T>);
 
     public:
-        bool IsIdentical(const Func<T>& other)
+        bool IsIdentical(const Func<T>& other) const
         {
             return *reinterpret_cast<void**>((std::function<T>*)this)
                 == *reinterpret_cast<void**>((std::function<T>*)&other);

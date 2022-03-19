@@ -14,3 +14,7 @@ set(IndexUI_IncludeDir "Index/Include/Include_IndexUI/")
 
 target_include_directories(IndexTest PUBLIC ${Index_IncludeDir})
 target_include_directories(IndexTest PUBLIC ${IndexUI_IncludeDir})
+
+
+# Testing
+add_subdirectory(Test)

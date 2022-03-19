@@ -1,5 +1,3 @@
-#pragma once
-
 #define ui_ref ::Index::IPtr<::Index::UI::UIElement>
 #define ui_ptr ::Index::UI::UIElement*
 

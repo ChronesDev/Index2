@@ -1245,8 +1245,8 @@ namespace Index::UI
         }
         Rect Rect_ShrinkOr_Margin_(Rect r, float value)
         {
-            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value),
-                r.Height - MarginBottomOr(value) };
+            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value) - MarginLeftOr(value),
+                r.Height - MarginBottomOr(value) - MarginTopOr(value) };
         }
         Rect Rect_ResizeShrinkOr_Margin_(Rect r, float value)
         {
@@ -1256,7 +1256,7 @@ namespace Index::UI
 
         Rect Rect_Shrink_Padding_(Rect r)
         {
-            return { r.X + PaddingLeft, r.Y + PaddingTop, r.Width - PaddingRight, r.Height - PaddingBottom };
+            return { r.X + PaddingLeft, r.Y + PaddingTop, r.Width - PaddingRight - PaddingLeft, r.Height - PaddingBottom - PaddingTop };
         }
         Rect Rect_ResizeShrink_Padding_(Rect r)
         {
@@ -1264,8 +1264,8 @@ namespace Index::UI
         }
         Rect Rect_ShrinkOr_Padding_(Rect r, float value)
         {
-            return { r.X + PaddingLeftOr(value), r.Y + PaddingTopOr(value), r.Width - PaddingRightOr(value),
-                r.Height - PaddingBottomOr(value) };
+            return { r.X + PaddingLeftOr(value), r.Y + PaddingTopOr(value), r.Width - PaddingRightOr(value) - PaddingLeftOr(value),
+                r.Height - PaddingBottomOr(value) - PaddingTopOr(value) };
         }
         Rect Rect_ResizeShrinkOr_Padding_(Rect r, float value)
         {
@@ -1471,8 +1471,11 @@ namespace Index::UI
          */
         Rect AlignToComputedLayout_(Rect i)
         {
-            Rect r1 = Rect_LimitAlign_(i, { 0, 0, ComputedMaxWidth, ComputedMaxHeight }, Alignment_);
-            Rect r2 = Rect_Align_(r1, { 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) }, Alignment_);
+            Rect rMax = { 0, 0, ComputedMaxWidth, ComputedMaxHeight };
+            Rect rMin = Rect_ResizeShrink_Margin_({ 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) });
+
+            Rect r1 = Rect_LimitAlign_(i, rMax, Alignment_);
+            Rect r2 = Rect_Align_(r1, rMin, Alignment_);
             return r2;
         }
 
@@ -1484,7 +1487,7 @@ namespace Index::UI
         {
             Rect im = Rect_ShrinkOr_Margin_(i, 0);
             Rect ima = AlignToComputedLayout_(im);
-            Rect imap = Rect_ResizeShrinkOr_Padding_(ima, 0);
+            Rect imap = Rect_ShrinkOr_Padding_(ima, 0);
             return imap;
         }
     };

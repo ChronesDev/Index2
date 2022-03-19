@@ -1,5 +1,3 @@
-#pragma once
-
 #undef ui_ref // ::Index::IPtr<::Index::UI::UIElement>
 #undef ui_ptr // ::Index::UI::UIElement*
 

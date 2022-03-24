@@ -7,7 +7,6 @@ target_sources(IndexInclude PRIVATE
         console/console.cc
         debug/debug.cc
         event/event.cc
-        event/objevent.cc
         rect/rect.cc
         size/size.cc
         vector/vector.cc

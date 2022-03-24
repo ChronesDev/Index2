@@ -40,7 +40,7 @@ namespace Index::UI
         }
         void FocusElement(const IPtr<UIInputElement<T>>& e) override
         {
-            if (dynamic_cast<UIInputContext<T>>(e->IInputContext_) != this) INDEX_THROW("Foreign IInputContext.");
+            if (dynamic_cast<UIInputContext<T>*>(e->IInputContext) != this) INDEX_THROW("Foreign IInputContext.");
             e->Focus();
         }
         void UnfocusElement() override

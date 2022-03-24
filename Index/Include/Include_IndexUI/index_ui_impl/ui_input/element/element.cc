@@ -39,7 +39,7 @@ namespace Index::UI
     protected:
         void OnAttachedToUIRoot_(IPtr<IUIRoot> root) override
         {
-            UIInputElement_OnAttachedToUIRoot_();
+            UIInputElement_OnAttachedToUIRoot_(root);
             UIElement::OnAttachedToUIRoot_(root);
         }
         void OnDetachedFromUIRoot_() override
@@ -86,7 +86,7 @@ namespace Index::UI
             if (!IsFocused) return;
 
             if (IInputContext_->FocusedElement_ != ISelf()) INDEX_THROW("Element is not focused in IInputContext.");
-            IInputContext_->UIInputElement_Unfocus_(ISelf());
+            IInputContext_->UIInputElement_Unfocus_();
 
             IsFocused_ = false;
             OnUnfocused();

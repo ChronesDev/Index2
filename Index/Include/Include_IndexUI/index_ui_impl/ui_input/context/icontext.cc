@@ -25,8 +25,8 @@ namespace Index::UI
         virtual void UIInputElement_Unfocus_() = 0;
 
     public:
-        virtual bool FocusElement(const IPtr<UIElement>& e) = 0;
-        virtual bool FocusElement(const IPtr<UIInputElement<T>>& e) = 0;
-        virtual bool UnfocusElement() = 0;
+        virtual void FocusElement(const IPtr<UIElement>& e) = 0;
+        virtual void FocusElement(const IPtr<UIInputElement<T>>& e) = 0;
+        virtual void UnfocusElement() = 0;
     };
 }

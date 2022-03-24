@@ -5,6 +5,7 @@ target_sources(IndexInclude PRIVATE
         math/math.cc
         memory/memory.cc
         nullable/nullable.cc
+        pair/pair.cc
         span/span.cc
         stack/stack.cc
         string/string.cc

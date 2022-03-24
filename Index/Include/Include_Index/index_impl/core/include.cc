@@ -4,6 +4,7 @@
 #include "console/console.cc"
 #include "debug/debug.cc"
 #include "event/event.cc"
+#include "event/objevent.cc"
 #include "rect/rect.cc"
 #include "size/size.cc"
 #include "types.cc"

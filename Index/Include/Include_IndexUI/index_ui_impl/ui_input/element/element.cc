@@ -59,19 +59,15 @@ namespace Index::UI
         INDEX_Property(get = GetIsFocused) bool IsFocused;
 
     public:
-        // TODO: Finish that
-        virtual void ForceFocus()
-        {
-            if (!HasIInputContext) INDEX_THROW("Missing IInputContext.");
-            if (!IsFocusable) INDEX_THROW("Element cannot be focused.");
-
-            OnFocused();
-        }
         virtual void TryFocus()
         {
             if (!HasIInputContext) return;
             if (!IsFocusable) return;
+            if (IsFocused) return;
 
+            IInputContext_->UIInputElement_Focus_(ISelf());
+
+            IsFocused_ = true;
             OnFocused();
         }
         virtual void Focus()
@@ -80,11 +76,19 @@ namespace Index::UI
             if (!IsFocusable) INDEX_THROW("Element cannot be focused.");
             if (IsFocused) return;
 
+            IInputContext_->UIInputElement_Focus_(ISelf());
+
+            IsFocused_ = true;
             OnFocused();
         }
-        virtual void Unfocus() {
+        virtual void Unfocus()
+        {
             if (!IsFocused) return;
 
+            if (IInputContext_->FocusedElement_ != ISelf()) INDEX_THROW("Element is not focused in IInputContext.");
+            IInputContext_->UIInputElement_Unfocus_(ISelf());
+
+            IsFocused_ = false;
             OnUnfocused();
         }
 

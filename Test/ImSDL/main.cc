@@ -24,7 +24,7 @@ int main(int, char**)
 
     // Setup SDL_Renderer instance
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
-        //SDL_RENDERER_PRESENTVSYNC |
+        SDL_RENDERER_PRESENTVSYNC |
             SDL_RENDERER_ACCELERATED);
     if (renderer == NULL)
     {

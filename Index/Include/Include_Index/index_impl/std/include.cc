@@ -3,6 +3,7 @@
 #include "math/math.cc"
 #include "memory/memory.cc"
 #include "nullable/nullable.cc"
+#include "pair/pair.cc"
 #include "span/span.cc"
 #include "stack/stack.cc"
 #include "string/string.cc"

@@ -59,30 +59,5 @@ namespace Index::UI
                 if (auto ptr = this->FocusedElement_.template DynamicAs<UIInputElement<T>>(); ptr) { ptr->Unfocus(); }
             }
         }
-
-    public:
-        virtual void EventKeyPress(typename T::TKey key)
-        {
-            if (IInputElement_) { IInputElement_->EventKeyPress(key); }
-        }
-        virtual void EventKeyRelease(typename T::TKey key)
-        {
-            if (IInputElement_) { IInputElement_->EventKeyRelease(key); }
-        }
-
-        virtual void EventPointerMove(Vec2F from, Vec2F to)
-        {
-            if (IInputElement_) { IInputElement_->EventPointerMove(from, to); }
-        }
-        virtual void EventPointerPress(typename T::TKey key)
-        {
-            if (IInputElement_) { IInputElement_->EventPointerPress(key); }
-        }
-        virtual void EventPointerRelease(typename T::TKey key)
-        {
-            if (IInputElement_) { IInputElement_->EventPointerRelease(key); }
-        }
-
-    public:
     };
 }

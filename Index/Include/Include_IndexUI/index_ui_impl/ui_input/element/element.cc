@@ -95,13 +95,5 @@ namespace Index::UI
     protected:
         virtual void OnFocused() { }
         virtual void OnUnfocused() { }
-
-    public:
-        virtual void EventKeyPress(typename T::TKey key) { }
-        virtual void EventKeyRelease(typename T::TKey key) { }
-
-        virtual void EventPointerMove(Vec2F from, Vec2F to) { }
-        virtual void EventPointerPress(typename T::TKey key) { }
-        virtual void EventPointerRelease(typename T::TKey key) { }
     };
 }

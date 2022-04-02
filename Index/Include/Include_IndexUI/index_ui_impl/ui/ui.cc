@@ -20,16 +20,16 @@ namespace Index::UI
 // Math
 namespace Index::UI
 {
-    Size Min_(Size a, Size b) { return { Min(a.Width, a.Width), Min(a.Height, a.Height) }; }
-    Size Max_(Size a, Size b) { return { Max(a.Width, a.Width), Max(a.Height, a.Height) }; }
+    inline Size Min_(Size a, Size b) { return { Min(a.Width, a.Width), Min(a.Height, a.Height) }; }
+    inline Size Max_(Size a, Size b) { return { Max(a.Width, a.Width), Max(a.Height, a.Height) }; }
 
-    Vec2F Min_(Vec2F a, Vec2F b) { return { Min(a.X, a.X), Min(a.Y, a.Y) }; }
-    Vec2F Max_(Vec2F a, Vec2F b) { return { Max(a.X, a.X), Max(a.Y, a.Y) }; }
+    inline Vec2F Min_(Vec2F a, Vec2F b) { return { Min(a.X, a.X), Min(a.Y, a.Y) }; }
+    inline Vec2F Max_(Vec2F a, Vec2F b) { return { Max(a.X, a.X), Max(a.Y, a.Y) }; }
 
-    Vec3F Min_(Vec3F a, Vec3F b) { return { Min(a.X, a.X), Min(a.Y, a.Y), Min(a.Z, b.Z) }; }
-    Vec3F Max_(Vec3F a, Vec3F b) { return { Max(a.X, a.X), Max(a.Y, a.Y), Max(a.Z, b.Z) }; }
+    inline Vec3F Min_(Vec3F a, Vec3F b) { return { Min(a.X, a.X), Min(a.Y, a.Y), Min(a.Z, b.Z) }; }
+    inline Vec3F Max_(Vec3F a, Vec3F b) { return { Max(a.X, a.X), Max(a.Y, a.Y), Max(a.Z, b.Z) }; }
 
-    float AutoF_ValueOr_(float a, float x)
+    inline float AutoF_ValueOr_(float a, float x)
     {
         if (a == AutoF)
             return x;

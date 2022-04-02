@@ -24,7 +24,7 @@ namespace Index
     template <class T> struct Chain : public std::list<T>
     {
     public:
-        using std::list<T>::vector;
+        using std::list<T>::list;
 
         ALIAS_RECLASS_CONSTRUCTOR(Chain, std::list<T>)
 

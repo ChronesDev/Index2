@@ -1,3 +1,4 @@
+#include "chain/chain.cc"
 #include "func/func.cc"
 #include "limits/limits.cc"
 #include "math/math.cc"

@@ -1,5 +1,7 @@
 target_sources(IndexInclude PRIVATE
         include.cc
+
+        chain/chain.cc
         func/func.cc
         limits/limits.cc
         math/math.cc

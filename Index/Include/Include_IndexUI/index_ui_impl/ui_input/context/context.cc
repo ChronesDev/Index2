@@ -59,5 +59,9 @@ namespace Index::UI
                 if (auto ptr = this->FocusedElement_.template DynamicAs<UIInputElement<T>>(); ptr) { ptr->Unfocus(); }
             }
         }
+
+    protected:
+        virtual void OnElementFocused_(const IPtr<UIElement>& e) { };
+        virtual void OnElementUnfocused_() { };
     };
 }

@@ -29,6 +29,7 @@ namespace Index::UI
             }
             SetIInputElement_(e.Ptr);
             this->FocusedElement_ = e;
+            OnElementFocused_(e);
         }
         void UIInputElement_Unfocus_() override
         {
@@ -38,6 +39,7 @@ namespace Index::UI
             }
             SetIInputElement_(nullptr);
             this->FocusedElement_ = nullptr;
+            OnElementUnfocused_();
         }
 
     public:

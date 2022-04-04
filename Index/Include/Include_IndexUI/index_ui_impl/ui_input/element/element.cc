@@ -85,7 +85,7 @@ namespace Index::UI
         {
             if (!IsFocused) return;
 
-            if (IInputContext_->FocusedElement_ != ISelf()) INDEX_THROW("Element is not focused in IInputContext.");
+            if (IInputContext_->FocusedElement_ != ISelf()) return;
             IInputContext_->UIInputElement_Unfocus_();
 
             IsFocused_ = false;

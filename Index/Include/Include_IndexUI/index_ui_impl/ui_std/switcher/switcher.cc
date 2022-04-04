@@ -51,7 +51,7 @@ namespace Index::UI
                 if (p.first != Index) continue;
                 auto& c = p.second;
 
-                c->ComputeLayoutPosition(i);
+                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(i);
             }
 
             PolishComputedLayoutPosition();

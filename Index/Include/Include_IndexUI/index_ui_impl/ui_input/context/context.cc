@@ -14,29 +14,20 @@ namespace Index::UI
         void SetIInputElement_(UIElement* e)
         {
             if (e == nullptr) IInputElement_ = nullptr;
-            if (auto ptr = dynamic_cast<UIInputElement<T>*>(e); ptr)
-                IInputElement_ = ptr;
-            else
-                INDEX_THROW("Bad type.");
+            auto ptr = dynamic_cast<UIInputElement<T>*>(e);
+            IInputElement_ = ptr;
         }
 
     protected:
         void UIInputElement_Focus_(const IPtr<UIElement>& e) override
         {
-            if (this->HasFocusedElement)
-            {
-                if (auto ptr = this->FocusedElement_.template DynamicAs<UIInputElement<T>>(); ptr) { ptr->Unfocus(); }
-            }
+            if (IInputElement_) { IInputElement_->Unfocus(); }
             SetIInputElement_(e.Ptr);
             this->FocusedElement_ = e;
             OnElementFocused_(e);
         }
         void UIInputElement_Unfocus_() override
         {
-            if (this->HasFocusedElement)
-            {
-                if (auto ptr = this->FocusedElement_.template DynamicAs<UIInputElement<T>>(); ptr) { ptr->Unfocus(); }
-            }
             SetIInputElement_(nullptr);
             this->FocusedElement_ = nullptr;
             OnElementUnfocused_();
@@ -63,7 +54,7 @@ namespace Index::UI
         }
 
     protected:
-        virtual void OnElementFocused_(const IPtr<UIElement>& e) { };
-        virtual void OnElementUnfocused_() { };
+        virtual void OnElementFocused_(const IPtr<UIElement>& e) {};
+        virtual void OnElementUnfocused_() {};
     };
 }

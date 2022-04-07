@@ -1472,7 +1472,7 @@ namespace Index::UI
         Rect AlignToComputedLayout_(Rect i)
         {
             Rect rMax = { 0, 0, ComputedMaxWidth, ComputedMaxHeight };
-            Rect rMin = Rect_ResizeShrink_Margin_({ 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) });
+            Rect rMin = Rect_ResizeShrink_Margin_({ 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) }); // TODO: FIX!!!
 
             Rect r1 = Rect_LimitAlign_(i, rMax, Alignment_);
             Rect r2 = Rect_Align_(r1, rMin, Alignment_);

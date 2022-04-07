@@ -41,38 +41,32 @@ namespace Index::UI::ImSDL
 
         // clang-format disable
         sub VStack mapn {
-            m Name = "Stack1";
-            m Alignment = Align::LeftTop;
-            m Margin = { 20, 20 };
-            m Width = 100;
-
-            sub Rectangle mapn {
-                m Height = 40;
-                m Fill = Color::RGB(97, 255, 69);
-            };
+            m Padding = { 6 };
             sub HStack mapn {
-                sub Rectangle mapn {
-                    m Width = 50;
-                    m MinHeight = 50;
-                    m Fill = Colors::Yellow;
-                    m Padding = { 10 };
-                };
-                sub Rectangle mapn {
-                    m Width = 50;
-                    m MinHeight = 50;
-                    m Fill = Colors::Blue;
-                };
-            };
-            sub Rectangle mapn {
                 m Height = 30;
-                m Fill = Colors::Red;
             };
-            sub Rectangle mapn {
-                m Name = "X";
-                m MaxSize = { AutoF, 50 };
-                m Margin = { 5, 5 };
-                m Padding = { 10, 0 };
-                m Fill = Colors::Aqua;
+            sub Switcher mapn {
+                m Name = "Switcher";
+                m MinWidth = 600;
+                m Height = 350;
+                m Padding = { 0, 80, 0, 0 };
+                m Index = 0;
+
+                sub Container, 0 mapn {
+                    sub Rectangle mapn {
+                        m Name = "BREAK!";
+                        m MaxSize = { 20, 20 };
+                        m Fill = Colors::Red;
+                    };
+                };
+                sub Container, 1 mapn {
+                    sub Rectangle mapn {
+                        m Name = "BREAK!";
+                        m MaxSize = { 20, 20 };
+                        m Fill = Colors::Lime;
+                    };
+                };
+                sub Container, 2 mapmn;
             };
         };
         // clang-format enable

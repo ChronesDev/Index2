@@ -41,32 +41,13 @@ namespace Index::UI::ImSDL
 
         // clang-format disable
         sub VStack mapn {
+            m Width = 300;
             m Padding = { 6 };
-            sub HStack mapn {
-                m Height = 30;
-            };
-            sub Switcher mapn {
-                m Name = "Switcher";
-                m MinWidth = 600;
-                m Height = 350;
-                m Padding = { 0, 80, 0, 0 };
-                m Index = 0;
-
-                sub Container, 0 mapn {
-                    sub Rectangle mapn {
-                        m Name = "BREAK!";
-                        m MaxSize = { 20, 20 };
-                        m Fill = Colors::Red;
-                    };
-                };
-                sub Container, 1 mapn {
-                    sub Rectangle mapn {
-                        m Name = "BREAK!";
-                        m MaxSize = { 20, 20 };
-                        m Fill = Colors::Lime;
-                    };
-                };
-                sub Container, 2 mapmn;
+            sub Rectangle mapn {
+                m Name = "RECT";
+                m Width = 100;
+                m MinSize = { 100, 100 };
+                m Margin = { 20, 20 };
             };
         };
         // clang-format enable

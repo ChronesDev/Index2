@@ -46,8 +46,8 @@ namespace Index::UI::ImSDL
             var& dc = ir->dc;
 
             dc->AddRectFilled(
-                ToImVec(ComputedLayout.First),
-                ToImVec(ComputedLayout.Second),
+                ToImVec(ContentLayout.First),
+                ToImVec(ContentLayout.Second),
                 ToImColor(Fill));
         }
     };

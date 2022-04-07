@@ -1,3 +1,41 @@
+/**
+ *? README
+ *
+ ** --- UIElement ---
+ *
+ *  1. Alignment
+ *  -------------
+ *  | Info:     Alignment determines how the element should align.
+ *  | Default:  'Align::Stretch'
+ *
+ *  2. Size, MinSize, MaxSize
+ *  --------------------------
+ *  | Info:     These properties do not directly influence how the element is aligned / rendered.
+ *  | Default:  'AutoS' / 'AutoF'
+ *
+ *  3. ActualSize, ActualMinSize, ActualMaxSize
+ *  --------------------------------------------
+ *  | Info:     Gives out the values, but takes priority into consideration.
+ *  |           MaxSize > MinSize > Size
+ *  | Uses:     'Size', 'MinSize', 'MaxSize'
+ *
+ *  4. ComputedMinSize, ComputedMaxSize
+ *  ------------------------------------
+ *  | Info:     Gives info about how big the element is going to be. Takes all the '_Size' properties and Margin /
+ *  |           Padding into consideration.
+ *  | Uses:     'Size', 'MinSize', 'MaxSize', 'Padding', 'Margin'
+ *
+ *  5. ComputedLayout
+ *  ------------------
+ *  | Info:     Determines the layout with 'Padding' and 'Margin' into consideration.
+ *  | Uses:     'ComputedMinSize', 'ComputedMaxSize'
+ *
+ *  6. ContentLayout
+ *  -----------------
+ *  | Info:     Determines the layout of the content. Should be used when rendering.
+ *  | Uses:     'ComputedLayout', 'Padding', 'Margin'
+ */
+
 #pragma once
 
 #include <mutex>
@@ -503,106 +541,51 @@ namespace Index::UI
         }
         INDEX_Property(get = GetAutoMaxHeight, put = SetAutoMaxHeight) bool AutoMaxHeight;
 
-        float WidthOr(float value)
+        float WidthOr(float value) const
         {
             if (AutoWidth)
                 return value;
             else
                 return Width;
         }
-        float HeightOr(float value)
+        float HeightOr(float value) const
         {
             if (AutoHeight)
                 return value;
             else
                 return Height;
         }
-        float MinWidthOr(float value)
+        float MinWidthOr(float value) const
         {
             if (AutoMinWidth)
                 return value;
             else
                 return MinWidth;
         }
-        float MinHeightOr(float value)
+        float MinHeightOr(float value) const
         {
             if (AutoMinHeight)
                 return value;
             else
                 return MinHeight;
         }
-        float MaxWidthOr(float value)
+        float MaxWidthOr(float value) const
         {
             if (AutoMaxWidth)
                 return value;
             else
                 return MaxWidth;
         }
-        float MaxHeightOr(float value)
+        float MaxHeightOr(float value) const
         {
             if (AutoMaxHeight)
                 return value;
             else
                 return MaxHeight;
         }
-        Index::Size SizeOr(float value) { return { WidthOr(value), HeightOr(value) }; }
-        Index::Size MinSizeOr(float value) { return { MinWidthOr(value), MinHeightOr(value) }; }
-        Index::Size MaxSizeOr(float value) { return { MaxWidthOr(value), MaxHeightOr(value) }; }
-
-        Index::Size GetActualMinSize() const { return { ActualMinWidth, ActualMinHeight }; }
-        INDEX_Property(get = GetActualMinSize) Index::Size ActualMinSize;
-
-        Index::Size GetActualSize() const { return { ActualWidth, ActualHeight }; }
-        INDEX_Property(get = GetActualSize) Index::Size ActualSize;
-
-        Index::Size GetActualMaxSize() const { return { ActualMaxWidth, ActualMaxHeight }; }
-        INDEX_Property(get = GetActualMaxSize) Index::Size ActualMaxSize;
-
-        float GetActualMinWidth() const { return Min(MinWidth, MaxWidth); }
-        INDEX_Property(get = GetActualMinWidth) float ActualMinWidth;
-
-        float GetActualMinHeight() const { return Min(MinHeight, MaxHeight); }
-        INDEX_Property(get = GetActualMinHeight) float ActualMinHeight;
-
-        float GetActualWidth() const
-        {
-            if (AutoWidth)
-                return Width;
-            else
-                return Clamp(Width, AutoF_ValueOr_(ActualMinWidth, 0), ActualMaxWidth);
-        }
-        INDEX_Property(get = GetActualWidth) float ActualWidth;
-
-        float GetActualHeight() const
-        {
-            if (AutoHeight)
-                return Height;
-            else
-                return Clamp(Height, AutoF_ValueOr_(ActualMinHeight, 0), ActualMaxHeight);
-        }
-        INDEX_Property(get = GetActualHeight) float ActualHeight;
-
-        float GetActualMaxWidth() const { return MaxWidth; }
-        INDEX_Property(get = GetActualMaxWidth) float ActualMaxWidth;
-
-        float GetActualMaxHeight() const { return MaxHeight; }
-        INDEX_Property(get = GetActualMaxHeight) float ActualMaxHeight;
-
-        float ActualMinWidthOr(float value) { return AutoF_ValueOr_(ActualMinWidth, value); }
-        float ActualMinHeightOr(float value) { return AutoF_ValueOr_(ActualMinHeight, value); }
-        float ActualWidthOr(float value) { return AutoF_ValueOr_(ActualWidth, value); }
-        float ActualHeightOr(float value) { return AutoF_ValueOr_(ActualHeight, value); }
-        float ActualMaxWidthOr(float value) { return AutoF_ValueOr_(ActualMaxWidth, value); }
-        float ActualMaxHeightOr(float value) { return AutoF_ValueOr_(ActualMaxHeight, value); }
-        Index::Size ActualSizeOr(float value) { return { ActualWidthOr(value), ActualHeightOr(value) }; }
-        Index::Size ActualMinSizeOr(float value) { return { ActualMinWidthOr(value), ActualMinHeightOr(value) }; }
-        Index::Size ActualMaxSizeOr(float value) { return { ActualMaxWidthOr(value), ActualMaxHeightOr(value) }; }
-
-        Index::Size ClampSize(Index::Size value)
-        {
-            return { ActualWidthOr(Clamp(value.Width, ActualMinWidthOr(0), ActualMaxWidth)),
-                ActualHeightOr(Clamp(value.Height, ActualMinHeightOr(0), ActualMaxHeight)) };
-        }
+        Index::Size SizeOr(float value) const { return { WidthOr(value), HeightOr(value) }; }
+        Index::Size MinSizeOr(float value) const { return { MinWidthOr(value), MinHeightOr(value) }; }
+        Index::Size MaxSizeOr(float value) const { return { MaxWidthOr(value), MaxHeightOr(value) }; }
 
         Vec4F& GetMargin() { return Margin_; }
         const Vec4F& GetMargin() const { return Margin_; }
@@ -653,35 +636,41 @@ namespace Index::UI
         }
         INDEX_Property(get = GetAutoMarginBottom, put = SetAutoMarginBottom) bool AutoMarginBottom;
 
-        float MarginLeftOr(float value)
+        float GetMarginHorizontal() const { return MarginLeftOr(0) + MarginRightOr(0); }
+        INDEX_Property(get = GetMarginHorizontal) float MarginHorizontal;
+
+        float GetMarginVertical() const { return MarginTopOr(0) + MarginBottomOr(0); }
+        INDEX_Property(get = GetMarginHorizontal) float MarginVertical;
+
+        float MarginLeftOr(float value) const
         {
             if (AutoMarginLeft)
                 return value;
             else
                 return MarginLeft;
         }
-        float MarginTopOr(float value)
+        float MarginTopOr(float value) const
         {
             if (AutoMarginTop)
                 return value;
             else
                 return MarginTop;
         }
-        float MarginRightOr(float value)
+        float MarginRightOr(float value) const
         {
             if (AutoMarginRight)
                 return value;
             else
                 return MarginRight;
         }
-        float MarginBottomOr(float value)
+        float MarginBottomOr(float value) const
         {
             if (AutoMarginBottom)
                 return value;
             else
                 return MarginBottom;
         }
-        Vec4F MarginOr(float value)
+        Vec4F MarginOr(float value) const
         {
             return { MarginLeftOr(value), MarginTopOr(value), MarginRightOr(value), MarginBottomOr(value) };
         }
@@ -735,39 +724,59 @@ namespace Index::UI
         }
         INDEX_Property(get = GetAutoPaddingBottom, put = SetAutoPaddingBottom) bool AutoPaddingBottom;
 
-        float PaddingLeftOr(float value)
+        float GetPaddingHorizontal() const { return PaddingLeftOr(0) + PaddingRightOr(0); }
+        INDEX_Property(get = GetPaddingHorizontal) float PaddingHorizontal;
+
+        float GetPaddingVertical() const { return PaddingTopOr(0) + PaddingBottomOr(0); }
+        INDEX_Property(get = GetPaddingHorizontal) float PaddingVertical;
+
+        float PaddingLeftOr(float value) const
         {
             if (AutoPaddingLeft)
                 return value;
             else
                 return PaddingLeft;
         }
-        float PaddingTopOr(float value)
+        float PaddingTopOr(float value) const
         {
             if (AutoPaddingTop)
                 return value;
             else
                 return PaddingTop;
         }
-        float PaddingRightOr(float value)
+        float PaddingRightOr(float value) const
         {
             if (AutoPaddingRight)
                 return value;
             else
                 return PaddingRight;
         }
-        float PaddingBottomOr(float value)
+        float PaddingBottomOr(float value) const
         {
             if (AutoPaddingBottom)
                 return value;
             else
                 return PaddingBottom;
         }
-        Vec4F PaddingOr(float value)
+        Vec4F PaddingOr(float value) const
         {
             return { PaddingLeftOr(value), PaddingTopOr(value), PaddingRightOr(value), PaddingBottomOr(value) };
         }
 
+    protected:
+        Index::Rect ContentLayout_;
+        Index::Rect InnerContentLayout_;
+
+    public:
+        Index::Rect GetContentLayout() const { return ContentLayout_; }
+        void SetContentLayout(Index::Rect value) { ContentLayout_ = value; }
+        INDEX_Property(get = GetContentLayout, put = SetContentLayout) Index::Rect ContentLayout;
+
+        Index::Rect GetInnerContentLayout() const { return InnerContentLayout_; }
+        void SetInnerContentLayout(Index::Rect value) { InnerContentLayout_ = value; }
+        INDEX_Property(get = GetInnerContentLayout, put = SetInnerContentLayout) Index::Rect InnerContentLayout;
+
+    public:
     protected:
         Align Alignment_ = Align::Stretch;
 
@@ -813,6 +822,8 @@ namespace Index::UI
         UInt64 ComputeFrame_ = 0;
         Index::Size ComputedMinSize_;
         Index::Size ComputedMaxSize_;
+        Index::Size ComputedInnerMinSize_;
+        Index::Size ComputedInnerMaxSize_;
         Rect ComputedLayout_;
 
     public:
@@ -885,6 +896,74 @@ namespace Index::UI
         Index::Size ComputedMaxSizeOr(float value)
         {
             return { ComputedMaxWidthOr(value), ComputedMaxHeightOr(value) };
+        }
+
+        Index::Size GetComputedInnerMinSize() const { return ComputedInnerMinSize_; }
+        INDEX_Property(get = GetComputedInnerMinSize) Index::Size ComputedInnerMinSize;
+
+        float GetComputedInnerMinWidth() const { return ComputedInnerMinSize_.Width; }
+        INDEX_Property(get = GetComputedInnerMinWidth) float ComputedInnerMinWidth;
+
+        float GetComputedInnerMinHeight() const { return ComputedInnerMinSize_.Height; }
+        INDEX_Property(get = GetComputedInnerMinHeight) float ComputedInnerMinHeight;
+
+        bool GetAutoComputedInnerMinWidth() const { return ComputedInnerMinSize_.Width == AutoF; }
+        INDEX_Property(get = GetAutoComputedInnerMinWidth) bool AutoComputedInnerMinWidth;
+
+        bool GetAutoComputedInnerMinHeight() const { return ComputedInnerMinSize_.Height == AutoF; }
+        INDEX_Property(get = GetAutoComputedInnerMinHeight) bool AutoComputedInnerMinHeight;
+
+        float ComputedInnerMinWidthOr(float value)
+        {
+            if (AutoComputedInnerMinWidth)
+                return value;
+            else
+                return ComputedInnerMinWidth;
+        }
+        float ComputedInnerMinHeightOr(float value)
+        {
+            if (AutoComputedInnerMinHeight)
+                return value;
+            else
+                return ComputedInnerMinHeight;
+        }
+        Index::Size ComputedInnerMinSizeOr(float value)
+        {
+            return { ComputedInnerMinWidthOr(value), ComputedInnerMinHeightOr(value) };
+        }
+
+        Index::Size GetComputedInnerMaxSize() const { return ComputedInnerMaxSize_; }
+        INDEX_Property(get = GetComputedInnerMaxSize) Index::Size ComputedInnerMaxSize;
+
+        float GetComputedInnerMaxWidth() const { return ComputedInnerMaxSize_.Width; }
+        INDEX_Property(get = GetComputedInnerMaxWidth) float ComputedInnerMaxWidth;
+
+        float GetComputedInnerMaxHeight() const { return ComputedInnerMaxSize_.Height; }
+        INDEX_Property(get = GetComputedInnerMaxHeight) float ComputedInnerMaxHeight;
+
+        bool GetAutoComputedInnerMaxWidth() const { return ComputedInnerMaxSize_.Width == AutoF; }
+        INDEX_Property(get = GetAutoComputedInnerMaxWidth) bool AutoComputedInnerMaxWidth;
+
+        bool GetAutoComputedInnerMaxHeight() const { return ComputedInnerMaxSize_.Height == AutoF; }
+        INDEX_Property(get = GetAutoComputedInnerMaxHeight) bool AutoComputedInnerMaxHeight;
+
+        float ComputedInnerMaxWidthOr(float value)
+        {
+            if (AutoComputedInnerMaxWidth)
+                return value;
+            else
+                return ComputedInnerMaxWidth;
+        }
+        float ComputedInnerMaxHeightOr(float value)
+        {
+            if (AutoComputedInnerMaxHeight == AutoF)
+                return value;
+            else
+                return ComputedInnerMaxHeight;
+        }
+        Index::Size ComputedInnerMaxSizeOr(float value)
+        {
+            return { ComputedInnerMaxWidthOr(value), ComputedInnerMaxHeightOr(value) };
         }
 
         Rect GetComputedLayout() const { return ComputedLayout_; }
@@ -1017,12 +1096,7 @@ namespace Index::UI
          */
         virtual void OnComputeLayout()
         {
-            auto minChildren = ApplyPadding_(FitRectToChildren_());
-            auto min = ClampSize(minChildren);
-            auto max = ActualMaxSize;
-
-            ComputedMinSize_ = ApplyMargin_(min);
-            ComputedMaxSize_ = max;
+            ComputeComputedSizes_(FitRectToChildren_());
 
             PolishLayout();
             PolishComputedLayout();
@@ -1034,12 +1108,11 @@ namespace Index::UI
          */
         virtual void OnComputeLayoutPosition(Rect i)
         {
-            Rect r = GetSubrect_(i);
-            ComputedLayout_ = r;
+            ComputeComputedLayoutAndContentLayout_(i);
 
             for (auto& c : Children_)
             {
-                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(r);
+                if (c->IsComputedLayoutPositionDirty) c->ComputeLayoutPosition(i);
             }
 
             PolishComputedLayoutPosition();
@@ -1190,9 +1263,6 @@ namespace Index::UI
             return false;
         }
 
-    protected:
-        // IPtr<> TODO: Complete HERE
-
     public:
         void AnimationTick() override { }
 
@@ -1245,7 +1315,8 @@ namespace Index::UI
         }
         Rect Rect_ShrinkOr_Margin_(Rect r, float value)
         {
-            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value), r.Width - MarginRightOr(value) - MarginLeftOr(value),
+            return { r.X + MarginLeftOr(value), r.Y + MarginTopOr(value),
+                r.Width - MarginRightOr(value) - MarginLeftOr(value),
                 r.Height - MarginBottomOr(value) - MarginTopOr(value) };
         }
         Rect Rect_ResizeShrinkOr_Margin_(Rect r, float value)
@@ -1256,7 +1327,8 @@ namespace Index::UI
 
         Rect Rect_Shrink_Padding_(Rect r)
         {
-            return { r.X + PaddingLeft, r.Y + PaddingTop, r.Width - PaddingRight - PaddingLeft, r.Height - PaddingBottom - PaddingTop };
+            return { r.X + PaddingLeft, r.Y + PaddingTop, r.Width - PaddingRight - PaddingLeft,
+                r.Height - PaddingBottom - PaddingTop };
         }
         Rect Rect_ResizeShrink_Padding_(Rect r)
         {
@@ -1264,8 +1336,8 @@ namespace Index::UI
         }
         Rect Rect_ShrinkOr_Padding_(Rect r, float value)
         {
-            return { r.X + PaddingLeftOr(value), r.Y + PaddingTopOr(value), r.Width - PaddingRightOr(value) - PaddingLeftOr(value),
-                r.Height - PaddingBottomOr(value) - PaddingTopOr(value) };
+            return { r.X + PaddingLeftOr(value), r.Y + PaddingTopOr(value), r.Width - PaddingHorizontal,
+                r.Height - PaddingVertical };
         }
         Rect Rect_ResizeShrinkOr_Padding_(Rect r, float value)
         {
@@ -1273,144 +1345,150 @@ namespace Index::UI
                 r.Height - PaddingTopOr(value) - PaddingBottomOr(value) };
         }
 
-        static Rect Rect_AlignCenter_(Rect parent, Rect r)
+        static Rect Rect_AlignCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - (r.Width / 2), parent.Center.Y - (r.Height / 2), r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
                 parent.Center.Y - Min(r.Height / 2, parent.Height / 2), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignTopCenter_(Rect parent, Rect r)
+        static Rect Rect_AlignTopCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - (r.Width / 2), parent.Y, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignTopCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignTopCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignTopLeft_(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
-        static Rect Rect_LimitAlignTopLeft_(Rect parent, Rect r)
+        static Rect Rect_AlignTopLeft_(const Rect& parent, const Rect& r)
+        {
+            return { parent.X, parent.Y, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignTopLeft_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignTopRight_(Rect parent, Rect r)
+        static Rect Rect_AlignTopRight_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignTopRight_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignTopRight_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignBottomCenter_(Rect parent, Rect r)
+        static Rect Rect_AlignBottomCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - (r.Width / 2), parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2),
                 parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignBottomLeft_(Rect parent, Rect r)
+        static Rect Rect_AlignBottomLeft_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomLeft_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomLeft_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignBottomRight_(Rect parent, Rect r)
+        static Rect Rect_AlignBottomRight_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignBottomRight_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignBottomRight_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
                 Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignLeftCenter_(Rect parent, Rect r)
+        static Rect Rect_AlignLeftCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Center.Y - (r.Width / 2), r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignLeftCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignLeftCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Center.Y - Min(r.Width / 2, parent.Width / 2), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignLeftTop_(Rect parent, Rect r) { return { parent.X, parent.Y, r.Width, r.Height }; }
-        static Rect Rect_LimitAlignLeftTop_(Rect parent, Rect r)
+        static Rect Rect_AlignLeftTop_(const Rect& parent, const Rect& r)
+        {
+            return { parent.X, parent.Y, r.Width, r.Height };
+        }
+        static Rect Rect_LimitAlignLeftTop_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Y, Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignLeftBottom_(Rect parent, Rect r)
+        static Rect Rect_AlignLeftBottom_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignLeftBottom_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignLeftBottom_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Second.Y - Min(r.Height, parent.Height), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_AlignRightCenter_(Rect parent, Rect r)
+        static Rect Rect_AlignRightCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - r.Width, parent.Center.Y - (r.Height / 2), r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width),
                 parent.Center.Y - Min(r.Height / 2, parent.Height / 2), Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignRightTop_(Rect parent, Rect r)
+        static Rect Rect_AlignRightTop_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - r.Width, parent.Y, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightTop_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightTop_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_AlignRightBottom_(Rect parent, Rect r)
+        static Rect Rect_AlignRightBottom_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - r.Width, parent.Second.Y - r.Height, r.Width, r.Height };
         }
-        static Rect Rect_LimitAlignRightBottom_(Rect parent, Rect r)
+        static Rect Rect_LimitAlignRightBottom_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Second.Y - Min(r.Height, parent.Height),
                 Min(r.Width, parent.Width), Min(r.Height, parent.Height) };
         }
 
-        static Rect Rect_LimitVAlignLeftTop_(Rect parent, Rect r)
+        static Rect Rect_LimitVAlignLeftTop_(const Rect& parent, const Rect& r)
         {
             return { parent.X, parent.Y, r.Width, Min(r.Height, parent.Height) };
         }
-        static Rect Rect_LimitVAlignRightTop_(Rect parent, Rect r)
+        static Rect Rect_LimitVAlignRightTop_(const Rect& parent, const Rect& r)
         {
             return { parent.Second.X - Min(r.Width, parent.Width), parent.Y, Min(r.Width, parent.Width),
                 Min(r.Height, parent.Height) };
         }
-        static Rect Rect_LimitHAlignTopCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitHAlignTopCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Y, Min(r.Width, parent.Width),
                 r.Height };
         }
-        static Rect Rect_LimitHAlignBottomCenter_(Rect parent, Rect r)
+        static Rect Rect_LimitHAlignBottomCenter_(const Rect& parent, const Rect& r)
         {
             return { parent.Center.X - Min(r.Width / 2, parent.Width / 2), parent.Second.Y - r.Height,
                 Min(r.Width, parent.Width), r.Height };
         }
 
-        static Rect Rect_Align_(Rect parent, Rect r, Align a)
+        static Rect Rect_Align_(const Rect& parent, const Rect& r, const Align& a)
         {
             if (a.IsCentered) return Rect_AlignCenter_(parent, r);
             if (a.IsStretched) return parent;
@@ -1437,58 +1515,68 @@ namespace Index::UI
 
             return parent;
         }
-        static Rect Rect_LimitAlign_(Rect parent, Rect r, Align a)
+        static Rect Rect_LimitAlign_(const Rect& parent, const Rect& r, const Index::Size& l, const Align& a)
         {
             if (a.IsCentered) return Rect_LimitAlignCenter_(parent, r);
-            if (a.IsStretched) return parent;
+            if (a.IsStretched) return Rect_LimitAlignCenter_(parent, { {}, l });
 
-            if (a.IsHLeft && a.IsVStretched)
-                return Rect_LimitAlignLeftTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+            if (a.IsHLeft && a.IsVStretched) return Rect_LimitAlignLeftTop_(parent, { r.X, r.Y, r.Width, l.Height });
             if (a.IsHLeft && a.IsVCentered) return Rect_LimitAlignLeftBottom_(parent, r);
             if (a.IsHLeft && a.IsVTop) return Rect_LimitAlignLeftTop_(parent, r);
             if (a.IsHLeft && a.IsVBottom) return Rect_LimitAlignLeftBottom_(parent, r);
 
             if (a.IsHRight && a.IsVStretched)
-                return Rect_LimitAlignRightTop_(parent, { r.X, r.Y, r.Width, Limits::FloatMax });
+                return Rect_LimitAlignRightTop_(parent, { r.X, r.Y, r.Width, l.Height });
             if (a.IsHRight && a.IsVCentered) return Rect_LimitAlignRightBottom_(parent, r);
             if (a.IsHRight && a.IsVTop) return Rect_LimitAlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_LimitAlignRightBottom_(parent, r);
 
             if (a.IsVTop && a.IsHStretched)
-                return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+                return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, l.Width, r.Height });
             if (a.IsVTop && a.IsHCentered) return Rect_LimitAlignTopCenter_(parent, r);
 
             if (a.IsVBottom && a.IsHStretched)
-                return Rect_LimitAlignBottomCenter_(parent, { r.X, r.Y, Limits::FloatMax, r.Height });
+                return Rect_LimitAlignBottomCenter_(parent, { r.X, r.Y, l.Width, r.Height });
             if (a.IsVBottom && a.IsHCentered) return Rect_LimitAlignBottomCenter_(parent, r);
 
             return parent;
         }
-
-        /**
-         * Calculates and aligns layout.
-         * Uses: Constraints, Alignment
-         */
-        Rect AlignToComputedLayout_(Rect i)
+        static Rect Rect_LimitAlign_(const Rect& parent, const Rect& r, const Align& a)
         {
-            Rect rMax = { 0, 0, ComputedMaxWidth, ComputedMaxHeight };
-            Rect rMin = Rect_ResizeShrink_Margin_({ 0, 0, ComputedMinWidthOr(0), ComputedMinHeightOr(0) }); // TODO: FIX!!!
-
-            Rect r1 = Rect_LimitAlign_(i, rMax, Alignment_);
-            Rect r2 = Rect_Align_(r1, rMin, Alignment_);
-            return r2;
+            return Rect_LimitAlign_(parent, r, { Limits::FloatMax }, a);
         }
 
-        /**
-         * Calculates and aligns layout.
-         * Uses: Constraints, Alignment, Margin, Padding
-         */
-        Rect GetSubrect_(Rect i)
+    protected:
+        void ComputeComputedSizes_(const Index::Size& inner)
         {
-            Rect im = Rect_ShrinkOr_Margin_(i, 0);
-            Rect ima = AlignToComputedLayout_(im);
-            Rect imap = Rect_ShrinkOr_Padding_(ima, 0);
-            return imap;
+            Index::Size ri = { inner.Width + PaddingHorizontal, inner.Height + PaddingVertical };
+
+            Index::Size rMax = { MaxWidth, MaxHeight };
+            Index::Size rMax1 = { WidthOr(rMax.Width), HeightOr(rMax.Height) };
+            Index::Size rMax2 = ApplyMargin_(rMax1);
+
+            Index::Size rMin = { MinWidthOr(0), MinHeightOr(0) };
+            Index::Size rMin1 = { Max(rMin.Width, ri.Width), Max(rMin.Height, ri.Height) };
+            Index::Size rMin2 = { WidthOr(rMin1.Width), HeightOr(rMin1.Height) };
+            Index::Size rMin3 = { Min(rMax1.Width, rMin2.Width), Min(rMax1.Height, rMin2.Height) };
+            Index::Size rMin4 = ApplyMargin_(rMin2);
+
+            ComputedInnerMinSize_ = rMin3;
+            ComputedInnerMaxSize_ = rMax1;
+
+            ComputedMinSize_ = rMin4;
+            ComputedMaxSize_ = rMax2;
+        }
+        void ComputeComputedLayoutAndContentLayout_(const Rect& outer)
+        {
+            Rect ro = Rect_ShrinkOr_Margin_(outer, 0);
+
+            Rect r1 = Rect_LimitAlign_(ro, { { 0, 0 }, ComputedInnerMaxSize_ }, ComputedInnerMaxSize_, Alignment_);
+            Rect r2 = Rect_Align_(r1, { { 0, 0 }, ComputedInnerMinSize_ }, Alignment_);
+
+            ComputedLayout_ = r2;
+            ContentLayout_ = r2;
+            InnerContentLayout_ = Rect_ShrinkOr_Padding_(ContentLayout_, 0);
         }
     };
 }

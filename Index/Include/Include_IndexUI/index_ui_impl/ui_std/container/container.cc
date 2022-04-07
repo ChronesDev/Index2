@@ -39,19 +39,6 @@ namespace Index::UI
     struct Container : virtual UIContainer
     {
         INDEX_UI_UseMapper(ContainerMapper);
-
-        void OnComputeLayout() override
-        {
-            auto minChildren = ApplyPadding_(FitRectToChildren_());
-            auto min = ClampSize(minChildren);
-            auto max = ActualMaxSize;
-
-            ComputedMinSize_ = ApplyMargin_(min);
-            ComputedMaxSize_ = max;
-
-            PolishLayout();
-            PolishComputedLayout();
-        }
     };
 
     struct ContainerMapper : virtual UIContainerMapper

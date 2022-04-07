@@ -13,8 +13,8 @@ namespace Index::UI
 
         void OnComputeLayoutPosition(Rect i) override
         {
-            Rect r = GetSubrect_(i);
-            ComputedLayout_ = r;
+            ComputeComputedLayoutAndContentLayout_(i);
+            auto& r = ComputedLayout_;
 
             float height = 0;
             for (auto& c : Children_)
@@ -36,16 +36,12 @@ namespace Index::UI
             for (auto& c : Children_)
             {
                 float width = c->ComputedMinWidth;
-                if (minChildren.Width < width) minChildren.Width = width;
+                minChildren.Width = Max(minChildren.Width, width);
 
                 minChildren.Height += c->ComputedMinHeight;
             }
 
-            auto min = ClampSize(ApplyPadding_(minChildren));
-            auto max = ActualMaxSize;
-
-            ComputedMinSize_ = ApplyMargin_(min);
-            ComputedMaxSize_ = max;
+            ComputeComputedSizes_(minChildren);
 
             PolishLayout();
             PolishComputedLayout();

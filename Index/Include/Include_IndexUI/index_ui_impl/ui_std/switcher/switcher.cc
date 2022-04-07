@@ -43,8 +43,7 @@ namespace Index::UI
     protected:
         void OnComputeLayoutPosition(Rect i) override
         {
-            Rect r = GetSubrect_(i);
-            ComputedLayout_ = r;
+            ComputeComputedLayoutAndContentLayout_(i);
             
             for (auto& p : Switchables_)
             {
@@ -59,12 +58,7 @@ namespace Index::UI
         
         void OnComputeLayout() override
         {
-            auto minChildren = ApplyPadding_(FitRectToTargetChildren_());
-            auto min = ClampSize(minChildren);
-            auto max = ActualMaxSize;
-
-            ComputedMinSize_ = ApplyMargin_(min);
-            ComputedMaxSize_ = max;
+            ComputeComputedSizes_(FitRectToTargetChildren_());
 
             PolishLayout();
             PolishComputedLayout();

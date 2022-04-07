@@ -38,13 +38,23 @@ namespace Index::UI
         }
 
     public:
-        int Index;
+        int Index_;
+
+    public:
+        int GetIndex() const { return Index_; }
+        void SetIndex(int value)
+        {
+            if (Index_ == value) return;
+            MakeLayoutDirty();
+            Index_ = value;
+        }
+        INDEX_Property(get = GetIndex, put = SetIndex) int Index;
 
     protected:
         void OnComputeLayoutPosition(Rect i) override
         {
             ComputeComputedLayoutAndContentLayout_(i);
-            
+
             for (auto& p : Switchables_)
             {
                 if (p.first != Index) continue;
@@ -55,7 +65,7 @@ namespace Index::UI
 
             PolishComputedLayoutPosition();
         }
-        
+
         void OnComputeLayout() override
         {
             ComputeComputedSizes_(FitRectToTargetChildren_());
@@ -132,10 +142,7 @@ namespace Index::UI
         }
 
     protected:
-        void OnAdd_(const IPtr<UIMapper>& child) override
-        {
-            Children_Map_.insert({ NextIndex, child });
-        }
+        void OnAdd_(const IPtr<UIMapper>& child) override { Children_Map_.insert({ NextIndex, child }); }
 
         void OnRemove_(const IPtr<UIMapper>& child) override
         {

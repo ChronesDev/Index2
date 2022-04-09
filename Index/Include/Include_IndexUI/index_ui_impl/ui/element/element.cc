@@ -980,6 +980,14 @@ namespace Index::UI
             }
             return false;
         }
+        virtual bool AreChildrenComputedLayoutPositionDirty_()
+        {
+            for (auto& c : Children_)
+            {
+                if (c->IsComputedLayoutPositionDirty) return true;
+            }
+            return false;
+        }
         virtual bool AreAllChildrenLayoutDirty_()
         {
             for (auto& c : Children_)
@@ -1011,7 +1019,10 @@ namespace Index::UI
          * @brief Determines whether it should compute the layout
          */
         INDEX_Property(get = GetShouldCompute) bool ShouldCompute;
-        virtual bool GetShouldCompute() { return ShouldComputeSelf_() || AreChildrenLayoutDirty_(); }
+        virtual bool GetShouldCompute()
+        {
+            return ShouldComputeSelf_() || AreChildrenLayoutDirty_() || AreChildrenComputedLayoutPositionDirty_();
+        }
 
     public:
         /**
@@ -1024,7 +1035,7 @@ namespace Index::UI
                 ForceComputeLayout();
                 return;
             }
-//            if (frame == ComputeFrame_) return;
+            if (frame == ComputeFrame_) return;
             ComputeFrame_ = frame;
 
             ComputeChildrenLayout_(frame);
@@ -1042,6 +1053,7 @@ namespace Index::UI
         {
             ForceComputeChildrenLayout_();
             OnComputeLayout();
+            MakeComputedLayoutPositionDirty();
         }
 
         /**
@@ -1527,14 +1539,12 @@ namespace Index::UI
             if (a.IsHLeft && a.IsVTop) return Rect_LimitAlignLeftTop_(parent, r);
             if (a.IsHLeft && a.IsVBottom) return Rect_LimitAlignLeftBottom_(parent, r);
 
-            if (a.IsHRight && a.IsVStretched)
-                return Rect_LimitAlignRightTop_(parent, { r.X, r.Y, r.Width, l.Height });
+            if (a.IsHRight && a.IsVStretched) return Rect_LimitAlignRightTop_(parent, { r.X, r.Y, r.Width, l.Height });
             if (a.IsHRight && a.IsVCentered) return Rect_LimitAlignRightBottom_(parent, r);
             if (a.IsHRight && a.IsVTop) return Rect_LimitAlignRightTop_(parent, r);
             if (a.IsHRight && a.IsVBottom) return Rect_LimitAlignRightBottom_(parent, r);
 
-            if (a.IsVTop && a.IsHStretched)
-                return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, l.Width, r.Height });
+            if (a.IsVTop && a.IsHStretched) return Rect_LimitAlignTopCenter_(parent, { r.X, r.Y, l.Width, r.Height });
             if (a.IsVTop && a.IsHCentered) return Rect_LimitAlignTopCenter_(parent, r);
 
             if (a.IsVBottom && a.IsHStretched)

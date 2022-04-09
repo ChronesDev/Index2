@@ -970,7 +970,7 @@ namespace Index::UI
         INDEX_Property(get = GetComputedLayout) Rect ComputedLayout;
 
     protected:
-        virtual bool ShouldComputeSelf_() { return IsLayoutDirty; }
+        virtual bool ShouldComputeSelf_() { return IsLayoutDirty || IsComputedLayoutPositionDirty; }
 
         virtual bool AreChildrenLayoutDirty_()
         {

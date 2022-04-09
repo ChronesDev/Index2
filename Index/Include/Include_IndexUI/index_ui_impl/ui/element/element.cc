@@ -1019,7 +1019,12 @@ namespace Index::UI
          */
         virtual void ComputeLayout(UInt64 frame)
         {
-            if (frame == 0) ForceComputeLayout();
+            if (frame == 0)
+            {
+                ForceComputeLayout();
+                return;
+            }
+            if (frame == ComputeFrame_) return;
             ComputeFrame_ = frame;
 
             ComputeChildrenLayout_(frame);
@@ -1045,9 +1050,6 @@ namespace Index::UI
          */
         virtual void SubComputeLayout(UInt64 frame)
         {
-            if (frame == ComputeFrame_) return;
-            ComputeFrame_ = frame;
-
             ComputeChildrenLayout_(frame);
             if (ShouldCompute)
             {

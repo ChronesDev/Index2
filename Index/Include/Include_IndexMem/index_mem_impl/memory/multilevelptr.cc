@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../std/include.cc"
+#include <index>
 
 namespace Index
 {

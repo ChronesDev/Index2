@@ -1,10 +1,16 @@
 #pragma once
 
-#include "../core/include.cc"
-#include "../include/include.cc"
 #include <utility>
 
-#include "../std/include.cc"
+#include <index>
+
+#ifdef INDEX_WINDOWS
+#include <memoryapi.h>
+#include <Psapi.h>
+#include <processthreadsapi.h>
+#include <libloaderapi.h>
+#endif
+
 #include "multilevelptr.cc"
 
 #define INDEX_MEM_IsInRange(x, a, b) (x >= a && x <= b)
@@ -78,7 +84,7 @@ namespace Index
         template <class T> constexpr void Write(void* at, T value) { *(T*)(void*)(at) = value; }
         template <class T> constexpr void Write(IntPtr at, T value) { *(T*)(void*)(at) = value; }
 
-#ifndef INDEX_NO_WINDOWS_H
+#ifdef INDEX_WINDOWS
 
         template <class T> constexpr void WriteProtected(void* at, T value)
         {
@@ -99,7 +105,7 @@ namespace Index
 
         template <class T> constexpr void WriteStatic(IntPtr at, T value) { *(T*)(void*)(Base + at) = value; }
 
-#ifndef INDEX_NO_WINDOWS_H
+#ifdef INDEX_WINDOWS
 
         template <class T> constexpr void WriteStaticProtected(IntPtr offset, T value)
         {
@@ -111,7 +117,7 @@ namespace Index
 
 #endif
     public:
-#ifndef INDEX_NO_WINDOWS_H
+#ifdef INDEX_WINDOWS
 
         void PatchBytes(void* at, List<byte> bytes)
         {
@@ -309,7 +315,7 @@ namespace Index
     public:
         static Memory New()
         {
-#ifndef INDEX_NO_WINDOWS_H
+#ifdef INDEX_WINDOWS
             auto baseAddress = (IntPtr)GetModuleHandleW(nullptr);
             auto mem = Memory(baseAddress);
             return mem;

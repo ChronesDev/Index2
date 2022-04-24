@@ -8,9 +8,9 @@ namespace Index
     {
         float X = 0, Y = 0, Width = 0, Height = 0;
 
-        Rect() = default;
+        constexpr Rect() = default;
 
-        Rect(float x, float y, float width, float height)
+        constexpr Rect(float x, float y, float width, float height)
             : X(x)
             , Y(y)
             , Width(width)
@@ -18,7 +18,7 @@ namespace Index
         {
         }
 
-        Rect(float x, float y, Size size)
+        constexpr Rect(float x, float y, Size size)
             : X(x)
             , Y(y)
             , Width(size.Width)
@@ -26,7 +26,7 @@ namespace Index
         {
         }
 
-        Rect(Vec2F vec, float width, float height)
+        constexpr Rect(Vec2F vec, float width, float height)
             : X(vec.X)
             , Y(vec.Y)
             , Width(width)
@@ -34,7 +34,7 @@ namespace Index
         {
         }
 
-        Rect(Vec2F vec, Size size)
+        constexpr Rect(Vec2F vec, Size size)
             : X(vec.X)
             , Y(vec.Y)
             , Width(size.Width)

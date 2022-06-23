@@ -1,4 +1,4 @@
-> :information_source: This project is currently work in progress
+> :warning: This project has been deprecated by [**chr**](https://github.com/ChronesIO/chr)
 
 # Index2
 [![](https://tokei.rs/b1/github/ChronesDev/Index2?category=files)](https://github.com/ChronesDev/Index2)
